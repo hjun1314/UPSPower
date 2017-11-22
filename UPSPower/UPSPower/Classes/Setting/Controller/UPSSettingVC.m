@@ -17,7 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor orangeColor];
-    self.title = @"报警";
+    self.title = @"报警信息";
 }
 
 - (void)didReceiveMemoryWarning {

@@ -11,7 +11,6 @@
 #import "UPSSettingVC.h"
 #import "UPSMineVC.h"
 #import "UPSNacVC.h"
-#import "UIImage+Image.h"
 
 @interface UPSTabVC ()
 
