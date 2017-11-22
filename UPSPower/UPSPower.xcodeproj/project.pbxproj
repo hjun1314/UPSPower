@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A3D58CC3654013FE2DA59315 /* libPods-UPSPower.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 750407187259C868BCC2C80B /* libPods-UPSPower.a */; };
 		F09319951FC5088700D04D82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319941FC5088700D04D82 /* AppDelegate.m */; };
-		F09319981FC5088700D04D82 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319971FC5088700D04D82 /* ViewController.m */; };
-		F093199B1FC5088700D04D82 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F09319991FC5088700D04D82 /* Main.storyboard */; };
 		F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */; };
 		F09319A01FC5088700D04D82 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F093199F1FC5088700D04D82 /* Assets.xcassets */; };
 		F09319A31FC5088700D04D82 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F09319A11FC5088700D04D82 /* LaunchScreen.storyboard */; };
@@ -36,12 +35,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		750407187259C868BCC2C80B /* libPods-UPSPower.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UPSPower.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AADD0DE3F747753B7EDA9FDF /* Pods-UPSPower.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UPSPower.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UPSPower/Pods-UPSPower.debug.xcconfig"; sourceTree = "<group>"; };
+		E3FD12E4C475D74F1A321C9C /* Pods-UPSPower.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UPSPower.release.xcconfig"; path = "Pods/Target Support Files/Pods-UPSPower/Pods-UPSPower.release.xcconfig"; sourceTree = "<group>"; };
 		F09319901FC5088700D04D82 /* UPSPower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UPSPower.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F09319931FC5088700D04D82 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F09319941FC5088700D04D82 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F09319961FC5088700D04D82 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		F09319971FC5088700D04D82 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		F093199A1FC5088700D04D82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F093199D1FC5088700D04D82 /* UPSPower.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UPSPower.xcdatamodel; sourceTree = "<group>"; };
 		F093199F1FC5088700D04D82 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F09319A21FC5088700D04D82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3D58CC3654013FE2DA59315 /* libPods-UPSPower.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +80,134 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0DAF368A69731B5A01A1D758 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				750407187259C868BCC2C80B /* libPods-UPSPower.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		13239FF878458D258D0C34AE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AADD0DE3F747753B7EDA9FDF /* Pods-UPSPower.debug.xcconfig */,
+				E3FD12E4C475D74F1A321C9C /* Pods-UPSPower.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		F0746DEE1FC518E100429F3B /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F0746DF81FC518E100429F3B /* Main */,
+				F0746DF41FC518E100429F3B /* Setting */,
+				F0746DF01FC518E100429F3B /* Mine */,
+				F0746DEF1FC518E100429F3B /* Other */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		F0746DEF1FC518E100429F3B /* Other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		F0746DF01FC518E100429F3B /* Mine */ = {
+			isa = PBXGroup;
+			children = (
+				F0746DF11FC518E100429F3B /* Controller */,
+				F0746DF21FC518E100429F3B /* Model */,
+				F0746DF31FC518E100429F3B /* View */,
+			);
+			path = Mine;
+			sourceTree = "<group>";
+		};
+		F0746DF11FC518E100429F3B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F0746DF21FC518E100429F3B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F0746DF31FC518E100429F3B /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F0746DF41FC518E100429F3B /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				F0746DF51FC518E100429F3B /* Controller */,
+				F0746DF61FC518E100429F3B /* Model */,
+				F0746DF71FC518E100429F3B /* View */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		F0746DF51FC518E100429F3B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F0746DF61FC518E100429F3B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F0746DF71FC518E100429F3B /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F0746DF81FC518E100429F3B /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				F0746DF91FC518E100429F3B /* Controller */,
+				F0746DFA1FC518E100429F3B /* Model */,
+				F0746DFB1FC518E100429F3B /* View */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		F0746DF91FC518E100429F3B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F0746DFA1FC518E100429F3B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F0746DFB1FC518E100429F3B /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		F09319871FC5088700D04D82 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +215,8 @@
 				F09319AE1FC5088700D04D82 /* UPSPowerTests */,
 				F09319B91FC5088800D04D82 /* UPSPowerUITests */,
 				F09319911FC5088700D04D82 /* Products */,
+				13239FF878458D258D0C34AE /* Pods */,
+				0DAF368A69731B5A01A1D758 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,16 +233,14 @@
 		F09319921FC5088700D04D82 /* UPSPower */ = {
 			isa = PBXGroup;
 			children = (
+				F0746DEE1FC518E100429F3B /* Classes */,
 				F09319931FC5088700D04D82 /* AppDelegate.h */,
 				F09319941FC5088700D04D82 /* AppDelegate.m */,
-				F09319961FC5088700D04D82 /* ViewController.h */,
-				F09319971FC5088700D04D82 /* ViewController.m */,
-				F09319991FC5088700D04D82 /* Main.storyboard */,
+				F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */,
 				F093199F1FC5088700D04D82 /* Assets.xcassets */,
 				F09319A11FC5088700D04D82 /* LaunchScreen.storyboard */,
 				F09319A41FC5088700D04D82 /* Info.plist */,
 				F09319A51FC5088700D04D82 /* main.m */,
-				F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */,
 			);
 			path = UPSPower;
 			sourceTree = "<group>";
@@ -142,9 +270,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F09319BF1FC5088800D04D82 /* Build configuration list for PBXNativeTarget "UPSPower" */;
 			buildPhases = (
+				7CA68B7CDD69AD22408D93D6 /* [CP] Check Pods Manifest.lock */,
 				F093198C1FC5088700D04D82 /* Sources */,
 				F093198D1FC5088700D04D82 /* Frameworks */,
 				F093198E1FC5088700D04D82 /* Resources */,
+				FB3983EA542B036403DC9927 /* [CP] Embed Pods Frameworks */,
+				4DFE0665C1AF73659E4EB027 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -197,6 +328,7 @@
 		F09319881FC5088700D04D82 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = UPS;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = hjun;
 				TargetAttributes = {
@@ -243,7 +375,6 @@
 			files = (
 				F09319A31FC5088700D04D82 /* LaunchScreen.storyboard in Resources */,
 				F09319A01FC5088700D04D82 /* Assets.xcassets in Resources */,
-				F093199B1FC5088700D04D82 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,12 +394,62 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4DFE0665C1AF73659E4EB027 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UPSPower/Pods-UPSPower-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7CA68B7CDD69AD22408D93D6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-UPSPower-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FB3983EA542B036403DC9927 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UPSPower/Pods-UPSPower-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F093198C1FC5088700D04D82 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F09319981FC5088700D04D82 /* ViewController.m in Sources */,
 				F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */,
 				F09319A61FC5088700D04D82 /* main.m in Sources */,
 				F09319951FC5088700D04D82 /* AppDelegate.m in Sources */,
@@ -307,14 +488,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		F09319991FC5088700D04D82 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F093199A1FC5088700D04D82 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		F09319A11FC5088700D04D82 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -432,6 +605,7 @@
 		};
 		F09319C01FC5088800D04D82 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AADD0DE3F747753B7EDA9FDF /* Pods-UPSPower.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -447,6 +621,7 @@
 		};
 		F09319C11FC5088800D04D82 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E3FD12E4C475D74F1A321C9C /* Pods-UPSPower.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

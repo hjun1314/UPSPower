@@ -1,0 +1,9 @@
+platform :ios, '9.0'
+
+target "UPSPower" do
+
+pod 'AFNetworking'
+
+end
+
+
