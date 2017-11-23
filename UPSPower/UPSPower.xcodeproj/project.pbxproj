@@ -26,6 +26,7 @@
 		F09319BB1FC5088800D04D82 /* UPSPowerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319BA1FC5088800D04D82 /* UPSPowerUITests.m */; };
 		F09319E61FC51DE700D04D82 /* UPSTabVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319E51FC51DE700D04D82 /* UPSTabVC.m */; };
 		F09319E91FC51E5B00D04D82 /* UPSNacVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319E81FC51E5B00D04D82 /* UPSNacVC.m */; };
+		F0C943871FC6747D00A4B7DB /* UPSSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C943861FC6747D00A4B7DB /* UPSSettingCell.m */; };
 		F0DBFDB81FC5249D004F66C9 /* UPSSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DBFDB71FC5249D004F66C9 /* UPSSettingVC.m */; };
 		F0DBFDBB1FC524B2004F66C9 /* UPSMineVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DBFDBA1FC524B2004F66C9 /* UPSMineVC.m */; };
 /* End PBXBuildFile section */
@@ -87,6 +88,8 @@
 		F09319E51FC51DE700D04D82 /* UPSTabVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSTabVC.m; sourceTree = "<group>"; };
 		F09319E71FC51E5B00D04D82 /* UPSNacVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSNacVC.h; sourceTree = "<group>"; };
 		F09319E81FC51E5B00D04D82 /* UPSNacVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSNacVC.m; sourceTree = "<group>"; };
+		F0C943851FC6747D00A4B7DB /* UPSSettingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSSettingCell.h; sourceTree = "<group>"; };
+		F0C943861FC6747D00A4B7DB /* UPSSettingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSSettingCell.m; sourceTree = "<group>"; };
 		F0DBFDB61FC5249D004F66C9 /* UPSSettingVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSSettingVC.h; sourceTree = "<group>"; };
 		F0DBFDB71FC5249D004F66C9 /* UPSSettingVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSSettingVC.m; sourceTree = "<group>"; };
 		F0DBFDB91FC524B2004F66C9 /* UPSMineVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSMineVC.h; sourceTree = "<group>"; };
@@ -289,6 +292,8 @@
 		F0746DF71FC518E100429F3B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F0C943851FC6747D00A4B7DB /* UPSSettingCell.h */,
+				F0C943861FC6747D00A4B7DB /* UPSSettingCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -573,6 +578,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */,
+				F0C943871FC6747D00A4B7DB /* UPSSettingCell.m in Sources */,
 				F05D0E5B1FC529E600FD4218 /* UIImage+Image.m in Sources */,
 				F05D0E6F1FC544E200FD4218 /* YUFoldingTableView.m in Sources */,
 				F05D0E651FC52A6200FD4218 /* FileTool.m in Sources */,

@@ -10,7 +10,7 @@
 #import "YUFoldingTableView.h"
 #import "UPSEquipmentCell.h"
 
-@interface UPSEquipmentVC ()<YUFoldingTableViewDelegate,EquipmentBtnDelegate>
+@interface UPSEquipmentVC ()<YUFoldingTableViewDelegate>
 
 @property (nonatomic,strong)YUFoldingTableView *tableView;
 @property (nonatomic, assign)YUFoldingSectionHeaderArrowPosition arrowPosition;
@@ -25,23 +25,20 @@
     [super viewDidLoad];
     self.navigationItem.title = @"设备状态";
     [self setupTableView];
+    [self setupNotification];
 }
 - (void)setupTableView{
     
     
-    //    UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 40, 30)];
-    //    [self.view addSubview:title];
-    //    title.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    //    title.text = @"报警信息";
-    
-    YUFoldingTableView *tableView = [[YUFoldingTableView alloc]initWithFrame:CGRectMake(0, 104, kScreenW, kScreenH - 104)];
+    YUFoldingTableView *tableView = [[YUFoldingTableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight + 40, kScreenW, kScreenH - 104)];
     self.tableView = tableView;
     [self.view addSubview:tableView];
     tableView.foldingDelegate =self;
     if (self.arrowPosition) {
         tableView.foldingState = YUFoldingSectionStateShow;
     }
-    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, kScreenW, 40)];
+    
+    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, 40)];
     headView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:headView];
     UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, headView.width, 30)];
@@ -62,6 +59,28 @@
         
     }
 }
+
+#pragma mark- 创建点击通知
+- (void)setupNotification{
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickUnknownBtn) name:@"clickUnknownBtn" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickFaultBtn) name:@"clickFaultBtn" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickNormalBtn) name:@"clickNormalBtn" object:nil];
+}
+- (void)clickUnknownBtn{
+    NSLog(@"点击了未知按钮。。。。。。。。。。");
+}
+- (void)clickFaultBtn{
+    NSLog(@"点击了异常按钮。。。。");
+    
+}
+- (void)clickNormalBtn{
+    NSLog(@"点击了正常按钮。。。。。");
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 
 #pragma mark- 代理方法
 - (NSInteger )numberOfSectionForYUFoldingTableView:(YUFoldingTableView *)yuTableView
@@ -84,7 +103,7 @@
 }
 - (CGFloat )yuFoldingTableView:(YUFoldingTableView *)yuTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;
+    return 70;
 }
 - (NSString *)yuFoldingTableView:(YUFoldingTableView *)yuTableView titleForHeaderInSection:(NSInteger)section
 {
@@ -107,7 +126,6 @@
 {
     static NSString *cellID = @"cellID";
     UPSEquipmentCell *cell = [yuTableView dequeueReusableCellWithIdentifier:cellID];
-    cell.delegate = self;
     if (cell == nil) {
         cell = [[UPSEquipmentCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
@@ -115,13 +133,13 @@
    
     return cell;
 }
-- (void)didClickUnknownBtn:(UIButton *)unknownBtn{
-    NSLog(@"点击了未知按钮");
-}
-
-- (void)didClickFaultBtn:(UIButton *)faultBtn{
-    NSLog(@"点击了异常按钮");
-}
+//- (void)didClickUnknownBtn:(UIButton *)unknownBtn{
+//    NSLog(@"点击了未知按钮");
+//}
+//
+//- (void)didClickFaultBtn:(UIButton *)faultBtn{
+//    NSLog(@"点击了异常按钮");
+//}
 
 - (void )yuFoldingTableView:(YUFoldingTableView *)yuTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

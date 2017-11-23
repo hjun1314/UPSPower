@@ -7,17 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@protocol EquipmentBtnDelegate<NSObject>
-
-- (void)didClickUnknownBtn:(UIButton *)unknownBtn;
-
-- (void)didClickFaultBtn:(UIButton *)faultBtn;
 
 
-@end
 @interface UPSEquipmentCell : UITableViewCell
 
-@property (nonatomic,weak)id <EquipmentBtnDelegate>delegate;
 
 
 
