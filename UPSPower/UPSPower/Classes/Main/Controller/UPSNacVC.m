@@ -19,9 +19,9 @@
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     attrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:20];
     [bar setTitleTextAttributes:attrs];
-    
+    [bar setBarTintColor:[UIColor cyanColor]];
     // 设置导航条背景图片
-    [bar setBackgroundImage:[UIImage imageNamed:@"navigationbarBackgroundWhite"] forBarMetrics:UIBarMetricsDefault];
+    //[bar setBackgroundImage:[UIImage imageNamed:@"navigationbarBackgroundWhite"] forBarMetrics:UIBarMetricsDefault];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -21,7 +21,7 @@
     UILabel *unknownLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.width - 20, 20)];
     [self addSubview:unknownLabel];
     unknownLabel.text = @"上海UPSx1 异常1次";
-    unknownLabel.textColor = [UIColor lightGrayColor];
+//    unknownLabel.textColor = [UIColor lightGrayColor];
     
     UILabel *faultLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 25, self.width - 20, 20)];
     faultLabel.text = @"上海UPSx1 异常2次";
@@ -30,7 +30,7 @@
     
     UILabel *normalLbael = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, self.width - 20, 20)];
     normalLbael.text = @"正常";
-    normalLbael.textColor = [UIColor lightGrayColor];
+//    normalLbael.textColor = [UIColor lightGrayColor];
     [self addSubview:normalLbael];
     
 }

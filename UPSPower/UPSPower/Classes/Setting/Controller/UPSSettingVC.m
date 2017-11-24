@@ -105,7 +105,10 @@
     
     return cell;
 }
-
+- (void )yuFoldingTableView:(YUFoldingTableView *)yuTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [yuTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

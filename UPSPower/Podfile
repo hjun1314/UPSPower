@@ -3,6 +3,11 @@ platform :ios, '9.0'
 target "UPSPower" do
 
 pod 'AFNetworking'
+pod 'Masonry'
+pod 'MJExtension'
+pod 'MJRefresh'
+pod 'SDWebImage'
+pod 'SVProgressHUD'
 
 end
 

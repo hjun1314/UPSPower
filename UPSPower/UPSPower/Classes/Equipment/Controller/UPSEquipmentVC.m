@@ -9,7 +9,9 @@
 #import "UPSEquipmentVC.h"
 #import "YUFoldingTableView.h"
 #import "UPSEquipmentCell.h"
-
+#import "UPSNormalVC.h"
+#import "UPSUnknownVC.h"
+#import "UPSFaultVC.h"
 @interface UPSEquipmentVC ()<YUFoldingTableViewDelegate>
 
 @property (nonatomic,strong)YUFoldingTableView *tableView;
@@ -26,6 +28,7 @@
     self.navigationItem.title = @"设备状态";
     [self setupTableView];
     [self setupNotification];
+    
 }
 - (void)setupTableView{
     
@@ -53,8 +56,9 @@
 ///手势的点击
 - (void)clickTab{
     if (!self.isOpen) {
-        self.tableView.hidden = NO;
-    }else{self.tableView.hidden = YES;
+        self.tableView.hidden = YES;
+        self.view.backgroundColor = [UIColor redColor];
+    }else{self.tableView.hidden = NO;
         self.view.backgroundColor = [UIColor whiteColor];
         
     }
@@ -67,14 +71,17 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickNormalBtn) name:@"clickNormalBtn" object:nil];
 }
 - (void)clickUnknownBtn{
-    NSLog(@"点击了未知按钮。。。。。。。。。。");
+    UPSUnknownVC *unknown = [[UPSUnknownVC alloc]init];
+    [self.navigationController pushViewController:unknown animated:YES];
 }
 - (void)clickFaultBtn{
-    NSLog(@"点击了异常按钮。。。。");
-    
+    UPSFaultVC *fault = [[UPSFaultVC alloc]init];
+    [self.navigationController pushViewController:fault animated:YES];
 }
 - (void)clickNormalBtn{
-    NSLog(@"点击了正常按钮。。。。。");
+    UPSNormalVC *normal = [[UPSNormalVC alloc]init];
+    [self.navigationController pushViewController:normal animated:YES];
+
 }
 
 - (void)dealloc{
@@ -133,13 +140,7 @@
    
     return cell;
 }
-//- (void)didClickUnknownBtn:(UIButton *)unknownBtn{
-//    NSLog(@"点击了未知按钮");
-//}
-//
-//- (void)didClickFaultBtn:(UIButton *)faultBtn{
-//    NSLog(@"点击了异常按钮");
-//}
+
 
 - (void )yuFoldingTableView:(YUFoldingTableView *)yuTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
