@@ -69,7 +69,7 @@
     UILabel *bottomLabel = [[UILabel alloc]init];
     [self.view addSubview:bottomLabel];
     [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view.mas_bottom).offset(-100);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-50 - SafeAreaTabbarHeight);
         make.centerX.equalTo(self.view);
     }];
     bottomLabel.text = @"昌菱电气  版权所有";

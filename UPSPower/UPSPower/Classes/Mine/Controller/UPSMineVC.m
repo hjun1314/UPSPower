@@ -8,6 +8,8 @@
 
 #import "UPSMineVC.h"
 #import "UPSAboutUsVC.h"
+#import "UPSAlarmVC.h"
+#import "UPSChildUsersVC.h"
 @interface UPSMineVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -22,7 +24,7 @@
 }
 
 - (void)setup{
-    UITableView *tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTabbarHeight - SafeAreaTopHeight) style:UITableViewStyleGrouped];
     [self.view addSubview:tableView];
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     tableView.dataSource = self;
@@ -68,7 +70,14 @@
     
     if (indexPath.row == 0 ) {
     }else if (indexPath.row == 1){
+        
+        UPSChildUsersVC *childUserVC = [[UPSChildUsersVC alloc]init];
+        [self.navigationController pushViewController:childUserVC animated:YES];
+        
     }else if (indexPath.row == 2){
+        UPSAlarmVC *alarmVC = [[UPSAlarmVC alloc]init];
+        [self.navigationController pushViewController:alarmVC animated:YES];
+        
     }else if (indexPath.row == 3){
         
         UPSAboutUsVC *aboutVC = [[UPSAboutUsVC alloc]init];

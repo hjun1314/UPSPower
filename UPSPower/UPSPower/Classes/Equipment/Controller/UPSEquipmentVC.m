@@ -28,12 +28,11 @@
     self.navigationItem.title = @"设备状态";
     [self setupTableView];
     [self setupNotification];
-    
 }
 - (void)setupTableView{
     
     
-    YUFoldingTableView *tableView = [[YUFoldingTableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight + 40, kScreenW, kScreenH - 104)];
+    YUFoldingTableView *tableView = [[YUFoldingTableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight + 35, kScreenW, kScreenH - SafeAreaTabbarHeight - SafeAreaTopHeight - 35)];
     self.tableView = tableView;
     [self.view addSubview:tableView];
     tableView.foldingDelegate =self;
@@ -41,10 +40,10 @@
         tableView.foldingState = YUFoldingSectionStateShow;
     }
     
-    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, 40)];
-    headView.backgroundColor = [UIColor whiteColor];
+    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, 35)];
+    headView.backgroundColor = UICOLOR_RGB(245, 245, 245, 1);
     [self.view addSubview:headView];
-    UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, headView.width, 30)];
+    UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, headView.width, 25)];
     title.text = @"设备";
     [headView addSubview:title];
     

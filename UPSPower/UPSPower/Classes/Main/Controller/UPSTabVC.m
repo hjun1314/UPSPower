@@ -30,7 +30,9 @@
     NSMutableDictionary *attrsN = [NSMutableDictionary dictionary];
     attrsN[NSFontAttributeName] = [UIFont systemFontOfSize:13.0];
     [item setTitleTextAttributes:attrsN forState:UIControlStateNormal];
-    
+    UITabBar *tabbar = [UITabBar appearanceWhenContainedInInstancesOfClasses:@[self]];
+    [tabbar setBarTintColor:UICOLOR_RGB(245, 245, 245, 1)];
+    tabbar.translucent = NO;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
