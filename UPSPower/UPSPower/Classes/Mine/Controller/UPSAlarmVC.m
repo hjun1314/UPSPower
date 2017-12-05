@@ -73,38 +73,38 @@
     self.tableView = tabelView;
     [self.view addSubview:tabelView];
     
-    UPSAlarmBtn *sureBtn = [[UPSAlarmBtn alloc]init];
-    if (iphone4 || iphone5) {
-        sureBtn.frame = CGRectMake((self.view.width - 160) / 3, self.view.height - 120, 80, 40);
-    }else if (iphone6){
-        sureBtn.frame = CGRectMake((self.view.width - 200)/3, self.view.height - 120, 100, 40);
-    }else if (iphone6P){
-        sureBtn.frame = CGRectMake((self.view.width - 240)/3, self.view.height - 120, 120, 40);
-    }else if (iphoneX){
-        sureBtn.frame = CGRectMake((self.view.width - 200)/3, self.view.height - 150, 100, 40);
-    }
-    [sureBtn setTitle:@"保存" forState:UIControlStateNormal];
-    [sureBtn setBackgroundColor:[UIColor cyanColor]];
-    sureBtn.layer.cornerRadius = 10;
-    sureBtn.clipsToBounds = YES;
-    [self.view addSubview:sureBtn];
-    
-    UPSAlarmBtn *resumeBtn = [[UPSAlarmBtn alloc]init];
-    if (iphone4 || iphone5) {
-        resumeBtn.frame =CGRectMake((self.view.width - 160) / 3 * 2 + 80, self.view.height - 120, 80, 40);
-    }else if (iphone6){
-        resumeBtn.frame = CGRectMake((self.view.width - 200)/ 3 * 2 + 100, self.view.height - 120, 100, 40);
-    }else if (iphone6P){
-        resumeBtn.frame = CGRectMake((self.view.width - 240)/ 3 * 2 + 120, self.view.height - 120, 120, 40);
-    }else if (iphoneX){
-        resumeBtn.frame = CGRectMake((self.view.width - 200)/ 3 * 2 + 100, self.view.height - 150, 100, 40);
-    }
-    [resumeBtn setTitle:@"还原" forState:UIControlStateNormal];
-    [resumeBtn setBackgroundColor:[UIColor cyanColor]];
-    resumeBtn.clipsToBounds = YES;
-    resumeBtn.layer.cornerRadius = 10;
-    [self.view addSubview:resumeBtn];
-    
+//    UPSAlarmBtn *sureBtn = [[UPSAlarmBtn alloc]init];
+//    if (iphone4 || iphone5) {
+//        sureBtn.frame = CGRectMake((self.view.width - 160) / 3, self.view.height - 120, 80, 40);
+//    }else if (iphone6){
+//        sureBtn.frame = CGRectMake((self.view.width - 200)/3, self.view.height - 120, 100, 40);
+//    }else if (iphone6P){
+//        sureBtn.frame = CGRectMake((self.view.width - 240)/3, self.view.height - 120, 120, 40);
+//    }else if (iphoneX){
+//        sureBtn.frame = CGRectMake((self.view.width - 200)/3, self.view.height - 150, 100, 40);
+//    }
+//    [sureBtn setTitle:@"保存" forState:UIControlStateNormal];
+//    [sureBtn setBackgroundColor:[UIColor cyanColor]];
+//    sureBtn.layer.cornerRadius = 10;
+//    sureBtn.clipsToBounds = YES;
+//    [self.view addSubview:sureBtn];
+//    
+//    UPSAlarmBtn *resumeBtn = [[UPSAlarmBtn alloc]init];
+//    if (iphone4 || iphone5) {
+//        resumeBtn.frame =CGRectMake((self.view.width - 160) / 3 * 2 + 80, self.view.height - 120, 80, 40);
+//    }else if (iphone6){
+//        resumeBtn.frame = CGRectMake((self.view.width - 200)/ 3 * 2 + 100, self.view.height - 120, 100, 40);
+//    }else if (iphone6P){
+//        resumeBtn.frame = CGRectMake((self.view.width - 240)/ 3 * 2 + 120, self.view.height - 120, 120, 40);
+//    }else if (iphoneX){
+//        resumeBtn.frame = CGRectMake((self.view.width - 200)/ 3 * 2 + 100, self.view.height - 150, 100, 40);
+//    }
+//    [resumeBtn setTitle:@"还原" forState:UIControlStateNormal];
+//    [resumeBtn setBackgroundColor:[UIColor cyanColor]];
+//    resumeBtn.clipsToBounds = YES;
+//    resumeBtn.layer.cornerRadius = 10;
+//    [self.view addSubview:resumeBtn];
+//    
     
 }
 

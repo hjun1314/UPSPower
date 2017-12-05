@@ -10,10 +10,14 @@
 
 @interface UPSChildUserCell : UITableViewCell
 
-@property (nonatomic,strong)UILabel *nameLabel;
-@property (nonatomic,strong)UILabel *passwordLabel;
+@property (nonatomic,strong)UITextField *nameLabel;
+@property (nonatomic,strong)UITextField *passwordLabel;
 
+@property (nonatomic,copy)void(^btnClick)(void);
 
-
+///  从沙盒中加载用户账号密码
++ (void)loadUserSetting;
+///  保存账号密码到沙盒中
++ (void)saveUserSetting;
 
 @end

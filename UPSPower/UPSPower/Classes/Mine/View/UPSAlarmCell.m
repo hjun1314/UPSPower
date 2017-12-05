@@ -28,7 +28,7 @@
     
     UPSAlarmBtn *nameBtn = [[UPSAlarmBtn alloc]initWithFrame:CGRectMake(0, 0,kScreenW /3, 30)];
     [self addSubview:nameBtn];
-    [nameBtn setTitle:@"告警信息啊告警...。。。" forState:UIControlStateNormal];
+    [nameBtn setTitle:@"告警信息" forState:UIControlStateNormal];
     [nameBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     if (iphone4 || iphone5) {
         nameBtn.titleLabel.font = [UIFont systemFontOfSize:13];

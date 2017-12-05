@@ -59,18 +59,18 @@
 - (void)setupChildVCTitle{
     UINavigationController *nav = self.childViewControllers[0];
     nav.tabBarItem.title = @"设备";
-    nav.tabBarItem.image = [UIImage imageNamed:@"equipmentOrignal"];
-    nav.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"equipmentSel"];
+    nav.tabBarItem.image = [UIImage imageNamed:@"device_un"];
+    nav.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"device"];
     
     UINavigationController *nav1 = self.childViewControllers[1];
     nav1.tabBarItem.title = @"报警";
-    nav1.tabBarItem.image = [UIImage imageNamed:@"equipmentOrignal"];
-    nav1.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"equipmentSel"];
+    nav1.tabBarItem.image = [UIImage imageNamed:@"warning_un"];
+    nav1.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"warning"];
     
     UINavigationController *nav2 = self.childViewControllers[2];
     nav2.tabBarItem.title = @"个人";
-    nav2.tabBarItem.image = [UIImage imageNamed:@"equipmentOrignal"];
-    nav2.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"equipmentSel"];
+    nav2.tabBarItem.image = [UIImage imageNamed:@"owner_un"];
+    nav2.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"owner"];
     
 }
 - (void)didReceiveMemoryWarning {

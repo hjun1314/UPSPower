@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "UPSTabVC.h"
+#import "UPSMainVC.h"
 @interface AppDelegate ()
 
 @end
@@ -19,8 +20,11 @@
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    UPSTabVC *tab = [[UPSTabVC alloc]init];
-    self.window.rootViewController = tab;
+
+    
+//    UPSTabVC *tab = [[UPSTabVC alloc]init];
+    UPSMainVC *main = [[UPSMainVC alloc]init];
+    self.window.rootViewController = main;
     [self.window makeKeyAndVisible];
     
     

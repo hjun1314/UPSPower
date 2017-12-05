@@ -50,17 +50,24 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickTab)];
     [headView addGestureRecognizer:tap];
     
-    
+    UIButton *ben = [[UIButton alloc]initWithFrame:CGRectMake(100, self.view.height - 100, 50, 50)];
+    [self.view addSubview:ben];
+    [ben setBackgroundColor:[UIColor orangeColor]];
+    [ben addTarget:self action:@selector(clickBen) forControlEvents:UIControlEventTouchUpInside];
+}
+- (void)clickBen{
+    NSLog(@"哎");
 }
 ///手势的点击
 - (void)clickTab{
-    if (!self.isOpen) {
-        self.tableView.hidden = YES;
-        self.view.backgroundColor = [UIColor redColor];
-    }else{self.tableView.hidden = NO;
-        self.view.backgroundColor = [UIColor whiteColor];
-        
-    }
+//    if (!self.isOpen) {
+//        self.tableView.hidden = YES;
+//        self.view.backgroundColor = [UIColor redColor];
+//    }else{self.tableView.hidden = NO;
+//        self.view.backgroundColor = [UIColor whiteColor];
+//
+//    }
+    NSLog(@"点击了");
 }
 
 #pragma mark- 创建点击通知

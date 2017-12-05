@@ -21,11 +21,20 @@
 #define UICOLOR_RGB(R, G, B, A) [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:A]
 #import "UIImage+Image.h"
 #import "UIView+ZUtility.h"
+#import "UPSPower.h"
+#import "UPSHttpNetWorkTool.h"
 
 ///第三方
 #import <Masonry.h>
-
+#import <AFNetworking.h>
+#import <SVProgressHUD.h>
 
 #define SafeAreaTopHeight (kScreenH == 812.0 ? 88 : 64)
 #define SafeAreaTabbarHeight (kScreenH == 812.0 ? 83 : 49)
+
+///存储用户账号密码
+#define API_UserFilePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"user.plist"]
+
+
+
 #endif /* UPSPowerPCH_pch */
