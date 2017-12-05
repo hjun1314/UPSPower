@@ -25,9 +25,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"设备状态";
+    [self setupNav];
     [self setupTableView];
     [self setupNotification];
+}
+- (void)setupNav{
+    self.navigationItem.title = @"设备状态";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"添加分组" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
+}
+- (void)clickRightBarItem{
+    
+    
 }
 - (void)setupTableView{
     
@@ -50,14 +59,9 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickTab)];
     [headView addGestureRecognizer:tap];
     
-    UIButton *ben = [[UIButton alloc]initWithFrame:CGRectMake(100, self.view.height - 100, 50, 50)];
-    [self.view addSubview:ben];
-    [ben setBackgroundColor:[UIColor orangeColor]];
-    [ben addTarget:self action:@selector(clickBen) forControlEvents:UIControlEventTouchUpInside];
+    
 }
-- (void)clickBen{
-    NSLog(@"哎");
-}
+
 ///手势的点击
 - (void)clickTab{
 //    if (!self.isOpen) {

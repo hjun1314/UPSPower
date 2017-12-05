@@ -11,10 +11,10 @@
 //#import "UPSLoginTextField.h"
 @interface UPSLoginView()<UITextFieldDelegate>
 //@property (nonatomic,strong)UPSLoginBackView *backgroundView;
-//@property (nonatomic,strong)UPSLoginTextField *userTextField;
-//@property (nonatomic,strong)UPSLoginTextField *passwordTextField;
-//@property (nonatomic, strong) UIButton *loginButton;
-//@property (nonatomic, strong) UIActivityIndicatorView *logioningActivityIndicatorView;
+
+@property (nonatomic, strong) UIButton *loginButton;
+@property (nonatomic, strong) UIActivityIndicatorView *logioningActivityIndicatorView;
+
 //@property (nonatomic, assign) BOOL isUserEmpty;
 //@property (nonatomic, assign) BOOL isPasswordEmpty;
 
@@ -62,12 +62,13 @@
     [accountTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(iconView.mas_trailing).offset(15);
         make.top.trailing.bottom.equalTo(accountView);
-//        make.height.offset(32);
-//        make.trailing.equalTo(accountView);
+        //        make.height.offset(32);
+        //        make.trailing.equalTo(accountView);
         
     }];
     accountTextField.placeholder = @"请输入账号";
-    
+    self.userTextField = accountTextField;
+    accountTextField.delegate = self;
     ///密码
     UIView *passwordView = [[UIView alloc]init];
     [self addSubview:passwordView];
@@ -79,8 +80,8 @@
         make.height.offset(40);
     }];
     passwordView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-  
-   
+    
+    
     UIImageView *passwordImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 4, 32, 32)];
     [passwordView addSubview:passwordImageView];
     passwordImageView.image = [UIImage imageNamed:@"password"];
@@ -88,17 +89,18 @@
     UITextField *passwordTextField = [[UITextField alloc]init];
     [passwordView addSubview:passwordTextField];
     [passwordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.leading.equalTo(passwordImageView.mas_trailing).offset(15);
+        make.leading.equalTo(passwordImageView.mas_trailing).offset(15);
         make.top.trailing.bottom.equalTo(passwordView);
     }];
     passwordTextField.placeholder = @"请输入密码";
     passwordTextField.secureTextEntry = YES;
+    self.passwordTextField = passwordTextField;
+    passwordTextField.delegate = self;
     
-   
     UIButton *sureBtn = [[UIButton alloc]initWithFrame:CGRectMake(4, 4, 26, 23)];
     [self addSubview:sureBtn];
     [sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-
+        
         make.top.equalTo(passwordView.mas_bottom).offset(20);
         make.leading.equalTo(self).offset(10);
         make.trailing.equalTo(self).offset(-10);
@@ -109,21 +111,62 @@
     sureBtn.titleLabel.alpha = 0.5;
     [sureBtn.layer setCornerRadius:3.0];
     sureBtn.clipsToBounds = YES;
-   [sureBtn setTitle:@"登录" forState:UIControlStateNormal];
-        [sureBtn addTarget:self action:@selector(didClickLoginBtn:) forControlEvents:UIControlEventTouchUpInside];
-   [sureBtn setBackgroundColor:[UIColor lightGrayColor]];
-   [sureBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//    sureBtn.enabled = YES;
+    [sureBtn setTitle:@"登录" forState:UIControlStateNormal];
+    [sureBtn addTarget:self action:@selector(didClickLoginBtn:) forControlEvents:UIControlEventTouchUpInside];
+//    [sureBtn setBackgroundColor:[UIColor lightGrayColor]];
+    [sureBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.loginButton = sureBtn;
+    [sureBtn setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     
-  
     
 }
 
 - (void)didClickLoginBtn:(UIButton *)sender{
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"didClickSureBtn" object:nil];
+    [self addLogioningActivityIndicatorView];
+}
+
+#pragma mark - textfieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSCharacterSet *cs;
+    cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS]invertedSet];
+    
+    NSString *toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if (self.userTextField == textField) {
+        
+    }
+    if (self.passwordTextField == textField) {
+        if (toBeString.length > 0) {
+            self.loginButton.backgroundColor = UICOLOR_RGB(33, 151, 216, 1);          self.loginButton.enabled = YES;
+        }else{
+            self.loginButton.enabled = NO;
+            self.loginButton.backgroundColor = [UIColor lightGrayColor];
+        }
+    }
+    
+    
+    
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""]; //按cs分离出数组,数组按@""分离出字符串
+    
+    BOOL canChange = [string isEqualToString:filtered];
+    
+    return canChange;
+}
+
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+
+{
+    ///移除键盘
+    [self.userTextField resignFirstResponder];
+    
+    [self.passwordTextField resignFirstResponder];
     
 }
+
+
 //
 ////添加textField的背景View
 //- (void)addLoginBackgroundView:(CGRect)frame{
@@ -206,13 +249,13 @@
 //    [self.backgroundView addSubview:self.passwordTextField];
 //}
 //
-//- (void)addLogioningActivityIndicatorView{
-//    CGFloat logioningActivityIndicatorViewX = self.loginButton.frame.origin.x + 80;
-//    CGFloat logioningActivityIndicatorViewY = self.loginButton.frame.origin.y;
-//    CGFloat logioningActivityIndicatorViewWH = self.loginButton.frame.size.height;
-//    self.logioningActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(logioningActivityIndicatorViewX, logioningActivityIndicatorViewY, logioningActivityIndicatorViewWH, logioningActivityIndicatorViewWH)];
-//    [self addSubview:self.logioningActivityIndicatorView];
-//}
+- (void)addLogioningActivityIndicatorView{
+    CGFloat logioningActivityIndicatorViewX = self.loginButton.frame.origin.x + 80;
+    CGFloat logioningActivityIndicatorViewY = self.loginButton.frame.origin.y;
+    CGFloat logioningActivityIndicatorViewWH = self.loginButton.frame.size.height;
+    self.logioningActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(logioningActivityIndicatorViewX, logioningActivityIndicatorViewY, logioningActivityIndicatorViewWH, logioningActivityIndicatorViewWH)];
+    [self addSubview:self.logioningActivityIndicatorView];
+}
 //
 //- (void)clickLoginBtn:(id)sender{
 //    [self.loginButton setTitle:@"登录中..." forState:UIControlStateNormal];

@@ -243,8 +243,6 @@
 		F05D0E5F1FC52A6200FD4218 /* Log */ = {
 			isa = PBXGroup;
 			children = (
-				F05D0E601FC52A6200FD4218 /* FileTool.h */,
-				F05D0E621FC52A6200FD4218 /* FileTool.m */,
 				F05D0E611FC52A6200FD4218 /* NSObject+Log.m */,
 				F05D0E631FC52A6200FD4218 /* NSObject+Log.h */,
 			);
@@ -266,6 +264,12 @@
 		F0746DEE1FC518E100429F3B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F09319931FC5088700D04D82 /* AppDelegate.h */,
+				F09319941FC5088700D04D82 /* AppDelegate.m */,
+				F05D0E721FC5496F00FD4218 /* UPSPowerPCH.pch */,
+				F01C69A71FD0F0D700BD280D /* UPSPower.h */,
+				F05D0E4F1FC529E600FD4218 /* Category */,
+				F09ECD9D1FD6A58F008E7D2C /* Tool */,
 				F0746DF81FC518E100429F3B /* Main */,
 				F02BEA721FC52614007FCF8A /* Equipment */,
 				F0746DF41FC518E100429F3B /* Setting */,
@@ -278,10 +282,11 @@
 		F0746DEF1FC518E100429F3B /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F0228F7A1FD5310500A53245 /* UPSHttpNetWorkTool.h */,
-				F0228F791FD5310500A53245 /* UPSHttpNetWorkTool.m */,
-				F05D0E5F1FC52A6200FD4218 /* Log */,
-				F05D0E4F1FC529E600FD4218 /* Category */,
+				F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */,
+				F093199F1FC5088700D04D82 /* Assets.xcassets */,
+				F09319A11FC5088700D04D82 /* LaunchScreen.storyboard */,
+				F09319A51FC5088700D04D82 /* main.m */,
+				F054D9471FCBED1D002BB8C6 /* alarmLevel.plist */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -437,16 +442,7 @@
 			isa = PBXGroup;
 			children = (
 				F0746DEE1FC518E100429F3B /* Classes */,
-				F09319931FC5088700D04D82 /* AppDelegate.h */,
-				F09319941FC5088700D04D82 /* AppDelegate.m */,
-				F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */,
-				F093199F1FC5088700D04D82 /* Assets.xcassets */,
-				F09319A11FC5088700D04D82 /* LaunchScreen.storyboard */,
 				F09319A41FC5088700D04D82 /* Info.plist */,
-				F09319A51FC5088700D04D82 /* main.m */,
-				F05D0E721FC5496F00FD4218 /* UPSPowerPCH.pch */,
-				F01C69A71FD0F0D700BD280D /* UPSPower.h */,
-				F054D9471FCBED1D002BB8C6 /* alarmLevel.plist */,
 			);
 			path = UPSPower;
 			sourceTree = "<group>";
@@ -468,6 +464,19 @@
 			);
 			path = UPSPowerUITests;
 			sourceTree = "<group>";
+		};
+		F09ECD9D1FD6A58F008E7D2C /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				F05D0E5F1FC52A6200FD4218 /* Log */,
+				F0228F7A1FD5310500A53245 /* UPSHttpNetWorkTool.h */,
+				F0228F791FD5310500A53245 /* UPSHttpNetWorkTool.m */,
+				F05D0E601FC52A6200FD4218 /* FileTool.h */,
+				F05D0E621FC52A6200FD4218 /* FileTool.m */,
+			);
+			name = Tool;
+			path = UPSPower/Tool;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -850,7 +859,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/UPSPower/UPSPowerPCH.pch";
+				GCC_PREFIX_HEADER = /Users/hjun/Desktop/UPSPower/UPSPower/UPSPower/Classes/UPSPowerPCH.pch;
 				INFOPLIST_FILE = UPSPower/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -867,7 +876,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/UPSPower/UPSPowerPCH.pch";
+				GCC_PREFIX_HEADER = /Users/hjun/Desktop/UPSPower/UPSPower/UPSPower/Classes/UPSPowerPCH.pch;
 				INFOPLIST_FILE = UPSPower/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

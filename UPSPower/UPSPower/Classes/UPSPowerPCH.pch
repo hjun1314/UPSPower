@@ -35,6 +35,7 @@
 ///存储用户账号密码
 #define API_UserFilePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"user.plist"]
 
-
+#define NUMBERS @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define API_BaseURL @"http://192.168.1.147:12345/ups-interface/"
 
 #endif /* UPSPowerPCH_pch */

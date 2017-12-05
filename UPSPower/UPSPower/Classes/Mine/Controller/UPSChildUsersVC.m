@@ -223,8 +223,77 @@
         }
     }
 }
+#pragma mark- 代理方法
+///让TableView 进入编辑状态
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+    /** 首先调用父类的方法. */
+    [super setEditing:editing animated:animated];
+    
+    /** 使tableView处于编辑状态. */
+    [self.tableView setEditing:editing animated:animated];
+}
+
+///指定哪行cell可以进行编辑
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
 
 
+///指定cell的编辑状态（删除还是插入）
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /** 不同的行, 可以设置不同的编辑样式, 编辑样式是一个枚举类型 */
+    if (indexPath.row == 0) {
+        return UITableViewCellEditingStyleDelete;
+    } else {
+        return UITableViewCellEditingStyleInsert;
+    }
+}
+
+///指定 tableView 哪些行(cell) 可以移动 (UITableViewDataSource协议方法)
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /** 指定哪些行(cell)可以移动 */
+    if (0 == indexPath.row) {
+        return NO;  /**< NO cell不能移动 */
+    } else {
+        return YES; /**< YES cell可以移动 */
+    }
+}
+///3 . 移动 cell 后的操作: 数据源进行更新
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    /**  1. 从原位置移除,在从原位置移除之前, 需要保存一下原位置的数据, 同时持有一次. */
+    NSString *str = [self.data objectAtIndex:sourceIndexPath.row];
+    
+    [self.data removeObjectAtIndex:sourceIndexPath.row];
+    
+    /** 2. 添加到目的位置, 同时释放一次 */
+    [self.data insertObject:str atIndex:destinationIndexPath.row];
+    
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [_data removeObjectAtIndex:indexPath.row];
+        // Delete the row from the data source.
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        /** 1. 更新数据源:向数组中添加数据. */
+        [self.data insertObject:@"abcd" atIndex:indexPath.row];
+        
+        /** 2. TableView中插入一个cell. */
+        [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+      
+        
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

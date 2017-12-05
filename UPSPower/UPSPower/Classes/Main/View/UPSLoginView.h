@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UPSLoginView : UIView
-
+@property (nonatomic,strong)UITextField *userTextField;
+@property (nonatomic,strong)UITextField *passwordTextField;
 @end
