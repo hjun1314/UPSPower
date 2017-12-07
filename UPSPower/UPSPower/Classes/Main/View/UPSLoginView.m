@@ -117,14 +117,48 @@
     [sureBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.loginButton = sureBtn;
     [sureBtn setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+   
     
+    UILabel *bottomLabel = [[UILabel alloc]init];
+    [self addSubview:bottomLabel];
+    bottomLabel.text = @"昌菱电气  版权所有";
+    bottomLabel.font = [UIFont fontWithName:@"Arial"size:22];
+    
+    if (iphoneX) {
+        
+        [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.mas_bottom).offset(-60);
+            make.centerX.equalTo(self);
+        }];
+        
+    }else{
+        
+        [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.mas_bottom).offset(-40);
+            make.centerX.equalTo(self);
+        }];
+        
+    }
+    
+    
+    
+    UILabel *copyRightLabel = [[UILabel alloc]init];
+    [self addSubview:copyRightLabel];
+    [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(bottomLabel.mas_bottom).offset(10);
+        make.centerX.equalTo(self);
+        
+    }];
+    copyRightLabel.text = @"Copyright©2017 Shoryo All Rights Reserved";
+    copyRightLabel.font = [UIFont systemFontOfSize:15];
+   
     
 }
 
 - (void)didClickLoginBtn:(UIButton *)sender{
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"didClickSureBtn" object:nil];
-    [self addLogioningActivityIndicatorView];
+//    [self addLogioningActivityIndicatorView];
 }
 
 #pragma mark - textfieldDelegate

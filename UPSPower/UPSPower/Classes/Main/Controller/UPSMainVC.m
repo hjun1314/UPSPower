@@ -10,6 +10,7 @@
 #import "UPSLoginView.h"
 #import "UPSTabVC.h"
 #import "UPSNacVC.h"
+#import "UPSMainModel.h"
 @interface UPSMainVC ()
 
 @property (nonatomic,strong)UPSLoginView *loginView;
@@ -47,7 +48,17 @@
         UPSTabVC *tab = [[UPSTabVC alloc]init];
         [self.navigationController pushViewController:tab animated:YES];
         [SVProgressHUD showSuccessWithStatus:@"登录成功"];
-        NSLog(@"登录成功%@",responseObject);
+        NSMutableArray *dataM = [NSMutableArray array];
+        NSDictionary *data = responseObject[@"data"];
+        
+        UPSMainModel *model = [UPSMainModel mj_objectWithKeyValues:data];
+        [dataM addObject:model];
+        NSLog(@"模型数组。。。%@",dataM);
+        [UPSTool saveToken:responseObject[@"data"][@"token"]];
+        NSString *ID = responseObject[@"data"][@"userId"];
+        [UPSTool saveID:[ID integerValue]];
+//        NSLog(@"groupUps模型%@",responseObject[@"data"][@"groupUps"]);
+//        NSLog(@"%@",);
 
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"登录失败");

@@ -60,6 +60,7 @@
     [headView addGestureRecognizer:tap];
     
     
+   
 }
 
 ///手势的点击
@@ -71,7 +72,8 @@
 //        self.view.backgroundColor = [UIColor whiteColor];
 //
 //    }
-    NSLog(@"点击了");
+//    NSLog(@"点击了");
+//    self.tableView.hidden = YES;
 }
 
 #pragma mark- 创建点击通知
@@ -155,6 +157,9 @@
 - (void )yuFoldingTableView:(YUFoldingTableView *)yuTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [yuTableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == 0) {
+        NSLog(@"ddddd");
+    }
 }
 
 - (void)didReceiveMemoryWarning {

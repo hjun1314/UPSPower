@@ -9,14 +9,20 @@
 #import "UPSChildUsersVC.h"
 #import "UPSChildUserCell.h"
 #import "UPSChileUserCellModel.h"
-@interface UPSChildUsersVC ()<UITableViewDelegate,UITableViewDataSource>
+#import "UPSMainModel.h"
+#import "UPSChildUserAccountModel.h"
+@interface UPSChildUsersVC ()<UITableViewDelegate,UITableViewDataSource>{
+    FMDatabase * dataBase;
+    NSMutableArray * _usernameArr;
+    NSMutableArray * _passwordArr;
+    UIAlertController * _alert;
+}
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)UIView *titleView;
-@property (nonatomic,strong)NSMutableArray *data;
-
 @property (nonatomic,strong)UITextField *nameField;
 @property (nonatomic,strong)UITextField *passwordField;
 
+@property (nonatomic,strong)UPSMainModel *mainModel;
 
 
 @end
@@ -26,18 +32,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNav];
+    [self setupFMDB];
     [self setupUI];
-    [self setupNotification];
-    self.view.backgroundColor = [UIColor whiteColor];
-//     _data = [NSMutableArray arrayWithObjects:@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8", nil];
+    UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = model;
+    
    
-    _data = [NSMutableArray array];
 }
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [UPSChileUserCellModel getName];
-    [UPSChileUserCellModel getPassWord];
-}
+
 - (void)setNav{
     
     self.navigationItem.title = @"子用户管理";
@@ -48,57 +50,22 @@
 - (void)clickBack{
     [self.navigationController popViewControllerAnimated:YES];
 }
+///点击rightItem
 - (void)clickRightBtn{
-    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"添加用户名和密码"
-                                                                              message:nil
-                                                                       preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"账号";
-        textField.textColor = [UIColor blueColor];
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.borderStyle = UITextBorderStyleNone;
-    }];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"密码";
-        textField.textColor = [UIColor blueColor];
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.borderStyle = UITextBorderStyleNone;
-        textField.secureTextEntry = YES;
-    }];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        NSArray * textfields = alertController.textFields;
-        UITextField * namefield = textfields[0];
-        self.nameField = namefield;
-        //        [UPSChileUserCellModel saveName:self.nameField.text];
-        UITextField * passwordfiled = textfields[1];
-        self.passwordField = passwordfiled;
-        //        [UPSChileUserCellModel savePassword:self.passwordField.text];
-        //        passwordfiled.text = [UPSChileUserCellModel getPassWord];
-        ///添加cell
-        NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-        NSString *s = @"";
-        [_data addObject:s];
-        NSInteger row = self.data.count;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [indexPaths addObject: indexPath];
-        [self.tableView beginUpdates];
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
-    }]];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
-    }]];
-    [self presentViewController:alertController animated:YES completion:nil];
-    
+     [self presentViewController:_alert animated:YES completion:nil];
 }
+
 - (void)setupUI{
+    
     ///tableView
     UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight + 35, kScreenW, kScreenH - SafeAreaTopHeight - SafeAreaTabbarHeight - 35)];
     [self.view addSubview:tableView];
     self.tableView = tableView;
     tableView.delegate = self;
     tableView.dataSource = self;
-    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.tableFooterView = [UIView new];
+    
+    //    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     ///titleView
     UIView *titleView = [[UIView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, 35)];
     titleView.backgroundColor = UICOLOR_RGB(245, 245, 245, 1);
@@ -106,24 +73,11 @@
     self.titleView = titleView;
     [self setupTitleViewBtn];
     
-//    ///按钮点击
-//    UIButton *btn = [[UIButton alloc]init];
-//    [self.view addSubview:btn];
-//    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(self.view);
-//    make.bottom.equalTo(self.view.mas_bottom).offset(-80);
-//        make.height.offset(40);
-//        make.width.offset(80);
-//    }];
-//    [btn setBackgroundColor:[UIColor cyanColor]];
-////    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [btn setTitle:@"添加" forState:UIControlStateNormal];
-//    [btn addTarget:self action:@selector(didClickBtn) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
 - (void)setupTitleViewBtn{
-    NSArray *titles = @[@"用户名",@"密码",@"操作"];
+    NSArray *titles = @[@"用户名",@"密码"];
     NSUInteger count = titles.count;
     
     CGFloat titleBtnW = self.titleView.width / count;
@@ -136,165 +90,144 @@
         titleLabel.text = titles[i];
         titleLabel.textAlignment = NSTextAlignmentCenter;
     }
-    
-    
 }
 
-#pragma mark- 删除按钮点击方法
-- (void)setupNotification{
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didClickDeleteBtn:) name:@"didDeleteBtn" object:nil];
-}
-- (void)didClickDeleteBtn:(UIButton *)btn{
-    NSArray *visiblecells = [self.tableView visibleCells];
-    for (UPSChildUserCell *cell in visiblecells) {
-        if (cell.tag == btn.tag) {
-            [_data removeObjectAtIndex:cell.tag];
+///数据库相关
+- (void)setupFMDB{
+    
+    ///获取数据库对象
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    path = [path stringByAppendingPathComponent:@"userInfo.sqlite"];
+    dataBase = [FMDatabase databaseWithPath:path];
+    
+    ///打开数据库
+    BOOL open = [dataBase open];
+    
+    ///创建表
+    
+    NSString * create1=@"CREATE TABLE IF NOT EXISTS A_user (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,username TEXT,password TEXT)";
+    BOOL c1= [dataBase executeUpdate:create1];
+    if(c1){
+        NSLog(@"创建表成功");
+    }
+    
+    _alert = [UIAlertController alertControllerWithTitle:@"请输入账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [_alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"账号";
+    }];
+    [_alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"密码";
+        textField.secureTextEntry = YES;
+    }];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
+    [_alert addAction:action1];
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (!_alert.textFields[0].text||!_alert.textFields[1].text) {
+            return ;
+        }
+        //        4 插入数据
+        NSString * insertSql= @" INSERT INTO A_user(username, password)VALUES(?,?)";
+        //    插入语句
+        bool inflag1=[dataBase executeUpdate:insertSql,_alert.textFields[0].text,_alert.textFields[1].text];
+        if(inflag1){
+            NSLog(@"插入数据成功");
+            [self selectForm];
             [self.tableView reloadData];
         }
-    }
-}
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+        
+        ///http://192.168.1.147:12345/ups-interface/addChildrenAccount添加子账户
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"token"] = self.mainModel.token;
+        params[@"userId"] = @(self.mainModel.userId);
+        params[@"username"] = _alert.textFields[0].text;
+        params[@"password"] = _alert.textFields[1].text;
+        
+        [[UPSHttpNetWorkTool sharedApi]POST:@"addChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog(@"添加子账户成功%@",responseObject);
+        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog(@"添加子账户失败%@",error);
+        }];
+        
+        
+    }];
+    [_alert addAction:action2];
+    
+    _usernameArr = [[NSMutableArray alloc] init];
+    _passwordArr = [[NSMutableArray alloc] init];
 }
 
-#pragma mark- uitableviewDelegate & datasource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.data.count;
-}
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *ID = @"CELL";
-    UPSChildUserCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    if (cell == nil) {
-        cell = [[UPSChildUserCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-//
-//        UITextField *nameLabel = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, kScreenW / 3, 30)];
-//        nameLabel.textAlignment = NSTextAlignmentCenter;
-//        nameLabel.borderStyle = UITextBorderStyleNone;
-//        nameLabel.textAlignment = NSTextAlignmentCenter;
-//        nameLabel.userInteractionEnabled = NO;
-//        nameLabel.text = self.nameField.text;
-//
-//        [cell.contentView addSubview:nameLabel];
-//
-//        UITextField *passwordLabel = [[UITextField alloc]initWithFrame:CGRectMake(kScreenW / 3, 0, kScreenW / 3, 30)];
-//        passwordLabel.borderStyle = UITextBorderStyleNone;
-//        passwordLabel.secureTextEntry = YES;
-//        passwordLabel.textAlignment = NSTextAlignmentCenter;
-//        passwordLabel.userInteractionEnabled = NO;
-//        passwordLabel.text = self.passwordField.text;
-//        [cell.contentView addSubview:passwordLabel];
-//
-//        UIButton *fixBtn = [[UIButton alloc]initWithFrame:CGRectMake((kScreenW / 3)*2, 0, kScreenW / 6, 30)];
-//        [fixBtn setImage:[UIImage imageNamed:@"fix"] forState:UIControlStateNormal];
-//        [cell.contentView addSubview:fixBtn];
-//
-//
-//        UIButton *deleteBtn = [[UIButton alloc]initWithFrame:CGRectMake((kScreenW / 3) * 2 + kScreenW /6, 0, kScreenW / 6, 30)];
-//        [deleteBtn setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
-//        [cell.contentView addSubview:deleteBtn];
-//        [deleteBtn addTarget:self action:@selector(clickDeleteBtn:) forControlEvents:UIControlEventTouchUpInside];
+//数据库查询操作
+- (void)selectForm{
+    [_usernameArr removeAllObjects];
+    [_passwordArr removeAllObjects];
+    //    5查询数据FMDB的FMResultSet提供了多个方法来获取不同类型的数据
+    NSString * sql=@" select * from A_user ";
+    FMResultSet *result=[dataBase executeQuery:sql];
+    
+    while(result.next){
+        NSString * username =[result stringForColumn:@"username"];
+        [_usernameArr addObject:username];
+        NSString * password =[result stringForColumn:@"password"];
+        [_passwordArr addObject:password];
     }
-//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.tag = indexPath.row;
-    cell.btnClick = ^{
-        NSLog(@"点击了哪一行。。。%ld",(long)indexPath.row);
-    };
-    cell.nameLabel.text = self.nameField.text;
-    cell.passwordLabel.text = self.passwordField.text;
-    [UPSChileUserCellModel saveName:cell.nameLabel.text];
-    [UPSChileUserCellModel savePassword:cell.passwordLabel.text];
-//    
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return _usernameArr.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UPSChildUserCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (!cell) {
+        cell = [[UPSChildUserCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+    }
+    cell.passwordLabel.text = _passwordArr[indexPath.row];
+    cell.passwordLabel.secureTextEntry = YES;
+    cell.nameLabel.text = _usernameArr[indexPath.row];
+
     return cell;
-    
 }
-- (void)clickDeleteBtn:(UIButton *)btn{
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
-    NSArray *visiblecells = [self.tableView visibleCells];
-    for(UITableViewCell *cell in visiblecells)
-    {
-        if(cell.tag == btn.tag)
-        {
-            [_data removeObjectAtIndex:cell.tag];
-            [_data removeLastObject];
-//            NSLog(@"%ld cell.tag",cell.tag);
-            // 定义按钮的功能，现在为删除
-            [_tableView reloadData];
-            //break;
+    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.text = _usernameArr[indexPath.row];
+        }];
+        [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.text = _passwordArr[indexPath.row];
+            textField.secureTextEntry = YES;
+        }];
+        [self presentViewController:editAlert animated:YES completion:nil];
+        
+        UIAlertAction * action3 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
+        [editAlert addAction:action3];
+        UIAlertAction * action4 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //    修改语句
+            BOOL flag=  [dataBase executeUpdate:@" UPDATE A_user SET username = ?,password = ? WHERE id = ?;",editAlert.textFields[0].text,editAlert.textFields[1].text,@(indexPath.row+1)];
+            if(flag){
+                NSLog(@"修改成功");
+                [self selectForm];
+                [self.tableView reloadData];
+            }
+        }];
+        [editAlert addAction:action4];
+    }];
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        //        删除语句
+        BOOL dflag= [dataBase executeUpdate:@"delete from A_user WHERE username = ?",_usernameArr[indexPath.row]];
+        if(dflag){
+            [_usernameArr removeObjectAtIndex:indexPath.row];
+            [_passwordArr removeObjectAtIndex:indexPath.row];
+            [self.tableView reloadData];
         }
-    }
-}
-#pragma mark- 代理方法
-///让TableView 进入编辑状态
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
-    /** 首先调用父类的方法. */
-    [super setEditing:editing animated:animated];
-    
-    /** 使tableView处于编辑状态. */
-    [self.tableView setEditing:editing animated:animated];
-}
-
-///指定哪行cell可以进行编辑
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-
-///指定cell的编辑状态（删除还是插入）
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /** 不同的行, 可以设置不同的编辑样式, 编辑样式是一个枚举类型 */
-    if (indexPath.row == 0) {
-        return UITableViewCellEditingStyleDelete;
-    } else {
-        return UITableViewCellEditingStyleInsert;
-    }
-}
-
-///指定 tableView 哪些行(cell) 可以移动 (UITableViewDataSource协议方法)
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /** 指定哪些行(cell)可以移动 */
-    if (0 == indexPath.row) {
-        return NO;  /**< NO cell不能移动 */
-    } else {
-        return YES; /**< YES cell可以移动 */
-    }
-}
-///3 . 移动 cell 后的操作: 数据源进行更新
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
-    /**  1. 从原位置移除,在从原位置移除之前, 需要保存一下原位置的数据, 同时持有一次. */
-    NSString *str = [self.data objectAtIndex:sourceIndexPath.row];
-    
-    [self.data removeObjectAtIndex:sourceIndexPath.row];
-    
-    /** 2. 添加到目的位置, 同时释放一次 */
-    [self.data insertObject:str atIndex:destinationIndexPath.row];
-    
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_data removeObjectAtIndex:indexPath.row];
-        // Delete the row from the data source.
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-    }
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        /** 1. 更新数据源:向数组中添加数据. */
-        [self.data insertObject:@"abcd" atIndex:indexPath.row];
-        
-        /** 2. TableView中插入一个cell. */
-        [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        
-      
-        
-    }
+    }];
+    
+    return @[editAction,deleteAction];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

@@ -10,6 +10,8 @@
 #import "UPSAboutUsVC.h"
 #import "UPSAlarmVC.h"
 #import "UPSChildUsersVC.h"
+#import "UPSMainModel.h"
+#import "UPSMainVC.h"
 @interface UPSMineVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -92,6 +94,17 @@
         }];
         
         UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            ///http://192.168.1.147:12345/ups-interface/logout
+            NSDictionary *params = @{@"token": [UPSTool getToken] ,@"userId":@([UPSTool getID])};
+            [[UPSHttpNetWorkTool sharedApi]POST:@"logout" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                NSLog(@"注销成功");
+                UPSMainVC *main = [[UPSMainVC alloc]init];
+                [self.navigationController pushViewController:main animated:YES];
+            } fail:^(NSURLSessionDataTask *task, NSError *error) {
+                NSLog(@"注销失败");
+            }];
+            
+            
             
         }];
         
