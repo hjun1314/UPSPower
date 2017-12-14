@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class UPSParentGroupModel;
 @interface UPSMainModel : NSObject<NSCoding>
 
 Singleton_h(UPSMainModel);
 
 ///分栏数据
-@property (nonatomic,strong)NSArray *parentGroup;
+@property (nonatomic,strong)NSArray<UPSParentGroupModel *>*parentGroup;
 ///UPS数据
 @property (nonatomic,strong)NSArray *groupUps;
 ///用户id

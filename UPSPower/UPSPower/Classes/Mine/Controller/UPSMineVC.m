@@ -12,7 +12,9 @@
 #import "UPSChildUsersVC.h"
 #import "UPSMainModel.h"
 #import "UPSMainVC.h"
+#import "UPSAlarmModel.h"
 @interface UPSMineVC ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic,strong)UPSMainModel *mainModel;
 
 @end
 
@@ -23,6 +25,8 @@
 //    self.view.backgroundColor = [UIColor cyanColor];
     self.title = @"个人中心";
     [self setup];
+    UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = model;
 }
 
 - (void)setup{
@@ -77,9 +81,11 @@
         [self.navigationController pushViewController:childUserVC animated:YES];
         
     }else if (indexPath.row == 2){
+        ///http://192.168.1.147:12345/ups-interface/upsAlarmConfigureList
+       
         UPSAlarmVC *alarmVC = [[UPSAlarmVC alloc]init];
         [self.navigationController pushViewController:alarmVC animated:YES];
-        
+
     }else if (indexPath.row == 3){
         
         UPSAboutUsVC *aboutVC = [[UPSAboutUsVC alloc]init];

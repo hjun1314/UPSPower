@@ -17,7 +17,7 @@ Singleton_m(UPSMainModel);
     [aCoder encodeInteger:self.userChildrenId forKey:@"userChildrenId"];
     [aCoder encodeInteger:self.companyId forKey:@"companyId"];
     [aCoder encodeObject:self.token forKey:@"token"];
-    
+//    [aCoder encodeObject:self.parentGroup forKey:@"parentGroup"];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
@@ -26,6 +26,7 @@ Singleton_m(UPSMainModel);
     self.userChildrenId = [aDecoder decodeIntegerForKey:@"userChildrenId"];
     self.companyId = [aDecoder decodeIntegerForKey:@"companyId"];
     self.token = [aDecoder decodeObjectForKey:@"token"];
+//    self.parentGroup = [aDecoder decodeObjectForKey:@"parentGroup"];
     return self;
 }
 

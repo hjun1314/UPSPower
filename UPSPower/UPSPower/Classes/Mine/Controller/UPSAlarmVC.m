@@ -9,12 +9,21 @@
 #import "UPSAlarmVC.h"
 #import "UPSAlarmCell.h"
 #import "UPSAlarmBtn.h"
-@interface UPSAlarmVC ()<UITableViewDelegate,UITableViewDataSource,UIPickerViewDelegate,UIPickerViewDataSource>
+#import "UPSMainModel.h"
+#import "UPSAlarmModel.h"
+#import "UPSScreeningAlarmModel.h"
+#import "UPSUpdateAlermSettingModel.h"
+#import "YCXMenu.h"
+@interface UPSAlarmVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UIView *titleView;
 
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)NSArray *data;
+@property (nonatomic,strong)UPSMainModel *mainModel;
+
+@property (nonatomic,strong)NSMutableArray *items;
+
 
 @end
 
@@ -26,17 +35,35 @@
     [self setupTitleView];
     [self setupTableView];
     [self setNontification];
+    UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = model;
 }
 - (void)setNav{
     
     self.navigationItem.title = @"告警定义设置";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStylePlain target:self action:@selector(clickBack)];
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"告警刷选" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightItem:)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 }
 - (void)clickBack{
     [self.navigationController popViewControllerAnimated:YES];
 }
+- (void)clickRightItem:(id)sender{
+    
+    if (sender == self.navigationItem.rightBarButtonItem){
+        [YCXMenu setTintColor:UICOLOR_RGB(33, 151, 216, 1)];
+        [YCXMenu setSelectedColor:[UIColor redColor]];
+        if ([YCXMenu isShow]){
+            [YCXMenu dismissMenu];
+        } else {
+            [YCXMenu showMenuInView:self.view fromRect:CGRectMake(self.view.width - 75, SafeAreaTopHeight, 50, 0) menuItems:self.items selected:^(NSInteger index, YCXMenuItem *item) {
+                //NSLog(@"%@",item);
+            }];
+        }
+    }
+    
 
+}
 - (void)setupTitleView{
     UIView *titleView = [[UIView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, self.view.width, 35)];
     titleView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -113,20 +140,84 @@
 }
 
 - (void)clickLevelBtn{
-    UPSAlarmCell *cell = [[UPSAlarmCell alloc]init];
-    UIPickerView *pickView = [[UIPickerView alloc]init];
-    [self.view addSubview:pickView];
-//    [pickView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(cell.levelBtn.mas_bottom).offset(10);
-//        make.height.offset(30);
-//        make.width.offset(100);
+//   ///通过筛选获取告警设置
+//    ///http://192.168.1.147:12345/ups-interface/screenConfigureType
+//    UPSAlarmModel *model = [UPSAlarmModel sharedUPSAlarmModel];
+//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//    params[@"token"] = self.mainModel.token;;
+//    params[@"userId"] = @(self.mainModel.userId);
+//    params[@"typeId"] = @(model.typeId);
+//    [[UPSHttpNetWorkTool sharedApi]POST:@"screenConfigureType" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+//        NSMutableArray *dataM = responseObject[@"data"];
+//        NSMutableArray *tempArr = [NSMutableArray array];
+//        for (int i = 0; i < dataM.count; i++) {
+//            UPSScreeningAlarmModel *screeningModel = [UPSScreeningAlarmModel mj_objectWithKeyValues:dataM[i]];
+//            [tempArr addObject:screeningModel];
+//        }
+//        NSLog(@"通过筛选获取告警设置成功%@",tempArr);
+//
+//
+//    } fail:^(NSURLSessionDataTask *task, NSError *error) {
 //
 //    }];
-  
-    pickView.frame = CGRectMake(self.view.width / 2, 180, 200, 40);
-    pickView.delegate = self;
-    pickView.dataSource = self;
-  
+//
+     
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    
+    ///更新告警测试http://192.168.1.147:12345/ups-interface/settingUpsAlarm
+    NSMutableArray *paramsArr = [NSMutableArray array];
+    NSMutableArray *paramsData = [NSMutableArray array];
+    ///取数组参数
+    for (int i = 0; i < paramsData.count ; i++ ) {
+        UPSUpdateAlermSettingModel *model = paramsData[i];
+        
+        NSString *upsSettingId = [[NSString alloc]initWithFormat:@"%ld",model.upsSettingId];
+        NSString *isUsed = [[NSString alloc]initWithFormat:@"%d",model.isUse];
+        
+        NSDictionary *temp = @{@"upsSettingId": upsSettingId,@"isUsed":isUsed};
+        
+        [paramsArr addObject:temp];
+    }
+
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"token"] = self.mainModel.token;;
+        params[@"userId"] = @(self.mainModel.userId);
+    params[@"configureInputDTOList"] = paramsArr;
+    
+    [manager POST:@"http://192.168.1.147:12345/ups-interface/settingUpsAlarm" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                NSMutableArray *dataM = responseObject[@"data"];
+                NSMutableArray *tempArr = [NSMutableArray array];
+        
+        
+                for (int i = 0 ; i < dataM.count; i++) {
+                    UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
+                    [tempArr addObject:updateModel];
+                }
+                NSLog(@"更新告警测试成功%@",tempArr);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"更新告警测试失败%@",error);
+    }];
+//    [[UPSHttpNetWorkTool sharedApi]POST:@"settingUpsAlarm" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+//        NSMutableArray *dataM = responseObject[@"data"];
+//        NSMutableArray *tempArr = [NSMutableArray array];
+//
+//
+//        for (int i = 0 ; i < dataM.count; i++) {
+//            UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
+//            [tempArr addObject:updateModel];
+//        }
+//        NSLog(@"更新告警测试成功%@",tempArr);
+//
+//    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+//        NSLog(@"更新告警测试失败%@",error);
+//    }];
+    
+    
 }
 
 - (void)dealloc{
@@ -155,38 +246,66 @@
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 //    return 80;
 //}
-#pragma mark- pickView DataSource&delegate
 
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return self.data.count;
+#pragma mark- 懒加载
+- (NSMutableArray *)items {
+    if (!_items) {
+        
+        // set title
+//        YCXMenuItem *menuTitle = [YCXMenuItem menuTitle:@"全部" WithIcon:nil];
+//        menuTitle.foreColor = [UIColor whiteColor];
+//        menuTitle.titleFont = [UIFont boldSystemFontOfSize:20.0f];
+
+
+        
+        //set logout button
+        
+        YCXMenuItem *all = [YCXMenuItem menuItem:@"全 部" image:nil target:self action:@selector(clickAll)];
+        
+         YCXMenuItem *general = [YCXMenuItem menuItem:@"一 般" image:nil target:self action:@selector(clickGeneral)];
+        
+        YCXMenuItem *serious = [YCXMenuItem menuItem:@"严 重" image:nil target:self action:@selector(clickSerious)];
+        
+        YCXMenuItem *alarm = [YCXMenuItem menuItem:@"告 警" image:nil target:self action:@selector(clickAlarm)];
+        alarm.foreColor = [UIColor whiteColor];
+        alarm.alignment = NSTextAlignmentCenter;
+//
+        //set item
+        _items = [@[
+                  all,general,serious ,alarm
+                   ] mutableCopy];
+    }
+    return _items;
 }
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    return [self.data[component]count];
-}
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
-   
-    return self.data[component][row];
+- (void)clickAll{
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"token"] = self.mainModel.token;;
+        params[@"userId"] = @(self.mainModel.userId);
+        [[UPSHttpNetWorkTool sharedApi]POST:@"upsAlarmConfigureList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    
+            NSMutableArray *dataM = responseObject[@"data"];
+            NSMutableArray *tempArr = [NSMutableArray array];
+            for (int i = 0 ; i < dataM.count; i++) {
+                UPSAlarmModel *alermModel = [UPSAlarmModel mj_objectWithKeyValues:dataM[i]];
+                [tempArr addObject:alermModel];
+            }
+            NSLog(@"告警信息成功%@",tempArr);
+    
+        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+    
+        }];
     
 }
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    UPSAlarmCell *cell = [[UPSAlarmCell alloc]init];
-    //if (component == 0) {
-        [cell.levelBtn setTitle:self.data[component][row] forState:UIControlStateNormal];
-       // cell.levelBtn.titleLabel.text = self.data[component][row];
-        NSLog(@"点击了1");
-    //}else{
-        //[cell.levelBtn setTitle:@"哈哈哈" forState:UIControlStateNormal];
-        NSLog(@"点击了2");
+-(void)clickGeneral{
+    NSLog(@"点击了普通");
+}
+- (void)clickSerious{
+    NSLog( @"点击了严重");
+}
+- (void)clickAlarm{
+    NSLog(@"点击了告警");
+}
 
-   // }
-}
-- (NSArray *)data{
-    if (_data == nil) {
-        NSString *path = [[NSBundle mainBundle]pathForResource:@"alarmLevel.plist" ofType:nil];
-        _data = [NSArray arrayWithContentsOfFile:path];
-    }
-    return _data;
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

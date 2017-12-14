@@ -68,6 +68,11 @@
 
 - (UIColor *)yuFoldingTableView:(YUFoldingTableView *)yuTableView textColorForDescriptionInSection:(NSInteger )section;
 
+- (NSArray<UITableViewRowAction *> *)yuTableView:(YUFoldingTableView *)yuTableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+
+
+
 @end
 
 @interface YUFoldingTableView : UITableView <UITableViewDelegate,UITableViewDataSource>
@@ -75,5 +80,7 @@
 @property (nonatomic, weak) id<YUFoldingTableViewDelegate> foldingDelegate;
 
 @property (nonatomic, assign) YUFoldingSectionState foldingState;
+
+
 
 @end

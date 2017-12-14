@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class UPSGroupUPSModel;
 
 @interface UPSEquipmentCell : UITableViewCell
 
+@property (nonatomic,strong)UPSGroupUPSModel *upsModel;
 
+@property (nonatomic,strong)UIButton *normal;
 
 
 @end

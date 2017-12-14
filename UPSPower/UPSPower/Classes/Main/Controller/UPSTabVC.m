@@ -35,14 +35,17 @@
     tabbar.translucent = NO;
 }
 - (void)viewDidLoad {
-    [super viewDidLoad];
     [self setupChildVC];
     [self setupChildVCTitle];
+    [super viewDidLoad];
+    NSLog(@"self.tabArr%@",self.tabArr);
+
 }
 ///设置子控制器
 - (void)setupChildVC{
     
     UPSEquipmentVC *equipment = [[UPSEquipmentVC alloc]init];
+    equipment.dataArr = self.tabArr;
     UPSNacVC *nav = [[UPSNacVC alloc]initWithRootViewController:equipment];
     [self addChildViewController:nav];
     

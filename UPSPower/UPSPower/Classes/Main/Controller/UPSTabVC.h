@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UPSTabVC : UITabBarController
+@property (nonatomic,strong)NSMutableArray *tabArr;
 
 @end

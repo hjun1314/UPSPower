@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UPSEquipmentVC : UIViewController
+@property (nonatomic,strong)NSMutableArray *dataArr;
+@property (nonatomic,strong)NSMutableArray *upsArr;
 
 @end

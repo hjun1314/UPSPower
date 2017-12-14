@@ -23,9 +23,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setupDelegateAndDataSource];
+       
     }
     return self;
 }
+
 
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -208,9 +210,11 @@
                                      arrowImage:[self arrowImageForSection:section]
                                   arrowPosition:[self perferedArrowPosition]
                                    sectionState:((NSNumber *)self.statusArray[section]).integerValue];
+   
     
     sectionHeaderView.tapDelegate = self;
-    
+    UILongPressGestureRecognizer *longGes = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(clickHeadView:)];
+    [sectionHeaderView addGestureRecognizer:longGes];
     return sectionHeaderView;
 }
 
@@ -252,6 +256,13 @@
         }
     }
 }
+
+#pragma mark- 长按headview
+- (void)clickHeadView:(UIView *)head{
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"clickHeadView" object:head];
+}
+
+
 
 
 
