@@ -33,7 +33,8 @@
     [self.view addSubview:loginView];
     self.view.backgroundColor = [UIColor whiteColor];
       [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickLoginViewSureBtn) name:@"didClickSureBtn" object:nil];
-   
+    self.navigationItem.title = @"账号登录";
+    
 
 }
 
@@ -42,14 +43,17 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-   
     
+//    self.tabBarController.tabBar.hidden = YES;
+    
+
 }
 
 - (void)clickLoginViewSureBtn{
 //    UPSTabVC *tab = [[UPSTabVC alloc]init];
 //    [self.navigationController pushViewController:tab animated:YES];
-
+    [SVProgressHUD showWithStatus:@"正在登陆"];
+    [SVProgressHUD setBackgroundColor:UICOLOR_RGB(0, 0, 0, 0.3)];
     //192.168.1.147:12345/ups-interface/login
     NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text};
 
@@ -71,7 +75,6 @@
             [parentG addObject:groupModel];
 
         }
-
 //     self.parentArr = [UPSParentGroupModel mj_objectArrayWithKeyValuesArray:self.tempArr];
         ///ups设备数组转模型数组
         NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
@@ -85,12 +88,10 @@
         [UPSTool saveToken:responseObject[@"data"][@"token"]];
         NSString *ID = responseObject[@"data"][@"userId"];
         [UPSTool saveID:[ID integerValue]];
+       
         UPSTabVC *tab = [[UPSTabVC alloc]init];
-        tab.tabArr = parentG;
-        UPSEquipmentVC *eqVC = [[UPSEquipmentVC alloc]init];
-        eqVC.dataArr = parentG;
-        eqVC.upsArr = upsG;
-        [self.navigationController pushViewController:eqVC animated:YES];
+        [self.navigationController pushViewController:tab animated:YES];
+//        [self.navigationController presentViewController:eqVC animated:YES completion:nil];
         [SVProgressHUD showSuccessWithStatus:@"登录成功"];
 
     } fail:^(NSURLSessionDataTask *task, NSError *error) {

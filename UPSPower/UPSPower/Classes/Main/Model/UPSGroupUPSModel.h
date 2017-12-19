@@ -14,9 +14,11 @@
 ///分组id
 @property (nonatomic,assign)NSInteger groupId;
 ///设备名称
-@property (nonatomic,copy)NSString *upsName;
+@property (nonatomic,copy)NSString *userDefinedUpsName;
 ///状态
 @property (nonatomic,assign)NSInteger statId;
+///原始名称
+@property (nonatomic,copy)NSString *originalUpsName;
 
 
 

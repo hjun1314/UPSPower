@@ -13,9 +13,9 @@
 Singleton_h(UPSMainModel);
 
 ///分栏数据
-@property (nonatomic,strong)NSArray<UPSParentGroupModel *>*parentGroup;
+@property (nonatomic,strong)NSMutableArray *parentGroup;
 ///UPS数据
-@property (nonatomic,strong)NSArray *groupUps;
+@property (nonatomic,strong)NSMutableArray *groupUps;
 ///用户id
 @property (nonatomic,assign)NSInteger userId;
 ///子用户id

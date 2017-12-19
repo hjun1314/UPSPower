@@ -17,12 +17,7 @@
 #import "UPSMainVC.h"
 #import "UPSAddGroup.h"
 #import "UPSGroupUPSModel.h"
-@interface UPSEquipmentVC ()<YUFoldingTableViewDelegate>{
-    FMDatabase * dataBase;
-    NSMutableArray * _usernameArr;
-    NSMutableArray * _passwordArr;
-    UIAlertController * _alert;
-}
+@interface UPSEquipmentVC ()<YUFoldingTableViewDelegate>
 
 @property (nonatomic,strong)YUFoldingTableView *tableView;
 @property (nonatomic, assign)YUFoldingSectionHeaderArrowPosition arrowPosition;
@@ -30,6 +25,15 @@
 
 
 @property (nonatomic,strong)UPSMainModel *mainModel;
+@property (nonatomic,strong)UPSParentGroupModel *parentModel;
+///parentGroup相关
+//@property (nonatomic,strong)NSMutableArray *parentArr;
+@property (nonatomic,strong)NSMutableArray *parentData;
+///upsGroup相关
+//@property (nonatomic,strong)NSMutableArray *upsArr;
+@property (nonatomic,strong)NSMutableArray *upsData;
+
+
 
 
 @end
@@ -41,78 +45,30 @@
     [self setupNav];
     [self setupTableView];
     [self setupNotification];
-//     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
-//    self.mainModel = mainModel;
-//   self.dataArr = mainModel.parentGroup;
-//    NSLog(@"self.dataArr%@",self.dataArr);
-    // 1 获取数据库对象
-    NSString *path=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    path=[path stringByAppendingPathComponent:@"userInfo.sqlite"];
-    
-    dataBase=[FMDatabase databaseWithPath:path];
-    // 2 打开数据库，如果不存在则创建并且打开
-    BOOL open=[dataBase open];
-    if(open){
-        NSLog(@"数据库打开成功");
+     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = mainModel;
+//    self.parentArr = self.mainModel.parentGroup;
+//    self.upsArr = self.mainModel.groupUps;
+    ///解析parentGroup
+    NSMutableArray *parentG = [NSMutableArray array];
+    for (int i = 0; i < self.mainModel.parentGroup.count; i++) {
+        UPSParentGroupModel *p = [UPSParentGroupModel mj_objectWithKeyValues:self.mainModel.parentGroup[i]];
+        [parentG addObject:p];
     }
-    //3 创建表
-    NSString * create1=@"CREATE TABLE IF NOT EXISTS A_user (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,username TEXT,password TEXT)";
-    BOOL c1= [dataBase executeUpdate:create1];
-    if(c1){
-        NSLog(@"创建表成功");
+    self.parentData = parentG;
+    
+    ///解析groupUps
+    NSMutableArray *upsG = [NSMutableArray array];
+    for (int i = 0; i < self.mainModel.groupUps.count; i++) {
+        UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:self.mainModel.groupUps[i]];
+        [upsG addObject:u];
     }
-    
-    _alert = [UIAlertController alertControllerWithTitle:@"请输入账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    [_alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"账号";
-    }];
-    [_alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"密码";
-    }];
-    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
-    [_alert addAction:action1];
-    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (!_alert.textFields[0].text||!_alert.textFields[1].text) {
-            return ;
-        }
-        //        4 插入数据
-        NSString * insertSql= @" INSERT INTO A_user(username, password)VALUES(?,?)";
-        //    插入语句
-        bool inflag1=[dataBase executeUpdate:insertSql,_alert.textFields[0].text,_alert.textFields[1].text];
-        if(inflag1){
-            NSLog(@"插入数据成功");
-            [self selectForm];
-            [self.tableView reloadData];
-        }
-    }];
-    [_alert addAction:action2];
-    
-    _usernameArr = [[NSMutableArray alloc] init];
-    _passwordArr = [[NSMutableArray alloc] init];
-    
-    self.tableView.tableFooterView = [UIView new];
-    [self selectForm];
-
+    self.upsData = upsG;
 }
-//数据库查询操作
-- (void)selectForm{
-    [_usernameArr removeAllObjects];
-    [_passwordArr removeAllObjects];
-    //    5查询数据FMDB的FMResultSet提供了多个方法来获取不同类型的数据
-    NSString * sql=@" select * from A_user ";
-    FMResultSet *result=[dataBase executeQuery:sql];
-    
-    while(result.next){
-        NSString * username =[result stringForColumn:@"username"];
-        [_usernameArr addObject:username];
-        NSString * password =[result stringForColumn:@"password"];
-        [_passwordArr addObject:password];
-    }
-}
-
 
 - (void)setupNav{
     self.navigationItem.title = @"设备状态";
+    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"添加分组" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
 }
@@ -174,32 +130,7 @@
 }
 ///头部长按点击
 - (void)clickHeadViewBtn:(NSNotification *)info{
-//    UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"是否删除该组" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-//    UIAlertAction *cancel1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-//    [alert1 addAction:cancel1];
-//
-//    UIAlertAction *sure1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//
-//        ///http://192.168.1.147:12345/ups-interface/deleteGroup
-////        UPSParentGroupModel *parentG = [UPSParentGroupModel a];
-////        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-////        params[@"token"] = self.mainModel.token;
-////        params[@"userId"] = @(self.mainModel.userId);
-////        params[@"groupId"] = @(parentG.groupId);
-////
-////        [[UPSHttpNetWorkTool sharedApi]POST:@"deleteGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-////
-////            NSLog(@"删除组成功%@",responseObject);
-////
-////        } fail:^(NSURLSessionDataTask *task, NSError *error) {
-////            NSLog(@"删除组失败%@",error);
-////        }];
-////
-////
-//    }];
-//    [alert1 addAction:sure1];
-//    [self presentViewController:alert1 animated:YES completion:nil];
-    
+
    
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入新修改组的名称" message:@"" preferredStyle:UIAlertControllerStyleAlert];
@@ -209,18 +140,39 @@
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:cancel];
-    UIAlertAction *delete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:nil];
+    UIAlertAction *delete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                params[@"token"] = self.mainModel.token;
+                params[@"userId"] = @(self.mainModel.userId);
+                params[@"groupId"] = @(self.parentModel.groupId);
+        
+            [[UPSHttpNetWorkTool sharedApi]POST:@"deleteGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                
+                    NSLog(@"删除组成功%@",responseObject);
+        
+                } fail:^(NSURLSessionDataTask *task, NSError *error) {
+                    NSLog(@"删除组失败%@",error);
+                }];
+        
+
+    }];
     [alert addAction:delete];
-    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"修改" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
         ///测试更改分组
-        ///http://192.168.1.147:12345/ups-interface/updateUpsGroup
+        //http://192.168.1.147:12345/ups-interface/updateGroupName
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         params[@"token"] = self.mainModel.token;;
         params[@"userId"] = @(self.mainModel.userId);
         params[@"newGroupName"] = alert.textFields[0].text;
-//        params[@"groupId"] = 
-        
+        params[@"groupId"] = @(self.parentModel.groupId);
+        [[UPSHttpNetWorkTool sharedApi]POST:@"updateGroupName" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog(@"更改用户名成功%@",responseObject);
+        self.parentModel.groupName = alert.textFields[0].text;
+            
+        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+            
+        }];
         
         
     }];
@@ -266,7 +218,7 @@
 #pragma mark- 代理方法
 - (NSInteger )numberOfSectionForYUFoldingTableView:(YUFoldingTableView *)yuTableView
 {   // UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
-    return self.dataArr.count;
+    return self.parentData.count;
 }
 
 -(YUFoldingSectionHeaderArrowPosition)perferedArrowPositionForYUFoldingTableView:(YUFoldingTableView *)yuTableView
@@ -276,8 +228,9 @@
 }
 - (NSInteger )yuFoldingTableView:(YUFoldingTableView *)yuTableView numberOfRowsInSection:(NSInteger )section
 {
-//    UPSGroupUPSModel *groupM = self.upsArr[section];
-//    NSArray *array = [self.upsArr objectAtIndex:section];
+//   UPSGroupUPSModel *groupM = self.upsData[section];
+   NSArray *array = [self.parentData objectAtIndex:section];
+//    NSLog(@"array.count%lu",(unsigned long)array.count);
     return 1;
     
     
@@ -293,7 +246,7 @@
 - (NSString *)yuFoldingTableView:(YUFoldingTableView *)yuTableView titleForHeaderInSection:(NSInteger)section
 {
     
-    UPSParentGroupModel *parentModel = self.dataArr[section];
+    UPSParentGroupModel *parentModel = self.parentData[section];
     
     return parentModel.groupName;
 }
@@ -303,12 +256,13 @@
     static NSString *cellID = @"cellID";
     UITableViewCell *cell = [yuTableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
     }
-    UPSGroupUPSModel *groupM = self.upsArr[indexPath.section];
+    UPSGroupUPSModel *groupM = self.upsData[indexPath.section];
 //    UPSGroupUPSModel *dd =  groupM[indexPath.row];
   //  [cell.normal setTitle:groupM.upsName forState:UIControlStateNormal];
-    cell.textLabel.text = groupM.upsName;
+    cell.textLabel.text = groupM.userDefinedUpsName;
+    cell.detailTextLabel.text = groupM.originalUpsName;
 //    cell.selectionStyle = UITableViewCellSelectionStyleNone;
    
     return cell;
@@ -324,46 +278,17 @@
 }
 
 
-- (NSArray<UITableViewRowAction *> *)yuTableView:(YUFoldingTableView *)yuTableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (NSArray<UITableViewRowAction *> *)yuTableView:(YUFoldingTableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        
-        UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            //            textField.text = _usernameArr[indexPath.row];
-        }];
-        [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            //            textField.text = _passwordArr[indexPath.row];
-        }];
-        [self presentViewController:editAlert animated:YES completion:nil];
-        
-        UIAlertAction * action3 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
-        [editAlert addAction:action3];
-        UIAlertAction * action4 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            //    修改语句
-            BOOL flag=  [dataBase executeUpdate:@" UPDATE A_user SET username = ?,password = ? WHERE id = ?;",editAlert.textFields[0].text,editAlert.textFields[1].text,@(indexPath.row+1)];
-            if(flag){
-                NSLog(@"修改成功");
-                [self selectForm];
-                [self.tableView reloadData];
-            }
-        }];
-        [editAlert addAction:action4];
-    }];
-    
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        //        删除语句
-        BOOL dflag= [dataBase executeUpdate:@"delete from A_user WHERE username = ?",_usernameArr[indexPath.row]];
-        if(dflag){
-            NSLog(@"删除");
-            [_usernameArr removeObjectAtIndex:indexPath.row];
-            [_passwordArr removeObjectAtIndex:indexPath.row];
-            [self.tableView reloadData];
-        }
+    UITableViewRowAction *rowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         
     }];
     
-    return @[editAction,deleteAction];
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+    }];
+    
+    return @[rowAction,deleteAction];
 }
 
 

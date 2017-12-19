@@ -47,6 +47,10 @@
  */
 - (void )yuFoldingTableView:(YUFoldingTableView *)yuTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
+- (NSArray<UITableViewRowAction *> *)yuTableView:(YUFoldingTableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+
+
 @optional
 
 /**
@@ -68,7 +72,6 @@
 
 - (UIColor *)yuFoldingTableView:(YUFoldingTableView *)yuTableView textColorForDescriptionInSection:(NSInteger )section;
 
-- (NSArray<UITableViewRowAction *> *)yuTableView:(YUFoldingTableView *)yuTableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 
 

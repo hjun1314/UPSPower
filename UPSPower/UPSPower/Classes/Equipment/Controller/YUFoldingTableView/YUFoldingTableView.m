@@ -45,6 +45,7 @@
 {
     self.delegate = self;
     self.dataSource = self;
+//    self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     if (self.style == UITableViewStylePlain) {
         self.tableFooterView = [[UIView alloc] init];
     }
@@ -256,6 +257,18 @@
         }
     }
 }
+
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (_foldingDelegate && [_foldingDelegate respondsToSelector:@selector(yuTableView:editActionsForRowAtIndexPath:)]) {
+        return   [_foldingDelegate yuTableView:self editActionsForRowAtIndexPath:indexPath];
+    }else{
+        return @[];
+    }
+    
+}
+
+
 
 #pragma mark- 长按headview
 - (void)clickHeadView:(UIView *)head{

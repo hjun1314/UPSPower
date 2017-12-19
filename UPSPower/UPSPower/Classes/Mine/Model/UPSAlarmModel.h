@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface UPSAlarmModel : NSObject<NSCoding>
-
-Singleton_h(UPSAlarmModel);
+///显示告警设置列表模型
 ///此配置id
 @property (nonatomic,assign)NSInteger upsSettingId;
 ///报警编号
@@ -20,8 +19,8 @@ Singleton_h(UPSAlarmModel);
 ///告警类型Id
 @property (nonatomic,assign)NSInteger typeId;
 ///用户id
-@property (nonatomic,assign)NSInteger typeName;
-///是否停用
+@property (nonatomic,copy)NSString *typeName;
+///是否启用
 @property (nonatomic,assign)BOOL isUse;
 
 

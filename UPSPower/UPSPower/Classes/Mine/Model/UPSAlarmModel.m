@@ -9,7 +9,7 @@
 #import "UPSAlarmModel.h"
 
 @implementation UPSAlarmModel
-Singleton_m(UPSAlarmModel);
+//Singleton_m(UPSAlarmModel);
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     
     [aCoder encodeInteger:self.typeId forKey:@"typeId"];

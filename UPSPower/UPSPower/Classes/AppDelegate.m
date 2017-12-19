@@ -23,7 +23,6 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
  
     
-//    UPSTabVC *tab = [[UPSTabVC alloc]init];
     UPSMainVC *main = [[UPSMainVC alloc]init];
        UPSNacVC *nav = [[UPSNacVC alloc]initWithRootViewController:main];
     self.window.rootViewController = nav;

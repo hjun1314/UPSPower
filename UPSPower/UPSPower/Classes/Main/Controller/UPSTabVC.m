@@ -11,7 +11,7 @@
 #import "UPSSettingVC.h"
 #import "UPSMineVC.h"
 #import "UPSNacVC.h"
-
+#import "UPSMainVC.h"
 @interface UPSTabVC ()
 
 @end
@@ -38,14 +38,13 @@
     [self setupChildVC];
     [self setupChildVCTitle];
     [super viewDidLoad];
-    NSLog(@"self.tabArr%@",self.tabArr);
-
+    
 }
 ///设置子控制器
 - (void)setupChildVC{
     
     UPSEquipmentVC *equipment = [[UPSEquipmentVC alloc]init];
-    equipment.dataArr = self.tabArr;
+//    equipment.dataArr = self.tabArr;
     UPSNacVC *nav = [[UPSNacVC alloc]initWithRootViewController:equipment];
     [self addChildViewController:nav];
     
