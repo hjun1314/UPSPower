@@ -45,7 +45,7 @@
 {
     self.delegate = self;
     self.dataSource = self;
-//    self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     if (self.style == UITableViewStylePlain) {
         self.tableFooterView = [[UIView alloc] init];
     }

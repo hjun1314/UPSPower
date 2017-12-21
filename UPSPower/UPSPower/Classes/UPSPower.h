@@ -28,4 +28,7 @@ instance = [super allocWithZone:zone];\
 return instance;\
 }
 
+
+
+
 #endif /* UPSPower_h */

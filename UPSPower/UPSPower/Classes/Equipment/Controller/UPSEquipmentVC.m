@@ -47,23 +47,40 @@
     [self setupNotification];
      UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
-//    self.parentArr = self.mainModel.parentGroup;
-//    self.upsArr = self.mainModel.groupUps;
-    ///解析parentGroup
-    NSMutableArray *parentG = [NSMutableArray array];
-    for (int i = 0; i < self.mainModel.parentGroup.count; i++) {
-        UPSParentGroupModel *p = [UPSParentGroupModel mj_objectWithKeyValues:self.mainModel.parentGroup[i]];
-        [parentG addObject:p];
-    }
-    self.parentData = parentG;
     
-    ///解析groupUps
-    NSMutableArray *upsG = [NSMutableArray array];
-    for (int i = 0; i < self.mainModel.groupUps.count; i++) {
-        UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:self.mainModel.groupUps[i]];
-        [upsG addObject:u];
+    self.parentData = [NSMutableArray array];
+    self.upsData = [NSMutableArray array];
+    
+    ///刷新设备列表http://192.168.1.147:12345/ups-interface/refreshUpsList
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"token"] = mainModel.token;
+    params[@"userId"] = @(mainModel.userId);
+    [[UPSHttpNetWorkTool sharedApi]POST:@"refreshUpsList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSMutableArray *parentData = responseObject[@"data"][@"parentGroup"];
+        NSLog(@"设备列表%@",responseObject);
+        NSMutableArray *parentM = [NSMutableArray array];
+        for (int i = 0; i < parentData.count; i++) {
+            UPSParentGroupModel *p = [UPSParentGroupModel mj_objectWithKeyValues:parentData[i]];
+            [parentM addObject:p];
+        }
+        self.parentData = parentM;
+        
+        //解析groupUps
+        NSMutableArray *upsData = responseObject[@"data"][@"groupUps"];
+        NSMutableArray *upsM = [NSMutableArray array];
+        for (int i = 0; i < upsData.count; i++) {
+            UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:upsData[i]];
+            [upsM addObject:u];
+        }
+        self.upsData = upsM;
+        
+        [self.tableView reloadData];
     }
-    self.upsData = upsG;
+    fail:^(NSURLSessionDataTask *task, NSError *error) {
+        
+    }];
+    
+
 }
 
 - (void)setupNav{
@@ -217,7 +234,7 @@
 
 #pragma mark- 代理方法
 - (NSInteger )numberOfSectionForYUFoldingTableView:(YUFoldingTableView *)yuTableView
-{   // UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
+{
     return self.parentData.count;
 }
 
@@ -229,9 +246,15 @@
 - (NSInteger )yuFoldingTableView:(YUFoldingTableView *)yuTableView numberOfRowsInSection:(NSInteger )section
 {
 //   UPSGroupUPSModel *groupM = self.upsData[section];
-   NSArray *array = [self.parentData objectAtIndex:section];
+//    UPSParentGroupModel *parentM = self.parentData[section];
+//    if (groupM.groupId == parentM.groupId) {
+//        
+//    }
+//    NSLog(@".........%ld",(long)groupM.groupId);
+//   NSArray *array = [self.parentData objectAtIndex:section];
+    
 //    NSLog(@"array.count%lu",(unsigned long)array.count);
-    return 1;
+    return 3;
     
     
 }
@@ -258,11 +281,15 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
     }
-    UPSGroupUPSModel *groupM = self.upsData[indexPath.section];
+    UPSGroupUPSModel *groupM = self.upsData[indexPath.row];
+   // UPSParentGroupModel *parentM = self.parentData[indexPath.row];
+   // if (parentM.groupId == groupM.groupId) {
+        cell.textLabel.text = groupM.userDefinedUpsName;
+        cell.detailTextLabel.text = groupM.originalUpsName;
+   // }
 //    UPSGroupUPSModel *dd =  groupM[indexPath.row];
   //  [cell.normal setTitle:groupM.upsName forState:UIControlStateNormal];
-    cell.textLabel.text = groupM.userDefinedUpsName;
-    cell.detailTextLabel.text = groupM.originalUpsName;
+   
 //    cell.selectionStyle = UITableViewCellSelectionStyleNone;
    
     return cell;

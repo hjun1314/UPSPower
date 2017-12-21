@@ -7,12 +7,17 @@
 //
 
 #import "UPSSettingVC.h"
-#import "YUFoldingTableView.h"
 #import "UPSSettingCell.h"
-@interface UPSSettingVC ()<YUFoldingTableViewDelegate>
-@property (nonatomic,strong)YUFoldingTableView *tableView;
-@property (nonatomic, assign)YUFoldingSectionHeaderArrowPosition arrowPosition;
-@property (nonatomic,assign)BOOL isOpen;
+#import "SDAutoLayout.h"
+#import "UPSSettingModel.h"
+#import "UPSMainModel.h"
+#import "UPSAlarmRecordModel.h"
+#import "UPSSingalAlarmRecordModel.h"
+@interface UPSSettingVC ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic,strong)UITableView *tableView;
+@property (nonatomic,strong)NSMutableArray *dataArr;
+@property (nonatomic,strong)UPSMainModel *mainModel;
+
 @end
 
 @implementation UPSSettingVC
@@ -21,94 +26,112 @@
     [super viewDidLoad];
     self.title = @"报警信息";
     [self setupTableView];
+    [self setData];
+    UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = model;
+    ///http://192.168.1.147:12345/ups-interface/getAlarmLog
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"token"] = self.mainModel.token;;
+    params[@"userId"] = @(self.mainModel.userId);
+    params[@"companyId"] = @(self.mainModel.companyId);
+    [[UPSHttpNetWorkTool sharedApi]POST:@"getAlarmLog" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSMutableArray *dataM = responseObject[@"data"];
+        NSMutableArray *alarmRecordArr = [NSMutableArray array];
+        for (int i = 0; i < dataM.count; i++) {
+            UPSAlarmRecordModel *alarmRecordModel = [UPSAlarmRecordModel mj_objectWithKeyValues:dataM[i]];
+            [alarmRecordArr addObject:alarmRecordModel];
+        }
+        
+        
+    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+        
+    }];
+    
 }
 - (void)setupTableView{
     
     
-    YUFoldingTableView *tableView = [[YUFoldingTableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight + 35, kScreenW, kScreenH - SafeAreaTopHeight  - SafeAreaTabbarHeight-35)];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTopHeight  - SafeAreaTabbarHeight)];
 //    tableView.backgroundColor = [UIColor brownColor];
     self.tableView = tableView;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self.view addSubview:tableView];
-    tableView.foldingDelegate =self;
-    if (self.arrowPosition) {
-        tableView.foldingState = YUFoldingSectionStateShow;
-    }
-    
-    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, 35)];
-    headView.backgroundColor = UICOLOR_RGB(245, 245, 245, 1);
-    [self.view addSubview:headView];
-    UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, headView.width, 30)];
-    title.text = @"报警记录";
-    [headView addSubview:title];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickTab)];
-    [headView addGestureRecognizer:tap];
-    
-    
+    self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
 }
-///手势的点击
-- (void)clickTab{
-    if (!self.isOpen) {
-        self.tableView.hidden = NO;
-    }else{self.tableView.hidden = YES;
-        self.view.backgroundColor = [UIColor whiteColor];
+- (void)setData{
+    
+    self.dataArr = [NSMutableArray array];
+    
+    NSArray *textArr = @[@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次"];
+    for (int i = 0; i < textArr.count; i++) {
         
+        UPSSettingModel *model = [[UPSSettingModel alloc]init];
+        model.title = textArr[i];
+        model.time = [NSString stringWithFormat:@"2017年12月%d号",i+1];
+        [self.dataArr addObject:model];
     }
-}
-#pragma mark- 代理方法
-- (NSInteger )numberOfSectionForYUFoldingTableView:(YUFoldingTableView *)yuTableView
-{
-    return 5;
 }
 
--(YUFoldingSectionHeaderArrowPosition)perferedArrowPositionForYUFoldingTableView:(YUFoldingTableView *)yuTableView
-{
-    // 没有赋值，默认箭头在左
-    return self.arrowPosition ? :YUFoldingSectionHeaderArrowPositionLeft;
-}
-- (NSInteger )yuFoldingTableView:(YUFoldingTableView *)yuTableView numberOfRowsInSection:(NSInteger )section
-{
+   
+#pragma mark- 代理方法
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
-- (CGFloat )yuFoldingTableView:(YUFoldingTableView *)yuTableView heightForHeaderInSection:(NSInteger )section
-{
-    return 50;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArr.count;
 }
-- (CGFloat )yuFoldingTableView:(YUFoldingTableView *)yuTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 70;
-}
-- (NSString *)yuFoldingTableView:(YUFoldingTableView *)yuTableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return @"11.11";
-    }else if (section == 1){
-        return @"11.12";
-    }else if (section == 2){
-        return @"11.13";
-    }else if (section == 3){
-        return @"11.14";
-    }else{
-        return @"11.15";
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *IDCell = @"settingCell";
+    UPSSettingCell *cell = [tableView dequeueReusableCellWithIdentifier:IDCell];
+    if (cell == nil) {
+        cell = [[[NSBundle mainBundle]loadNibNamed:@"UPSSettingCell" owner:nil options:nil]firstObject];
+    }
+    if (indexPath.row==0) {
         
+        cell.topLine.sd_layout.topEqualToView(cell.point).leftSpaceToView(cell.contentView,8.5).widthIs(1).bottomSpaceToView(cell.point, 0);
+        
+        cell.bottomLine.sd_layout.topEqualToView(cell.point).leftSpaceToView(cell.contentView,8.5).widthIs(1).bottomSpaceToView(cell.contentView, 0);
     }
     
-}
-- (UITableViewCell *)yuFoldingTableView:(YUFoldingTableView *)yuTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellID = @"cellID";
-    UPSSettingCell *cell = [yuTableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        cell = [[UPSSettingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    if (indexPath.row == self.dataArr.count - 1) {
+        
+        cell.topLine.sd_layout.topEqualToView(cell.contentView).leftSpaceToView(cell.contentView,8.5).widthIs(1).bottomSpaceToView(cell.point, 0);
+        
+        cell.bottomLine.sd_layout.topEqualToView(cell.point).leftSpaceToView(cell.contentView,8.5).widthIs(1).heightIs(0);
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    
+    cell.model = self.dataArr[indexPath.row];
+    
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
+    
 }
-- (void )yuFoldingTableView:(YUFoldingTableView *)yuTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [yuTableView deselectRowAtIndexPath:indexPath animated:YES];
+    id model = self.dataArr[indexPath.row];
+    
+    return [self.tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[UPSSettingCell class] contentViewWidth:[self cellContentViewWith]];
+    
+    //    GZTimeLineModel *model = self.TimeLineData[indexPath.row];
+    //
+    //    return [self.GZTableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[GZTableViewCell class] contentViewWidth:self.view.frame.size.width];
 }
+
+- (CGFloat)cellContentViewWith
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    // 适配ios7横屏
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait && [[UIDevice currentDevice].systemVersion floatValue] < 8) {
+        width = [UIScreen mainScreen].bounds.size.height;
+    }
+    return width;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

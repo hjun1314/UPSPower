@@ -2,42 +2,54 @@
 //  UPSSettingCell.m
 //  UPSPower
 //
-//  Created by hjun on 2017/11/23.
+//  Created by hjun on 2017/12/19.
 //  Copyright © 2017年 hjun. All rights reserved.
 //
 
 #import "UPSSettingCell.h"
+#import "SDAutoLayout.h"
+#import "UPSSettingModel.h"
+@interface UPSSettingCell()
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 
+
+@end
 @implementation UPSSettingCell
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (void)setup{
-    
-    UILabel *unknownLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.width - 20, 20)];
-    [self addSubview:unknownLabel];
-    unknownLabel.text = @"上海UPSx1 异常1次";
-//    unknownLabel.textColor = [UIColor lightGrayColor];
-    
-    UILabel *faultLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 25, self.width - 20, 20)];
-    faultLabel.text = @"上海UPSx1 异常2次";
-    [self addSubview:faultLabel];
-    
-    
-    UILabel *normalLbael = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, self.width - 20, 20)];
-    normalLbael.text = @"正常";
-//    normalLbael.textColor = [UIColor lightGrayColor];
-    [self addSubview:normalLbael];
-    
-}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    self.contentView.backgroundColor = [UIColor whiteColor];
+    
+    self.point.sd_layout.topSpaceToView(self.contentView, 20).leftSpaceToView(self.contentView, 5).widthIs(8).heightEqualToWidth();
+    
+    self.point.sd_cornerRadius = @(4);
+    
+    self.topLine.sd_layout.topEqualToView(self.contentView).leftSpaceToView(self.contentView,8.5).widthIs(1).bottomSpaceToView(self.point, 0);
+    
+    self.bottomLine.sd_layout.topSpaceToView(self.point,0).leftSpaceToView(self.contentView,8.5).widthIs(1).bottomSpaceToView(self.contentView, 0);
+    
+    
+//    self.iconView.sd_layout.topSpaceToView(self.contentView , 10).leftSpaceToView(self.point, 3).bottomSpaceToView(self.contentView, 10).rightSpaceToView(self.contentView, 10);
+//       self.iconView.image = [UIImage imageNamed:@"WechatIMG3"];
+    
+    // 指定为拉伸模式，伸缩后重新赋值
+    
+//    self.iconView.image = [self.iconView.image stretchableImageWithLeftCapWidth:20 topCapHeight:30];
+    
+    self.timeLabel.sd_layout.centerYEqualToView(self.point).leftSpaceToView(self.contentView, 35).rightSpaceToView(self.contentView, 15).heightIs(20);
+    
+    self.contentLabel.sd_layout.topSpaceToView(self.timeLabel, 15).leftEqualToView(self.timeLabel).rightSpaceToView(self.contentView, 15).autoHeightRatio(0);
+    
+}
+
+- (void)setModel:(UPSSettingModel *)model{
+    _model = model;
+    self.contentLabel.text = model.title;
+    self.timeLabel.text = model.time;
+    
+      [self setupAutoHeightWithBottomView:self.contentLabel bottomMargin:15];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

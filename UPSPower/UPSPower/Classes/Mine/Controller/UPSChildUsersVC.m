@@ -127,7 +127,7 @@
     dataBase = [FMDatabase databaseWithPath:path];
 
     ///打开数据库
-    BOOL open = [dataBase open];
+//    BOOL open = [dataBase open];
 
     ///创建表
 

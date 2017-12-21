@@ -67,22 +67,22 @@
         [dataM addObject:mainModel];
 
         ///parentGroup数组转模型数组
-        NSMutableArray *parentM = responseObject[@"data"][@"parentGroup"];
-
-        NSMutableArray *parentG = [NSMutableArray array];
-        for (int i = 0; i < parentM.count; i++) {
-            UPSParentGroupModel *groupModel = [UPSParentGroupModel mj_objectWithKeyValues:parentM[i]];
-            [parentG addObject:groupModel];
-
-        }
-//     self.parentArr = [UPSParentGroupModel mj_objectArrayWithKeyValuesArray:self.tempArr];
-        ///ups设备数组转模型数组
-        NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
-        NSMutableArray *upsG = [NSMutableArray array];
-        for (int i = 0 ; i < upsM.count; i++) {
-            UPSGroupUPSModel *upsModel = [UPSGroupUPSModel mj_objectWithKeyValues:upsM[i]];
-            [upsG addObject:upsModel];
-        }
+//        NSMutableArray *parentM = responseObject[@"data"][@"parentGroup"];
+//
+//        NSMutableArray *parentG = [NSMutableArray array];
+//        for (int i = 0; i < parentM.count; i++) {
+//            UPSParentGroupModel *groupModel = [UPSParentGroupModel mj_objectWithKeyValues:parentM[i]];
+//            [parentG addObject:groupModel];
+//
+//        }
+////     self.parentArr = [UPSParentGroupModel mj_objectArrayWithKeyValuesArray:self.tempArr];
+//        ///ups设备数组转模型数组
+//        NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
+//        NSMutableArray *upsG = [NSMutableArray array];
+//        for (int i = 0 ; i < upsM.count; i++) {
+//            UPSGroupUPSModel *upsModel = [UPSGroupUPSModel mj_objectWithKeyValues:upsM[i]];
+//            [upsG addObject:upsModel];
+//        }
 
         ///存token id
         [UPSTool saveToken:responseObject[@"data"][@"token"]];
@@ -96,6 +96,7 @@
 
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"登录失败");
+        [SVProgressHUD showErrorWithStatus:@"登录失败"];
     }];
 
 }
