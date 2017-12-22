@@ -17,8 +17,14 @@
 #define iphone5 (kScreenW == 320,kScreenH == 568)
 #define iphone4 (kScreenW == 320,kScreenH == 480)
 #define iphoneX (kScreenW == 375,kScreenH == 812)
-
+///RGB十进制
 #define UICOLOR_RGB(R, G, B, A) [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:A]
+// RGB颜色(16进制)
+#define RGB_HEX(rgbValue) \
+[UIColor colorWithRed:((CGFloat)((rgbValue & 0xFF0000) >> 16)) / 255.0 \
+green:((CGFloat)((rgbValue & 0xFF00) >> 8)) / 255.0 \
+blue:((CGFloat)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
+
 #import "UIImage+Image.h"
 #import "UIView+ZUtility.h"
 #import "UPSPower.h"

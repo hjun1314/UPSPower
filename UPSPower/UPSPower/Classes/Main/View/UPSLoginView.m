@@ -67,6 +67,7 @@
         
     }];
     accountTextField.placeholder = @"请输入账号";
+    accountTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.userTextField = accountTextField;
     accountTextField.delegate = self;
     ///密码
@@ -94,6 +95,7 @@
     }];
     passwordTextField.placeholder = @"请输入密码";
     passwordTextField.secureTextEntry = YES;
+    passwordTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.passwordTextField = passwordTextField;
     passwordTextField.delegate = self;
     

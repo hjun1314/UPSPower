@@ -91,11 +91,10 @@
        
         UPSTabVC *tab = [[UPSTabVC alloc]init];
         [self.navigationController pushViewController:tab animated:YES];
-//        [self.navigationController presentViewController:eqVC animated:YES completion:nil];
         [SVProgressHUD showSuccessWithStatus:@"登录成功"];
 
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"登录失败");
+        NSLog(@"登录失败%@",error);
         [SVProgressHUD showErrorWithStatus:@"登录失败"];
     }];
 

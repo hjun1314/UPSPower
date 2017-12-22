@@ -105,6 +105,7 @@
             [[UPSHttpNetWorkTool sharedApi]POST:@"logout" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
                 NSLog(@"注销成功");
                 UPSMainVC *main = [[UPSMainVC alloc]init];
+                [main setHidesBottomBarWhenPushed:YES];
                 [self.navigationController pushViewController:main animated:YES];
             } fail:^(NSURLSessionDataTask *task, NSError *error) {
                 NSLog(@"注销失败");
