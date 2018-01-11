@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-@class UPSSettingModel;
+@class UPSAlarmRecordModel;
 @interface UPSSettingCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIView *point;
 @property (weak, nonatomic) IBOutlet UIView *topLine;
 @property (weak, nonatomic) IBOutlet UIView *bottomLine;
 
-@property (nonatomic,strong)UPSSettingModel *model;
+@property (nonatomic,strong)UPSAlarmRecordModel *model;
 
 
 @end

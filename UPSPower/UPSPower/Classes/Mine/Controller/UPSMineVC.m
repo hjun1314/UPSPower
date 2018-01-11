@@ -75,6 +75,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.row == 0 ) {
+        
+  
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"修改父账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.placeholder = @"修改密码";
+            textField.secureTextEntry = YES;
+        }];
+        [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        ///http://192.168.1.147:12345/ups-interface/updateParentPassword
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            params[@"token"] = self.mainModel.token;
+            params[@"userId"] = @(self.mainModel.userId);
+            params[@"newPassword"] = alert.textFields[0].text;
+            [[UPSHttpNetWorkTool sharedApi]POST:@"updateParentPassword" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                NSLog(@"密码修改成功%@",responseObject);
+                UPSMainVC *main = [[UPSMainVC alloc]init];
+                [self.navigationController pushViewController:main animated:YES];
+            } fail:^(NSURLSessionDataTask *task, NSError *error) {
+                
+            }];
+            
+        }]];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        
     }else if (indexPath.row == 1){
         
         UPSChildUsersVC *childUserVC = [[UPSChildUsersVC alloc]init];

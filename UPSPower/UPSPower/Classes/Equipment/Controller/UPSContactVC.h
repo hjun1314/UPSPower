@@ -10,5 +10,6 @@
 
 @interface UPSContactVC : UIViewController
 @property (nonatomic,strong)NSMutableArray *parentGroup;
+@property (nonatomic,strong)NSMutableArray *upsGroup;
 
 @end

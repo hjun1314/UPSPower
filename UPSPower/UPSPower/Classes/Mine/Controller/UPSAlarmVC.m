@@ -40,10 +40,7 @@
 ///严重告警
 @property (nonatomic,strong)NSMutableArray *seriousArr;
 
-@property (nonatomic,strong)UIButton *all;
-@property (nonatomic,strong)UIButton *run;
-@property (nonatomic,strong)UIButton *general;
-@property (nonatomic,strong)UIButton *serious;
+
 @property (nonatomic,assign)int flag;
 
 
@@ -353,7 +350,6 @@
 ///点击了全部筛选
 - (void)clickAll:(UIButton *)all{
     self.flag = 4;
-    self.all = all;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"token"] = self.mainModel.token;;
     params[@"userId"] = @(self.mainModel.userId);
@@ -380,7 +376,6 @@
     self.flag = 1;
     //    [self.generalArr removeAllObjects];
     //    [self.seriousArr removeAllObjects];
-    self.run = run;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"token"] = self.mainModel.token;;
     params[@"userId"] = @(self.mainModel.userId);
@@ -406,7 +401,6 @@
 ///一般告警
 - (void)clickGeneral:(UIButton *)general{
     self.flag = 2;
-    self.general = general;
     //    [self.runArr removeAllObjects];
     //   [self.seriousArr removeAllObjects];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -434,7 +428,6 @@
 ///严重告警
 - (void)clickSerious:(UIButton *)serious{
     self.flag = 3;
-    self.serious = serious;
     //    [self.runArr removeAllObjects];
     //    [self.generalArr removeAllObjects];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];

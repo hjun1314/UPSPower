@@ -8,7 +8,7 @@
 
 #import "UPSSettingCell.h"
 #import "SDAutoLayout.h"
-#import "UPSSettingModel.h"
+#import "UPSAlarmRecordModel.h"
 @interface UPSSettingCell()
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
@@ -44,11 +44,11 @@
     
 }
 
-- (void)setModel:(UPSSettingModel *)model{
+- (void)setModel:(UPSAlarmRecordModel *)model{
     _model = model;
-    self.contentLabel.text = model.title;
-    self.timeLabel.text = model.time;
-    
+    self.contentLabel.text = model.userDefinedUpsName;
+    self.timeLabel.text = model.happenTime;
+   
       [self setupAutoHeightWithBottomView:self.contentLabel bottomMargin:15];
 }
 

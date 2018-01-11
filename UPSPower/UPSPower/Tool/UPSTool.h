@@ -19,4 +19,14 @@
 ///取id
 +(NSInteger)getID;
 
+///存个推CID
++ (void)saveGeTuiCid:(NSString *)cid;
+///取cid
++ (NSString *)getGeTuiCid;
+
+///nadate转字符串
++ (NSString *)strwithInteger:(long)interger;
+
++ (NSString *)stringWithNsdate:(NSString *)str;
+
 @end

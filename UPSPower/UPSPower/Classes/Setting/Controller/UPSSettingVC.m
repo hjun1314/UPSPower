@@ -13,6 +13,8 @@
 #import "UPSMainModel.h"
 #import "UPSAlarmRecordModel.h"
 #import "UPSSingalAlarmRecordModel.h"
+#import "GKCover.h"
+#import "UPSAlarmView.h"
 @interface UPSSettingVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)NSMutableArray *dataArr;
@@ -26,7 +28,6 @@
     [super viewDidLoad];
     self.title = @"报警信息";
     [self setupTableView];
-    [self setData];
     UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
     self.mainModel = model;
     ///http://192.168.1.147:12345/ups-interface/getAlarmLog
@@ -41,7 +42,9 @@
             UPSAlarmRecordModel *alarmRecordModel = [UPSAlarmRecordModel mj_objectWithKeyValues:dataM[i]];
             [alarmRecordArr addObject:alarmRecordModel];
         }
-        
+        self.dataArr = alarmRecordArr;
+        [self.tableView reloadData];
+        NSLog(@"获取告警记录成功%@",responseObject);
         
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -58,19 +61,6 @@
     self.tableView.dataSource = self;
     [self.view addSubview:tableView];
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
-}
-- (void)setData{
-    
-    self.dataArr = [NSMutableArray array];
-    
-    NSArray *textArr = @[@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次",@"UPS设备1报警1次"];
-    for (int i = 0; i < textArr.count; i++) {
-        
-        UPSSettingModel *model = [[UPSSettingModel alloc]init];
-        model.title = textArr[i];
-        model.time = [NSString stringWithFormat:@"2017年12月%d号",i+1];
-        [self.dataArr addObject:model];
-    }
 }
 
    
@@ -101,8 +91,9 @@
         
         cell.bottomLine.sd_layout.topEqualToView(cell.point).leftSpaceToView(cell.contentView,8.5).widthIs(1).heightIs(0);
     }
-    
-    
+//    UPSAlarmRecordModel *record = self.dataArr[indexPath.row];
+//    cell.textLabel.text = record.happenTime;
+////
     cell.model = self.dataArr[indexPath.row];
     
 //    cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -131,7 +122,43 @@
     }
     return width;
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    ///http://192.168.1.147:12345/ups-interface/alarmLogDetails
+//    UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
+//    self.mainModel = model;
+    ///http://192.168.1.147:12345/ups-interface/getAlarmLog
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    UPSAlarmRecordModel *RecordModel = self.dataArr[indexPath.row];
 
+    params[@"token"] = self.mainModel.token;;
+    params[@"userId"] = @(self.mainModel.userId);
+    params[@"upsId"] = @(RecordModel.upsId);
+    params[@"happenTime"] = RecordModel.happenTime;
+    [[UPSHttpNetWorkTool sharedApi]POST:@"alarmLogDetails" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        NSMutableArray *dataM = responseObject[@"data"];
+        NSMutableArray *tempArr = [NSMutableArray array];
+        for (int i = 0 ; i < dataM.count; i++) {
+            UPSSingalAlarmRecordModel *singalModel = [UPSSingalAlarmRecordModel mj_objectWithKeyValues:dataM[i]];
+            [tempArr addObject:singalModel];
+            UPSAlarmView *greenView = [UPSAlarmView new];
+            greenView.backgroundColor = [UIColor whiteColor];
+                greenView.alarmLabel.text = singalModel.alarmCode;
+                greenView.nameLabel.text = singalModel.alarmDesc;
+            greenView.happenLabel.text = [UPSTool stringWithNsdate:singalModel.happenTime];
+            greenView.removeLabel.text = [UPSTool stringWithNsdate:singalModel.removeTime];
+            greenView.gk_size = CGSizeMake(kScreenW *0.7, 155);
+            
+            [GKCover translucentWindowCenterCoverContent:greenView animated:YES];
+        }
+        
+        
+    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+        
+    }];
+  
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

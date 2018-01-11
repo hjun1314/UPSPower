@@ -18,11 +18,14 @@
 #import "UPSAddGroup.h"
 #import "UPSGroupUPSModel.h"
 #import "UPSContactVC.h"
-@interface UPSEquipmentVC ()<UITableViewDelegate,UITableViewDataSource>{
+#import "UPSBaseInfoVC.h"
+#import "CPMoveCellTableView.h"
+#define IS_IOS7 [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0
+@interface UPSEquipmentVC ()<UITableViewDelegate,UITableViewDataSource,CPMoveCellTableViewDelegate,CPMoveCellTableViewDataSource>{
     NSIndexPath *_indexPath; // 保存当前选中的单元格
 }
 
-@property (nonatomic,strong)UITableView *tableView;
+@property (nonatomic,strong)CPMoveCellTableView *tableView;
 /** 保存分组数据模型 */
 //@property (nonatomic, strong) NSMutableArray *groupModelArr;
 /** 保存旋转状态(展开/折叠) */
@@ -40,6 +43,11 @@
 
 @property (nonatomic,strong)NSMutableArray *upsMoveData;
 
+@property (nonatomic,strong)NSMutableArray *cellData;
+
+///修改ups设备名称
+@property (nonatomic,strong)UITextField *textField;
+
 
 
 @end
@@ -51,14 +59,23 @@
     [self setupNav];
     //[self setupTableView];
     //    [self setupNotification];
+    UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = mainModel;
     [self loadData];
+    
+    
+  
+    
+    
+
 }
 
 - (void)setupNav{
     self.navigationItem.title = @"设备状态";
-    self.navigationItem.hidesBackButton = YES;
+//    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem)];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
+   
+//    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
     self.tableView.hidden = NO;
     
 }
@@ -67,38 +84,55 @@
     [self.tableView reloadData];
 }
 - (void)loadData{
-    UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
-    self.mainModel = mainModel;
-    
+
     self.parentData = [NSMutableArray array];
     self.upsData = [NSMutableArray array];
     
     ///刷新设备列表http://192.168.1.147:12345/ups-interface/refreshUpsList
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"token"] = mainModel.token;
-    params[@"userId"] = @(mainModel.userId);
+    params[@"token"] = self.mainModel.token;
+    params[@"userId"] = @(self.mainModel.userId);
     [[UPSHttpNetWorkTool sharedApi]POST:@"refreshUpsList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
         NSMutableArray *parentData = responseObject[@"data"][@"parentGroup"];
+        NSMutableArray *upsData = responseObject[@"data"][@"groupUps"];
+        NSMutableArray *upsM = [NSMutableArray array];
         NSLog(@"设备列表%@",responseObject);
         NSMutableArray *parentM = [NSMutableArray array];
+        NSMutableArray *tempArr = [NSMutableArray array];
         for (int i = 0; i < parentData.count; i++) {
             UPSParentGroupModel *p = [UPSParentGroupModel mj_objectWithKeyValues:parentData[i]];
             [parentM addObject:p];
+            
+           
+//            p.groupCellData = tempArr;
+            
             // 加个判断，防止多次重复调用这个方法时，造成数据累加无限添加
             if (self.switchArr.count < parentData.count) {
                 [self.switchArr addObject:@NO];
             }
+           
         }
-        self.parentData = parentM;
-        
-        //解析groupUps
-        NSMutableArray *upsData = responseObject[@"data"][@"groupUps"];
-        NSMutableArray *upsM = [NSMutableArray array];
-        for (int i = 0; i < upsData.count; i++) {
-            UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:upsData[i]];
+        for (int j = 0; j < upsData.count; j++) {
+            UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:upsData[j]];
             [upsM addObject:u];
         }
+        NSMutableArray *totalArray = [NSMutableArray arrayWithArray:parentM];
+        [totalArray addObjectsFromArray:upsM];
+        self.cellData = totalArray;
+        
+        self.parentData = parentM;
         self.upsData = upsM;
+       // NSMutableArray *p = [NSMutableArray array];
+       // NSMutableArray *u = [NSMutableArray array];
+//        for (UPSParentGroupModel *parentModel in p) {
+//            NSInteger groupId = parentModel.groupId;
+//            for (UPSGroupUPSModel *upsModel in u) {
+//                if (groupId == upsModel.groupId) {
+//                    [tempArr addObject:upsModel];
+//                }
+//            }
+//            parentModel.groupCellData = tempArr;
+//        }
         
         [self.tableView reloadData];
     }
@@ -108,141 +142,47 @@
     
     
 }
+
 - (void)clickRightBarItem{
     
     UPSContactVC *contactVc = [[UPSContactVC alloc]init];
     contactVc.parentGroup = self.parentData;
+    contactVc.upsGroup = self.upsData;
     [self.navigationController pushViewController:contactVc animated:YES];
-    //    ///添加分组
-    //    ///http://192.168.1.147:12345/ups-interface/addGroup
-    //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"添加分组" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    //    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-    //        textField.placeholder = @"请输入新分组名称";
-    //    }];
-    //    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-    //    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-    //        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    //        params[@"token"] = self.mainModel.token;;
-    //        params[@"userId"] = @(self.mainModel.userId);
-    //        params[@"newGroupName"] = alert.textFields[0].text;
-    //
-    //        [[UPSHttpNetWorkTool sharedApi]POST:@"addGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-    //
-    //            NSDictionary *dict = responseObject[@"data"];
-    //            NSMutableArray *dataM = [NSMutableArray array];
-    //            UPSAddGroup *add = [UPSAddGroup mj_objectWithKeyValues:dict];
-    //            [dataM addObject:add];
-    //
-    //            NSLog(@"%@添加分组成功",responseObject);
-    //
-    //        } fail:^(NSURLSessionDataTask *task, NSError *error) {
-    //            NSLog(@"添加分组失败%@",error);
-    //
-    //        }];
-    //    }];
-    //    [alert addAction:cancel];
-    //    [alert addAction:sure];
-    //    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
-/////头部长按点击
-//- (void)clickHeadViewBtn:(NSNotification *)info{
-//
-//
-//
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入新修改组的名称" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-//    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-//        textField.placeholder = @"修改组名称";
-//    }];
-//
-//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-//    [alert addAction:cancel];
-//    UIAlertAction *delete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-//        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//        params[@"token"] = self.mainModel.token;
-//        params[@"userId"] = @(self.mainModel.userId);
-//        params[@"groupId"] = @(self.parentModel.groupId);
-//
-//        [[UPSHttpNetWorkTool sharedApi]POST:@"deleteGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//
-//            NSLog(@"删除组成功%@",responseObject);
-//
-//        } fail:^(NSURLSessionDataTask *task, NSError *error) {
-//            NSLog(@"删除组失败%@",error);
-//        }];
-//
-//
-//    }];
-//    [alert addAction:delete];
-//    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"修改" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//
-//        ///测试更改分组
-//        //http://192.168.1.147:12345/ups-interface/updateGroupName
-//        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//        params[@"token"] = self.mainModel.token;;
-//        params[@"userId"] = @(self.mainModel.userId);
-//        params[@"newGroupName"] = alert.textFields[0].text;
-//        params[@"groupId"] = @(self.parentModel.groupId);
-//        [[UPSHttpNetWorkTool sharedApi]POST:@"updateGroupName" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//            NSLog(@"更改用户名成功%@",responseObject);
-//            self.parentModel.groupName = alert.textFields[0].text;
-//
-//        } fail:^(NSURLSessionDataTask *task, NSError *error) {
-//
-//        }];
-//
-//
-//    }];
-//    [alert addAction:sure];
-//    [self presentViewController:alert animated:YES completion:nil];
-//
-//}
-//
-//
-//#pragma mark- 创建点击通知
-//- (void)setupNotification{
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickUnknownBtn) name:@"clickUnknownBtn" object:nil];
-//    //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickFaultBtn) name:@"clickFaultBtn" object:nil];
-//    //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickNormalBtn) name:@"clickNormalBtn" object:nil];
-//}
-//- (void)clickUnknownBtn{
-//    UPSUnknownVC *unknown = [[UPSUnknownVC alloc]init];
-//    [self.navigationController pushViewController:unknown animated:YES];
-//
-//    ///更改UPS名称http://192.168.1.147:12345/ups-interface/updateUpsName
-//    //
-//    //    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//    //    params[@"token"] = self.mainModel.token;;
-//    //    params[@"userId"] = @(self.mainModel.userId);
-//
-//
-//}
-////- (void)clickFaultBtn{
-////    UPSFaultVC *fault = [[UPSFaultVC alloc]init];
-////    [self.navigationController pushViewController:fault animated:YES];
-////}
-////- (void)clickNormalBtn{
-////    UPSNormalVC *normal = [[UPSNormalVC alloc]init];
-////    [self.navigationController pushViewController:normal animated:YES];
-////
-////}
-//
-//- (void)dealloc{
-//    [[NSNotificationCenter defaultCenter]removeObserver:self];
-//}
-//
-//
-//#pragma mark- 代理方法
+
+#pragma mark- 代理方法
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return self.parentData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    //
-    //    UPSGroupUPSModel *parentModel = self.upsData[section];
-    if ([self.switchArr[section] boolValue] == YES) {
-        return self.upsData.count;
+    UPSParentGroupModel *parentModel = self.parentData[section];
+        UPSGroupUPSModel *upsModel = self.upsData[section];
+    NSMutableArray *tempArr = [NSMutableArray array];
+    for (UPSParentGroupModel *parentModel in self.parentData) {
+        NSInteger ID = parentModel.groupId;
+     
+        for (UPSGroupUPSModel *upsModel in self.upsData) {
+            if (ID == upsModel.groupId ) {
+                [tempArr addObject:upsModel];
+            }
+        }
+        parentModel.groupCellData = tempArr;
+    }
+    self.cellData = tempArr;
+  
+//    if (parentModel.groupId == upsModel.groupId) {
+//
+//    }
+    
+//    NSLog(@"parentModel.groupId。。。。。%ld",(long)parentModel.groupId);
+//    NSLog(@"upsModel.groupId------%ld",(long)upsModel.groupId);
+    if ([self.switchArr[section] boolValue] == YES ) {
+        return  self.upsData.count;
     } else {
         return 0;
     }
@@ -254,48 +194,42 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     }
-    UPSGroupUPSModel *upsGroup = self.upsData[indexPath.row];
-    cell.textLabel.text = upsGroup.userDefinedUpsName;
-    cell.detailTextLabel.text = upsGroup.originalUpsName;
+    UPSGroupUPSModel *upsGroup = self.cellData[indexPath.row];
+    UPSParentGroupModel *parentGroup = self.parentData[indexPath.section];
+    if (upsGroup.groupId == parentGroup.groupId) {
+        cell.textLabel.text = upsGroup.userDefinedUpsName;
+        cell.detailTextLabel.text = upsGroup.originalUpsName;
+
+    }
     // 添加单元格的长按手势
-    //    UILongPressGestureRecognizer *longPressed = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressToDo:)];
-    //    longPressed.minimumPressDuration = 1;
-    //    [cell.contentView addGestureRecognizer:longPressed];
+//      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGestureRecognized:)];
+//    [cell addGestureRecognizer:longPress];
     return cell;
 }
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.view endEditing:YES];
+    //[self.view endEditing:YES];
     // 取消选中后的高亮状态(默认是：选中单元格后一直处于高亮状态，直到下次重新选择)
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    _indexPath = indexPath;
-    // 获取当前UPS设备对象,并传给详情页面
-    //    BRGroupModel *gModel = self.groupModelArr[indexPath.section];
-    //    BRContactsModel *model = gModel.contacts[indexPath.row];
-    //    NSLog(@"点击了：%@", model.name);
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    _indexPath = indexPath;
+    UPSGroupUPSModel *upsGroup = self.upsData[indexPath.row];
+    ///查看ups历史数据http://192.168.1.147:12345/ups-interface/checkUpsSituation
+    ///显示ups基本信息http://192.168.1.147:12345/ups-interface/checkUpsBaseParameter
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"token"] = self.mainModel.token;
+    params[@"userId"] = @(self.mainModel.userId);
+    params[@"upsId"] = @(upsGroup.id);
+    [[UPSHttpNetWorkTool sharedApi]POST:@"checkUpsBaseParameter" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        UPSBaseInfoVC *baseVC = [[UPSBaseInfoVC alloc]init];
+        [self.navigationController pushViewController:baseVC animated:YES];
+        NSLog(@"%@获取UPS历史数据成功@",responseObject);
+    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"获取ups历史数据失败%@",error);
+    }];
+    
 }
-///** 长按手势的执行方法 */
-//- (void)longPressToDo:(UILongPressGestureRecognizer *)gesture {
-//    if(gesture.state == UIGestureRecognizerStateBegan) {
-//        CGPoint point = [gesture locationInView:self.tableView];
-//        _indexPath = [self.tableView indexPathForRowAtPoint:point];
-//        // 弹出框
-//        [self gestureAlert];
-//        if(_indexPath == nil) return ;
-//    }
-//}
-///** 弹出框方法 */
-//- (void)gestureAlert {
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-//        NSLog(@"点击了删除");
-//    }]];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"移至分组" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        NSLog(@"点击了移至分组");
-//    }]];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-//    [self presentViewController:alert animated:YES completion:nil];
-//}
+
+
 //
 // 行高
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -328,7 +262,7 @@
     // 分组名Label
     UILabel *groupLable = [[UILabel alloc]initWithFrame:CGRectMake(45 / 375.0 * kScreenW, 0, kScreenW, 50 / 375.0 * kScreenW)];
     UPSParentGroupModel *model = _parentData[section];
-    groupLable.text = [NSString stringWithFormat:@"%@", model.groupName];
+    groupLable.text =  model.groupName;
     //    groupLable.text = @"哈根达斯";
     groupLable.textColor = [UIColor colorWithRed:0.21 green:0.21 blue:0.21 alpha:1.0];
     groupLable.font = [UIFont systemFontOfSize:16];
@@ -369,23 +303,86 @@
     clearView.backgroundColor = [UIColor clearColor];
     return clearView;
 }
+#pragma mark- 移动修改cell
 
+/** 1.指定tableView那些行(cell)可以移动 */
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // if (indexPath.row == 0) {
+    //  return NO; //cell不能移动
+    //} else {
+    return YES; //cell可以移动
+    // }
+}
+/** 2.移动cell后的操作:数据源进行更新 */
 //- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
 //    //1. 存储将要被移动的位置的对象
 //    NSString *str = [self.upsData objectAtIndex:sourceIndexPath.row];
 //    //2. 将对象从原位置移除
-//    [self.upsMoveData removeObjectAtIndex:sourceIndexPath.row];
+//    [self.upsData removeObjectAtIndex:sourceIndexPath.row];
 //    //3. 将对象插入到新位置
-//    [self.upsMoveData insertObject:str atIndex:destinationIndexPath.row];
+//    [self.upsData insertObject:str atIndex:destinationIndexPath.row];
 //    //刷新表格
 //    [self.tableView reloadData];
 //}
 
 
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改ups设备名称" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            self.textField = textField;
+        }];
+       
+        [self presentViewController:editAlert animated:YES completion:nil];
+        
+        UIAlertAction * action3 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
+        [editAlert addAction:action3];
+        UIAlertAction * action4 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //修改UPS设备名称http://192.168.1.147:12345/ups-interface/updateUpsName
+            UPSGroupUPSModel *upsGroup = self.upsData[indexPath.row];
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            params[@"token"] = self.mainModel.token;
+            params[@"userId"] = @(self.mainModel.userId);
+            params[@"upsId"] = @(upsGroup.id);
+            params[@"newUpsName"] = self.textField.text;
+            [[UPSHttpNetWorkTool sharedApi]POST:@"updateUpsName" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                upsGroup.userDefinedUpsName = self.textField.text;
+                [self.tableView reloadData];
+                [SVProgressHUD showSuccessWithStatus:@"设备名修改成功"];
+//                NSLog(@"设备名修改成功%@",responseObject);
+                
+            } fail:^(NSURLSessionDataTask *task, NSError *error) {
+//                NSLog(@"设备名修改失败%@",error);
+            }];
+            
+            
+            
+           
+        }];
+        [editAlert addAction:action4];
+    }];
+    
+    
+    
+    return @[editAction];
+}
+#pragma mark- 移动cell相关
+//必选
+- (NSArray *)originalArrayDataForTableView:(CPMoveCellTableView *)tableView{
+    return _upsData;
+}
+
+- (void)tableView:(CPMoveCellTableView *)tableView newArrayDataForDataSource:(NSArray *)newArray{
+    _upsData = [NSMutableArray arrayWithArray:newArray];
+}
+
 #pragma mark- 懒加载
 - (UITableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTopHeight - SafeAreaTabbarHeight)];
+        _tableView = [[CPMoveCellTableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTopHeight - SafeAreaTabbarHeight)style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -406,6 +403,14 @@
     }
     return _upsMoveData;
 }
+- (NSMutableArray *)cellData{
+    if (_cellData == nil) {
+        _cellData = [NSMutableArray array];
+    }
+    return _cellData;
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

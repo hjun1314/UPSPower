@@ -55,7 +55,7 @@
     [SVProgressHUD showWithStatus:@"正在登陆"];
     [SVProgressHUD setBackgroundColor:UICOLOR_RGB(0, 0, 0, 0.3)];
     //192.168.1.147:12345/ups-interface/login
-    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text};
+    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":[UPSTool getGeTuiCid]};
 
     [[UPSHttpNetWorkTool sharedApi]POST:@"login" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
 
@@ -63,9 +63,9 @@
         ///总模型
         NSMutableArray *dataM = [NSMutableArray array];
         NSDictionary *data = responseObject[@"data"];
+        
         UPSMainModel *mainModel = [UPSMainModel mj_objectWithKeyValues:data];
         [dataM addObject:mainModel];
-
         ///parentGroup数组转模型数组
 //        NSMutableArray *parentM = responseObject[@"data"][@"parentGroup"];
 //
@@ -77,8 +77,9 @@
 //        }
 ////     self.parentArr = [UPSParentGroupModel mj_objectArrayWithKeyValuesArray:self.tempArr];
 //        ///ups设备数组转模型数组
-//        NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
-//        NSMutableArray *upsG = [NSMutableArray array];
+       // NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
+        //NSMutableArray *upsG = [NSMutableArray array];
+//        upsG = [UPSGroupUPSModel mj_objectArrayWithKeyValuesArray:upsM];
 //        for (int i = 0 ; i < upsM.count; i++) {
 //            UPSGroupUPSModel *upsModel = [UPSGroupUPSModel mj_objectWithKeyValues:upsM[i]];
 //            [upsG addObject:upsModel];

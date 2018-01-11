@@ -16,14 +16,14 @@
     FMDatabase * dataBase;
     NSMutableArray * _usernameArr;
     NSMutableArray * _passwordArr;
-    UIAlertController * _alert;
+    //    UIAlertController * _alert;
 }
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)UIView *titleView;
 @property (nonatomic,strong)UITextField *nameField;
 @property (nonatomic,strong)UITextField *passwordField;
 
-@property (nonatomic,strong)NSArray *dataArr;
+@property (nonatomic,strong)NSMutableArray *dataArr;
 
 
 @property (nonatomic,strong)UPSMainModel *mainModel;
@@ -36,34 +36,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNav];
-    [self setupFMDB];
+    //[self setupFMDB];
     [self setupUI];
     UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
     self.mainModel = model;
     ///显示子账号列表http://192.168.1.147:12345/ups-interface/getAccountList
-//        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//        params[@"token"] = self.mainModel.token;
-//        params[@"userId"] = @(self.mainModel.userId);
-//        [[UPSHttpNetWorkTool sharedApi]POST:@"getAccountList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//
-//            NSLog(@"显示子账号列表%@",responseObject);
-////            NSMutableArray *tempArr = [NSMutableArray array];
-//            NSMutableArray *dict = responseObject[@"data"];
-//            self.dataArr = [UPSChildUserAccountModel mj_objectArrayWithKeyValuesArray:dict];
-////            for (int i = 0; i < dict.count; i++) {
-////                UPSChildUserAccountModel *account = [UPSChildUserAccountModel mj_objectWithKeyValues:dict[i]];
-////                [tempArr addObject:account];
-//////                [self.tableView reloadData];
-////            }
-////            self.dataArr = tempArr;
-////
-//
-//
-//        } fail:^(NSURLSessionDataTask *task, NSError *error) {
-//
-//        }];
-//
-//
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"token"] = self.mainModel.token;
+    params[@"userId"] = @(self.mainModel.userId);
+    [[UPSHttpNetWorkTool sharedApi]POST:@"getAccountList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        NSLog(@"显示子账号列表%@",responseObject);
+        //            NSMutableArray *tempArr = [NSMutableArray array];
+        NSMutableArray *dict = responseObject[@"data"];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithObjects:@"0", nil];
+        self.dataArr = [UPSChildUserAccountModel mj_objectArrayWithKeyValuesArray:dict];
+        //            for (int i = 0; i < dict.count; i++) {
+        //                UPSChildUserAccountModel *account = [UPSChildUserAccountModel mj_objectWithKeyValues:dict[i]];
+        //                [tempArr addObject:account];
+        ////                [self.tableView reloadData];
+        //            }
+        //            self.dataArr = tempArr;
+        //
+        [self.tableView reloadData];
+        
+    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+        
+    }];
+    
+    
 }
 
 - (void)setNav{
@@ -78,7 +79,51 @@
 }
 ///点击rightItem
 - (void)clickRightBtn{
-    [self presentViewController:_alert animated:YES completion:nil];
+    //[self presentViewController:_alert animated:YES completion:nil];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"账号";
+        
+    }];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"密码";
+        textField.secureTextEntry = YES;
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (!alert.textFields[0].text||!alert.textFields[1].text) {
+            return ;
+        }
+        
+        ///http://192.168.1.147:12345/ups-interface/addChildrenAccount添加子账户
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"token"] = self.mainModel.token;
+        params[@"userId"] = @(self.mainModel.userId);
+        params[@"username"] = alert.textFields[0].text;
+        params[@"password"] = alert.textFields[1].text;
+        
+        [[UPSHttpNetWorkTool sharedApi]POST:@"addChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog(@"添加子账户成功%@",responseObject);
+            NSMutableArray *tempArr = [NSMutableArray array];
+            NSDictionary *dict = responseObject[@"data"];
+            UPSAddChildModel *model = [UPSAddChildModel mj_objectWithKeyValues:dict];
+            [tempArr addObject:model];
+            NSString *ChildrenUserId = responseObject[@"data"][@"childrenUserId"];
+            [UPSAddChildModel saveChildrenUserId:[ChildrenUserId integerValue]];
+            [self.dataArr addObject:@"0"];
+            [self.tableView reloadData];
+            
+        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog(@"添加子账户失败%@",error);
+        }];
+        
+        
+    }];
+    
+    [alert addAction:cancel];
+    [alert addAction:sure];
+    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    
 }
 
 - (void)setupUI{
@@ -118,184 +163,90 @@
     }
 }
 
-///数据库相关
-- (void)setupFMDB{
-   
-    ///获取数据库对象
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    path = [path stringByAppendingPathComponent:@"userInfo.sqlite"];
-    dataBase = [FMDatabase databaseWithPath:path];
 
-    ///打开数据库
-//    BOOL open = [dataBase open];
-
-    ///创建表
-
-    NSString * create1=@"CREATE TABLE IF NOT EXISTS A_user (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,username TEXT,password TEXT)";
-    BOOL c1= [dataBase executeUpdate:create1];
-    if(c1){
-        NSLog(@"创建表成功");
-    }
-
-    _alert = [UIAlertController alertControllerWithTitle:@"请输入账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    [_alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"账号";
-    }];
-    [_alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"密码";
-        textField.secureTextEntry = YES;
-    }];
-    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
-    [_alert addAction:action1];
-    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (!_alert.textFields[0].text||!_alert.textFields[1].text) {
-            return ;
-        }
-        //        4 插入数据
-        NSString * insertSql= @" INSERT INTO A_user(username, password)VALUES(?,?)";
-        //    插入语句
-        bool inflag1=[dataBase executeUpdate:insertSql,_alert.textFields[0].text,_alert.textFields[1].text];
-        if(inflag1){
-//            NSLog(@"插入数据成功");
-           
-            ///http://192.168.1.147:12345/ups-interface/addChildrenAccount添加子账户
-            NSMutableDictionary *params = [NSMutableDictionary dictionary];
-            params[@"token"] = self.mainModel.token;
-            params[@"userId"] = @(self.mainModel.userId);
-            params[@"username"] = _alert.textFields[0].text;
-            params[@"password"] = _alert.textFields[1].text;
-
-            [[UPSHttpNetWorkTool sharedApi]POST:@"addChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-                NSLog(@"添加子账户成功%@",responseObject);
-                NSMutableArray *tempArr = [NSMutableArray array];
-                NSDictionary *dict = responseObject[@"data"];
-                UPSAddChildModel *model = [UPSAddChildModel mj_objectWithKeyValues:dict];
-                [tempArr addObject:model];
-                NSString *ChildrenUserId = responseObject[@"data"][@"childrenUserId"];
-                [UPSAddChildModel saveChildrenUserId:[ChildrenUserId integerValue]];
-                [self selectForm];
-                [self.tableView reloadData];
-                NSLog(@"插入数据成功");
-
-            } fail:^(NSURLSessionDataTask *task, NSError *error) {
-                NSLog(@"添加子账户失败%@",error);
-            }];
-//            [self selectForm];
-//            [self.tableView reloadData];
-//            NSLog(@"插入数据成功");
-        }
-
-
-
-
-    }];
-    [_alert addAction:action2];
-
-    _usernameArr = [[NSMutableArray alloc] init];
-    _passwordArr = [[NSMutableArray alloc] init];
-
-   [self selectForm];
-//
-}
-
-//数据库查询操作
-- (void)selectForm{
-    [_usernameArr removeAllObjects];
-    [_passwordArr removeAllObjects];
-    //    5查询数据FMDB的FMResultSet提供了多个方法来获取不同类型的数据
-    NSString * sql=@" select * from A_user ";
-    FMResultSet *result=[dataBase executeQuery:sql];
-    
-    while(result.next){
-        NSString * username =[result stringForColumn:@"username"];
-        [_usernameArr addObject:username];
-        NSString * password =[result stringForColumn:@"password"];
-        [_passwordArr addObject:password];
-    }
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _usernameArr.count;
+    return self.dataArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
+//    NSString *str = self.dataArr[indexPath.row];
+//    if ([str isEqualToString:@"0"]) {
     UPSChildUserCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell = [[UPSChildUserCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     }
-//    UPSChildUserAccountModel *model = self.dataArr[indexPath.row];
-    cell.passwordLabel.text = _passwordArr[indexPath.row];
+    UPSChildUserAccountModel *model = self.dataArr[indexPath.row];
+    //        cell.textLabel.text = @"hahaha";
+    //        cell.detailTextLabel.text = @"呵呵呵呵";
+    //            cell.passwordLabel.text = _dataArr[indexPath.row];
     cell.passwordLabel.secureTextEntry = YES;
-    cell.nameLabel.text = _usernameArr[indexPath.row];
-//    cell.nameLabel.text = model.username;
-//    cell.passwordLabel.text = model.password;
+    //            cell.nameLabel.text = _dataArr[indexPath.row];
+    cell.nameLabel.text = model.username;
+    cell.passwordLabel.text = model.password;
     return cell;
+//    }
+//        return nil;
 }
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    UPSChildUserAccountModel *model = self.dataArr[indexPath.row];
+    
     UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-
         UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
         [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            textField.text = _usernameArr[indexPath.row];
+            //            textField.text = _usernameArr[indexPath.row];
         }];
         [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            textField.text = _passwordArr[indexPath.row];
+            //            textField.text = _passwordArr[indexPath.row];
             textField.secureTextEntry = YES;
         }];
         [self presentViewController:editAlert animated:YES completion:nil];
-
+        
         UIAlertAction * action3 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
         [editAlert addAction:action3];
         UIAlertAction * action4 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            //    修改语句
-            BOOL flag=  [dataBase executeUpdate:@" UPDATE A_user SET username = ?,password = ? WHERE id = ?;",editAlert.textFields[0].text,editAlert.textFields[1].text,@(indexPath.row+1)];
-            if(flag){
-                //                NSLog(@"修改成功");
-                ///修改子账号名称
-                /// http://192.168.1.147:12345/ups-interface/updateAccount
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"token"] = self.mainModel.token;;
-    params[@"userId"] = @(self.mainModel.userId);
-    params[@"childrenUserId"] = @([UPSAddChildModel getChildrenUserId]);
-    params[@"username"] = editAlert.textFields[0].text;
-    params[@"password"] = editAlert.textFields[1].text;
-    [[UPSHttpNetWorkTool sharedApi]POST:@"updateAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-                    NSLog(@"子账号修改成功%@",responseObject);
-
-                    [self selectForm];
-                    [self.tableView reloadData];
-                } fail:^(NSURLSessionDataTask *task, NSError *error) {
-                    NSLog(@"子账号修改失败%@",error);
-                }];
-                [self selectForm];
-                [self.tableView reloadData];
-                
-            }
-            }];
-        [editAlert addAction:action4];
-    }];
-
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        //        删除语句
-        BOOL dflag= [dataBase executeUpdate:@"delete from A_user WHERE username = ?",_usernameArr[indexPath.row]];
-        if(dflag){
-
-            ///删除子账号http://192.168.1.147:12345/ups-interface/deleteChildrenAccount
+            ///修改子账号名称
+            /// http://192.168.1.147:12345/ups-interface/updateAccount
             NSMutableDictionary *params = [NSMutableDictionary dictionary];
             params[@"token"] = self.mainModel.token;;
             params[@"userId"] = @(self.mainModel.userId);
-            //            params[@""] = @();
-
-            [_usernameArr removeObjectAtIndex:indexPath.row];
-            [_passwordArr removeObjectAtIndex:indexPath.row];
+            params[@"childrenUserId"] = @(model.userId);
+            params[@"newUsername"] = editAlert.textFields[0].text;
+            params[@"password"] = editAlert.textFields[1].text;
+            params[@"originalUsername"] = model.username;
+            [[UPSHttpNetWorkTool sharedApi]POST:@"updateAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                NSLog(@"子账号修改成功%@",responseObject);
+                
+                [self.tableView reloadData];
+            } fail:^(NSURLSessionDataTask *task, NSError *error) {
+                NSLog(@"子账号修改失败%@",error);
+            }];
             [self.tableView reloadData];
-        }
-
+            
+            
+        }];
+        [editAlert addAction:action4];
     }];
-
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        //        删除语句
+        
+        ///删除子账号http://192.168.1.147:12345/ups-interface/deleteChildrenAccount
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"token"] = self.mainModel.token;;
+        params[@"userId"] = @(self.mainModel.userId);
+        params[@"childrenUserId"] = @(model.userId);
+        [[UPSHttpNetWorkTool sharedApi]POST:@"deleteChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog(@"删除子账号成功%@",responseObject);
+            [self.tableView reloadData];
+        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog(@"删除子账号失败%@",error);
+        }];
+        
+    }];
+    
     return @[editAction,deleteAction];
 }
+
 
 
 - (void)didReceiveMemoryWarning {

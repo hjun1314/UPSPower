@@ -9,7 +9,7 @@
 #import "UPSTool.h"
 #define Access_token @"token"
 #define Access_ID @"ID"
-
+#define Access_CID @"CID"
 @implementation UPSTool
 // 存储token
 +(void)saveToken:(NSString *)token
@@ -38,5 +38,57 @@
 +(NSInteger)getID{
     return [[NSUserDefaults standardUserDefaults]integerForKey:Access_ID];
 }
+
+///存个推CID
++ (void)saveGeTuiCid:(NSString *)cid{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:cid forKey:Access_CID];
+    [userDefaults synchronize];
+}
+///取cid
++ (NSString *)getGeTuiCid{
+    
+    return [[NSUserDefaults standardUserDefaults]objectForKey:Access_CID];
+    
+}
++ (NSString *)strwithInteger:(long)interger
+{
+   NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:interger];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd";
+    NSString *string = [formatter stringFromDate:date];
+    
+   
+//
+//    NSTimeInterval spaceTime = [date timeIntervalSinceDate:date];
+//    int second = (int)spaceTime;
+//    int minute = second / 60;
+//    int hour = minute / 60;
+//    if (minute < 1) {
+//        string = @"刚刚";
+//    }else if (hour < 1 && minute >= 1) {
+//       string = [NSString stringWithFormat:@"%d分钟前",minute];
+//    }else if (hour >= 1 && hour < 24) {
+//        string = [NSString stringWithFormat:@"%d小时前",hour];
+//    }else if (hour >= 24 && hour < 10 * 24) {
+//        string = [NSString stringWithFormat:@"%d天前",hour / 24];
+//    }else if (hour > 24 * 10) {
+//        string = string;
+//    }
+    return string;
+}
+
++ (NSString *)stringWithNsdate:(NSString *)str{
+//    NSString *str=@"1368082020";//时间戳
+    NSTimeInterval time=[str doubleValue]+28800;//因为时差问题要加8小时 == 28800 sec
+    NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
+    //实例化一个NSDateFormatter对象
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //设定时间格式,这里可以设置成自己需要的格式
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
+    return currentDateStr;
+}
+
 
 @end

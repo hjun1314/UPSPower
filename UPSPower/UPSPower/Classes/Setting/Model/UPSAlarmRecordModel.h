@@ -14,9 +14,9 @@
 ///告警总数
 @property (nonatomic,assign)NSInteger amount;
 ///ups名称
-@property (nonatomic,copy)NSString *upsName;
+@property (nonatomic,copy)NSString *userDefinedUpsName;
 ///发生时间
-@property (nonatomic,strong)NSDate *happenTime;
+@property (nonatomic,copy)NSString *happenTime;
 
 
 
