@@ -13,7 +13,6 @@
 		F01C59B11FE0CED7005BDB12 /* UPSScreeningAlarmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C59B01FE0CED7005BDB12 /* UPSScreeningAlarmModel.m */; };
 		F01C69AA1FD0F7D300BD280D /* UPSChileUserCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C69A91FD0F7D300BD280D /* UPSChileUserCellModel.m */; };
 		F01C69AD1FD12A2700BD280D /* UPSMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C69AC1FD12A2700BD280D /* UPSMainVC.m */; };
-		F01C69B61FD135AA00BD280D /* UPSLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C69B51FD135AA00BD280D /* UPSLoginView.m */; };
 		F01D507A1FF4CDF2000AAB27 /* UPSModelTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F01D50791FF4CDF2000AAB27 /* UPSModelTool.m */; };
 		F0228F7B1FD5310500A53245 /* UPSHttpNetWorkTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F0228F791FD5310500A53245 /* UPSHttpNetWorkTool.m */; };
 		F025C6A51FF36D3B00EAFBD6 /* UPSHistoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F025C6A41FF36D3B00EAFBD6 /* UPSHistoryModel.m */; };
@@ -22,6 +21,9 @@
 		F030EE101FECB59B00C8DA22 /* UPSContactVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F030EE0F1FECB59B00C8DA22 /* UPSContactVC.m */; };
 		F0317E091FEA51DD0090575D /* UPSAlarmRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0317E081FEA51DD0090575D /* UPSAlarmRecordModel.m */; };
 		F0317E0C1FEA52000090575D /* UPSSingalAlarmRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0317E0B1FEA52000090575D /* UPSSingalAlarmRecordModel.m */; };
+		F035D52B2016C99300B78B8E /* UPSChangePassword.m in Sources */ = {isa = PBXBuildFile; fileRef = F035D52A2016C99300B78B8E /* UPSChangePassword.m */; };
+		F035D52E2016C9BA00B78B8E /* UPSChangePasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F035D52D2016C9BA00B78B8E /* UPSChangePasswordVC.m */; };
+		F035D5312016CA8400B78B8E /* UPSTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F035D52F2016CA8400B78B8E /* UPSTextField.m */; };
 		F038DE591FD77FC500867921 /* UPSMainModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F038DE581FD77FC500867921 /* UPSMainModel.m */; };
 		F038DE5C1FD7855000867921 /* UPSEquipmentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F038DE5B1FD7855000867921 /* UPSEquipmentModel.m */; };
 		F038DE5F1FD7929B00867921 /* UPSTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F038DE5E1FD7929B00867921 /* UPSTool.m */; };
@@ -47,6 +49,8 @@
 		F06512A11FC7F94100CC1A87 /* UPSAlarmCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F06512A01FC7F94100CC1A87 /* UPSAlarmCell.m */; };
 		F06910A31FFCB91300DEDDD5 /* UIView+GKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F069109F1FFCB91300DEDDD5 /* UIView+GKExtension.m */; };
 		F06910A41FFCB91300DEDDD5 /* GKCover.m in Sources */ = {isa = PBXBuildFile; fileRef = F06910A21FFCB91300DEDDD5 /* GKCover.m */; };
+		F07057482015C77200AF2064 /* UPSLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F07057472015C77200AF2064 /* UPSLoginView.m */; };
+		F070574B2015C79A00AF2064 /* UPSRememberBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = F07057492015C79A00AF2064 /* UPSRememberBtn.m */; };
 		F07945521FE8FFD70002713F /* UPSSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F07945501FE8FFD70002713F /* UPSSettingCell.m */; };
 		F07945531FE8FFD70002713F /* UPSSettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F07945511FE8FFD70002713F /* UPSSettingCell.xib */; };
 		F079455A1FE905880002713F /* UIView+SDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = F07945551FE905870002713F /* UIView+SDAutoLayout.m */; };
@@ -131,8 +135,6 @@
 		F01C69A91FD0F7D300BD280D /* UPSChileUserCellModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSChileUserCellModel.m; sourceTree = "<group>"; };
 		F01C69AB1FD12A2700BD280D /* UPSMainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSMainVC.h; sourceTree = "<group>"; };
 		F01C69AC1FD12A2700BD280D /* UPSMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSMainVC.m; sourceTree = "<group>"; };
-		F01C69B41FD135AA00BD280D /* UPSLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSLoginView.h; sourceTree = "<group>"; };
-		F01C69B51FD135AA00BD280D /* UPSLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSLoginView.m; sourceTree = "<group>"; };
 		F01D50781FF4CDF2000AAB27 /* UPSModelTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSModelTool.h; sourceTree = "<group>"; };
 		F01D50791FF4CDF2000AAB27 /* UPSModelTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSModelTool.m; sourceTree = "<group>"; };
 		F0228F791FD5310500A53245 /* UPSHttpNetWorkTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSHttpNetWorkTool.m; sourceTree = "<group>"; };
@@ -151,6 +153,12 @@
 		F0317E081FEA51DD0090575D /* UPSAlarmRecordModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSAlarmRecordModel.m; sourceTree = "<group>"; };
 		F0317E0A1FEA52000090575D /* UPSSingalAlarmRecordModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSSingalAlarmRecordModel.h; sourceTree = "<group>"; };
 		F0317E0B1FEA52000090575D /* UPSSingalAlarmRecordModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSSingalAlarmRecordModel.m; sourceTree = "<group>"; };
+		F035D5292016C99300B78B8E /* UPSChangePassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSChangePassword.h; sourceTree = "<group>"; };
+		F035D52A2016C99300B78B8E /* UPSChangePassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSChangePassword.m; sourceTree = "<group>"; };
+		F035D52C2016C9B900B78B8E /* UPSChangePasswordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSChangePasswordVC.h; sourceTree = "<group>"; };
+		F035D52D2016C9BA00B78B8E /* UPSChangePasswordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSChangePasswordVC.m; sourceTree = "<group>"; };
+		F035D52F2016CA8400B78B8E /* UPSTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSTextField.m; sourceTree = "<group>"; };
+		F035D5302016CA8400B78B8E /* UPSTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSTextField.h; sourceTree = "<group>"; };
 		F038DE571FD77FC500867921 /* UPSMainModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSMainModel.h; sourceTree = "<group>"; };
 		F038DE581FD77FC500867921 /* UPSMainModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSMainModel.m; sourceTree = "<group>"; };
 		F038DE5A1FD7855000867921 /* UPSEquipmentModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSEquipmentModel.h; sourceTree = "<group>"; };
@@ -202,6 +210,10 @@
 		F06910A01FFCB91300DEDDD5 /* UIView+GKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+GKExtension.h"; sourceTree = "<group>"; };
 		F06910A11FFCB91300DEDDD5 /* GKCoverEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKCoverEnum.h; sourceTree = "<group>"; };
 		F06910A21FFCB91300DEDDD5 /* GKCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKCover.m; sourceTree = "<group>"; };
+		F07057462015C77200AF2064 /* UPSLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSLoginView.h; sourceTree = "<group>"; };
+		F07057472015C77200AF2064 /* UPSLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSLoginView.m; sourceTree = "<group>"; };
+		F07057492015C79A00AF2064 /* UPSRememberBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSRememberBtn.m; sourceTree = "<group>"; };
+		F070574A2015C79A00AF2064 /* UPSRememberBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSRememberBtn.h; sourceTree = "<group>"; };
 		F079454F1FE8FFD70002713F /* UPSSettingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSSettingCell.h; sourceTree = "<group>"; };
 		F07945501FE8FFD70002713F /* UPSSettingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSSettingCell.m; sourceTree = "<group>"; };
 		F07945511FE8FFD70002713F /* UPSSettingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UPSSettingCell.xib; sourceTree = "<group>"; };
@@ -486,6 +498,8 @@
 				F0DBFDBA1FC524B2004F66C9 /* UPSMineVC.m */,
 				F054D9491FCC0866002BB8C6 /* UPSChildUsersVC.h */,
 				F054D94A1FCC0866002BB8C6 /* UPSChildUsersVC.m */,
+				F035D52C2016C9B900B78B8E /* UPSChangePasswordVC.h */,
+				F035D52D2016C9BA00B78B8E /* UPSChangePasswordVC.m */,
 				F06512991FC7CBEE00CC1A87 /* UPSAlarmVC.h */,
 				F065129A1FC7CBEE00CC1A87 /* UPSAlarmVC.m */,
 				F06512961FC7ACF600CC1A87 /* UPSAboutUsVC.h */,
@@ -522,6 +536,10 @@
 				F0ABAB671FC815A400B32BCF /* UPSAlarmBtn.m */,
 				F07C5AE41FCEB28D006C516C /* UPSChildUserCell.h */,
 				F07C5AE51FCEB28D006C516C /* UPSChildUserCell.m */,
+				F035D5292016C99300B78B8E /* UPSChangePassword.h */,
+				F035D52A2016C99300B78B8E /* UPSChangePassword.m */,
+				F035D5302016CA8400B78B8E /* UPSTextField.h */,
+				F035D52F2016CA8400B78B8E /* UPSTextField.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -611,12 +629,14 @@
 		F0746DFB1FC518E100429F3B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F01C69B41FD135AA00BD280D /* UPSLoginView.h */,
-				F01C69B51FD135AA00BD280D /* UPSLoginView.m */,
+				F07057462015C77200AF2064 /* UPSLoginView.h */,
+				F07057472015C77200AF2064 /* UPSLoginView.m */,
 				F041551F1FD62A230032A2AF /* UPSLoginBackView.h */,
 				F041551D1FD62A230032A2AF /* UPSLoginBackView.m */,
 				F04155201FD62A230032A2AF /* UPSLoginTextField.h */,
 				F041551E1FD62A230032A2AF /* UPSLoginTextField.m */,
+				F070574A2015C79A00AF2064 /* UPSRememberBtn.h */,
+				F07057492015C79A00AF2064 /* UPSRememberBtn.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -946,6 +966,7 @@
 				F082E8AF1FF2067800BA3DEF /* UPSEquipmentVC.m in Sources */,
 				F04155211FD62A230032A2AF /* UPSLoginBackView.m in Sources */,
 				F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */,
+				F035D52B2016C99300B78B8E /* UPSChangePassword.m in Sources */,
 				F0228F7B1FD5310500A53245 /* UPSHttpNetWorkTool.m in Sources */,
 				F05D0E5B1FC529E600FD4218 /* UIImage+Image.m in Sources */,
 				F054D94B1FCC0866002BB8C6 /* UPSChildUsersVC.m in Sources */,
@@ -968,12 +989,15 @@
 				F09319E61FC51DE700D04D82 /* UPSTabVC.m in Sources */,
 				F0C9438A1FC6A15900A4B7DB /* UPSNormalVC.m in Sources */,
 				F09319E91FC51E5B00D04D82 /* UPSNacVC.m in Sources */,
+				F07057482015C77200AF2064 /* UPSLoginView.m in Sources */,
 				F05D0E681FC52BA800FD4218 /* UIView+ZUtility.m in Sources */,
 				F0E2B47B1FD7D24400B14C69 /* UPSChildUserAccountModel.m in Sources */,
+				F070574B2015C79A00AF2064 /* UPSRememberBtn.m in Sources */,
 				F0DE2D721FDA8A6C0080FAA5 /* UPSAddChildModel.m in Sources */,
 				F025C6A81FF36DB900EAFBD6 /* UPSBaseInfoModel.m in Sources */,
 				F04155221FD62A230032A2AF /* UPSLoginTextField.m in Sources */,
 				F07B2BD11FD9462000BD9F1B /* UPSParentGroupModel.m in Sources */,
+				F035D52E2016C9BA00B78B8E /* UPSChangePasswordVC.m in Sources */,
 				F079455A1FE905880002713F /* UIView+SDAutoLayout.m in Sources */,
 				F079455E1FE90D960002713F /* UPSSettingModel.m in Sources */,
 				F05D0E9A1FC56FF200FD4218 /* UPSEquipmentCell.m in Sources */,
@@ -990,10 +1014,10 @@
 				F01D507A1FF4CDF2000AAB27 /* UPSModelTool.m in Sources */,
 				F07C5AE61FCEB28D006C516C /* UPSChildUserCell.m in Sources */,
 				F0317E0C1FEA52000090575D /* UPSSingalAlarmRecordModel.m in Sources */,
-				F01C69B61FD135AA00BD280D /* UPSLoginView.m in Sources */,
 				F06512981FC7ACF600CC1A87 /* UPSAboutUsVC.m in Sources */,
 				F065129B1FC7CBEE00CC1A87 /* UPSAlarmVC.m in Sources */,
 				F030EE101FECB59B00C8DA22 /* UPSContactVC.m in Sources */,
+				F035D5312016CA8400B78B8E /* UPSTextField.m in Sources */,
 				F01C59AB1FE0C905005BDB12 /* UPSAlarmModel.m in Sources */,
 				F0DBFDB81FC5249D004F66C9 /* UPSSettingVC.m in Sources */,
 				F038DE5F1FD7929B00867921 /* UPSTool.m in Sources */,

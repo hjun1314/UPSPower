@@ -13,7 +13,11 @@
 
 @property (nonatomic,strong)UPSGroupUPSModel *upsModel;
 
-@property (nonatomic,strong)UIButton *normal;
+@property (nonatomic,strong)UILabel *nameLabel;
+
+@property (nonatomic,strong)UILabel *originalLabel;
+
+@property (nonatomic,strong)UIImageView *iconView;
 
 
 @end

@@ -64,27 +64,29 @@
     [self loadData];
     
     
-  
     
     
-
+    
+    
 }
 
 - (void)setupNav{
     self.navigationItem.title = @"设备状态";
-//    self.navigationItem.hidesBackButton = YES;
+    //    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem)];
-   
-//    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
+    
+    //    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
     self.tableView.hidden = NO;
     
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.tableView reloadData];
+    //
+
 }
 - (void)loadData{
-
+    
     self.parentData = [NSMutableArray array];
     self.upsData = [NSMutableArray array];
     
@@ -98,42 +100,22 @@
         NSMutableArray *upsM = [NSMutableArray array];
         NSLog(@"设备列表%@",responseObject);
         NSMutableArray *parentM = [NSMutableArray array];
-        NSMutableArray *tempArr = [NSMutableArray array];
-        for (int i = 0; i < parentData.count; i++) {
-            UPSParentGroupModel *p = [UPSParentGroupModel mj_objectWithKeyValues:parentData[i]];
-            [parentM addObject:p];
-            
-           
-//            p.groupCellData = tempArr;
-            
+        for (UPSParentGroupModel *dict in parentData) {
+            UPSParentGroupModel *p = [UPSParentGroupModel mj_objectWithKeyValues:dict];
             // 加个判断，防止多次重复调用这个方法时，造成数据累加无限添加
             if (self.switchArr.count < parentData.count) {
                 [self.switchArr addObject:@NO];
             }
-           
+          
+            [parentM addObject:p];
         }
-        for (int j = 0; j < upsData.count; j++) {
-            UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:upsData[j]];
+        for (UPSGroupUPSModel *upsModel in upsData) {
+            UPSGroupUPSModel *u = [UPSGroupUPSModel mj_objectWithKeyValues:upsModel];
             [upsM addObject:u];
+            
         }
-        NSMutableArray *totalArray = [NSMutableArray arrayWithArray:parentM];
-        [totalArray addObjectsFromArray:upsM];
-        self.cellData = totalArray;
-        
         self.parentData = parentM;
         self.upsData = upsM;
-       // NSMutableArray *p = [NSMutableArray array];
-       // NSMutableArray *u = [NSMutableArray array];
-//        for (UPSParentGroupModel *parentModel in p) {
-//            NSInteger groupId = parentModel.groupId;
-//            for (UPSGroupUPSModel *upsModel in u) {
-//                if (groupId == upsModel.groupId) {
-//                    [tempArr addObject:upsModel];
-//                }
-//            }
-//            parentModel.groupCellData = tempArr;
-//        }
-        
         [self.tableView reloadData];
     }
                                    fail:^(NSURLSessionDataTask *task, NSError *error) {
@@ -160,29 +142,24 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    UPSParentGroupModel *parentModel = self.parentData[section];
-        UPSGroupUPSModel *upsModel = self.upsData[section];
+//    UPSParentGroupModel *parentModel = self.parentData[section];
+//    UPSGroupUPSModel *upsModel = self.upsData[section];
     NSMutableArray *tempArr = [NSMutableArray array];
     for (UPSParentGroupModel *parentModel in self.parentData) {
         NSInteger ID = parentModel.groupId;
-     
+
         for (UPSGroupUPSModel *upsModel in self.upsData) {
             if (ID == upsModel.groupId ) {
                 [tempArr addObject:upsModel];
             }
+            parentModel.groupCellData = tempArr;
+
         }
-        parentModel.groupCellData = tempArr;
     }
     self.cellData = tempArr;
-  
-//    if (parentModel.groupId == upsModel.groupId) {
-//
-//    }
-    
-//    NSLog(@"parentModel.groupId。。。。。%ld",(long)parentModel.groupId);
-//    NSLog(@"upsModel.groupId------%ld",(long)upsModel.groupId);
+
     if ([self.switchArr[section] boolValue] == YES ) {
-        return  self.upsData.count;
+        return tempArr.count;
     } else {
         return 0;
     }
@@ -190,28 +167,38 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    UPSEquipmentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        cell = [[UPSEquipmentCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     }
     UPSGroupUPSModel *upsGroup = self.cellData[indexPath.row];
     UPSParentGroupModel *parentGroup = self.parentData[indexPath.section];
-    if (upsGroup.groupId == parentGroup.groupId) {
-        cell.textLabel.text = upsGroup.userDefinedUpsName;
-        cell.detailTextLabel.text = upsGroup.originalUpsName;
-
+    //    if (upsGroup.groupId == parentGroup.groupId) {
+    cell.nameLabel.text = upsGroup.userDefinedUpsName;
+    //        cell.iconView.image = [UIImage imageNamed:@"red"];
+    cell.originalLabel.text = upsGroup.originalUpsName;
+    if (upsGroup.statId == 1) {
+        cell.iconView.image = [UIImage imageNamed:@"red"];
+        
+    }else if(upsGroup.statId == 2){
+        cell.iconView.image = [UIImage imageNamed:@"green"];
+        
+    }else{
+        cell.iconView.image = [UIImage imageNamed:@"unknown_"];
     }
+    
+    //}
     // 添加单元格的长按手势
-//      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGestureRecognized:)];
-//    [cell addGestureRecognizer:longPress];
+    //      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGestureRecognized:)];
+    //    [cell addGestureRecognizer:longPress];
     return cell;
 }
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //[self.view endEditing:YES];
     // 取消选中后的高亮状态(默认是：选中单元格后一直处于高亮状态，直到下次重新选择)
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    _indexPath = indexPath;
+    //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    //    _indexPath = indexPath;
     UPSGroupUPSModel *upsGroup = self.upsData[indexPath.row];
     ///查看ups历史数据http://192.168.1.147:12345/ups-interface/checkUpsSituation
     ///显示ups基本信息http://192.168.1.147:12345/ups-interface/checkUpsBaseParameter
@@ -241,10 +228,10 @@
 }
 //// 分区尾的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-//    if (section == 0) {
-//        return 10.0f;
-//    } else {
-        return 1.0f;
+    //    if (section == 0) {
+    //        return 10.0f;
+    //    } else {
+    return 1.0f;
     //}
 }
 
@@ -329,13 +316,12 @@
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"重命名" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         
         UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改ups设备名称" message:@"" preferredStyle:UIAlertControllerStyleAlert];
         [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             self.textField = textField;
         }];
-       
         [self presentViewController:editAlert animated:YES completion:nil];
         
         UIAlertAction * action3 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
@@ -352,15 +338,15 @@
                 upsGroup.userDefinedUpsName = self.textField.text;
                 [self.tableView reloadData];
                 [SVProgressHUD showSuccessWithStatus:@"设备名修改成功"];
-//                NSLog(@"设备名修改成功%@",responseObject);
+                //                NSLog(@"设备名修改成功%@",responseObject);
                 
             } fail:^(NSURLSessionDataTask *task, NSError *error) {
-//                NSLog(@"设备名修改失败%@",error);
+                //                NSLog(@"设备名修改失败%@",error);
             }];
             
             
             
-           
+            
         }];
         [editAlert addAction:action4];
     }];
@@ -382,7 +368,7 @@
 #pragma mark- 懒加载
 - (UITableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[CPMoveCellTableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTopHeight - SafeAreaTabbarHeight)style:UITableViewStyleGrouped];
+        _tableView = [[CPMoveCellTableView alloc]initWithFrame:CGRectMake(0, 0, kScreenW, kScreenH  - SafeAreaTabbarHeight)];
         _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;

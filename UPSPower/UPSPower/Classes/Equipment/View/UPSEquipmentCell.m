@@ -27,26 +27,22 @@
 
 - (void)setup{
     
-    UIButton *unknownBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, 100, 30)];
-    [self addSubview:unknownBtn];
-    //[unknownBtn setTitle:@"设备1 未知" forState:UIControlStateNormal];
-    [unknownBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [unknownBtn addTarget:self action:@selector(clickUnknownBtn:) forControlEvents:UIControlEventTouchUpInside];
-    self.normal = unknownBtn;
+    UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, (kScreenW - 10) / 3, self.height)];
+    [self.contentView addSubview:nameLabel];
     
-//    UIButton *faultBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, 25, 100, 20)];
-//    [faultBtn setTitle:@"设备2 异常" forState:UIControlStateNormal];
-//    [faultBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//    [self addSubview:faultBtn];
-//    [faultBtn addTarget:self action:@selector(didFaultBtn:) forControlEvents:UIControlEventTouchUpInside];
-//
-//
-//    UIButton *normalBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, 50, 100, 20)];
-//    [normalBtn setTitle:@"设备3 正常" forState:UIControlStateNormal];
-//    [normalBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-//    [self addSubview:normalBtn];
-//    [normalBtn addTarget:self action:@selector(didnormalBtn:) forControlEvents:UIControlEventTouchUpInside];
-    
+//    nameLabel.backgroundColor = [UIColor orangeColor];
+    self.nameLabel = nameLabel;
+   
+    UIImageView *iconView = [[UIImageView alloc]initWithFrame:CGRectMake((kScreenW - 10) / 3 + 10, 0, 50, self.height)];
+    [self.contentView addSubview:iconView];
+//    iconView.backgroundColor = [UIColor blueColor];
+    self.iconView = iconView;
+
+    UILabel *originalLabel = [[UILabel alloc]initWithFrame:CGRectMake((kScreenW - 10) / 3 * 2, 0, (kScreenW - 10) / 3, self.height)];
+    [self.contentView addSubview:originalLabel];
+//    originalLabel.backgroundColor = [UIColor redColor];
+    self.originalLabel = originalLabel;
+    originalLabel.textAlignment = NSTextAlignmentRight;
 }
 
 - (void)clickUnknownBtn:(UIButton *)unknownBtn{

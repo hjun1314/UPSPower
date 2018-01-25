@@ -83,7 +83,6 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"账号";
-        
     }];
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"密码";
@@ -101,13 +100,16 @@
         params[@"userId"] = @(self.mainModel.userId);
         params[@"username"] = alert.textFields[0].text;
         params[@"password"] = alert.textFields[1].text;
-        
+
         [[UPSHttpNetWorkTool sharedApi]POST:@"addChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
             NSLog(@"添加子账户成功%@",responseObject);
             NSMutableArray *tempArr = [NSMutableArray array];
             NSDictionary *dict = responseObject[@"data"];
             UPSAddChildModel *model = [UPSAddChildModel mj_objectWithKeyValues:dict];
             [tempArr addObject:model];
+            alert.textFields[0].text = model.username;
+            self.passwordField.text = alert.textFields[1].text;
+
             NSString *ChildrenUserId = responseObject[@"data"][@"childrenUserId"];
             [UPSAddChildModel saveChildrenUserId:[ChildrenUserId integerValue]];
             [self.dataArr addObject:@"0"];
@@ -116,7 +118,6 @@
         } fail:^(NSURLSessionDataTask *task, NSError *error) {
             NSLog(@"添加子账户失败%@",error);
         }];
-        
         
     }];
     
@@ -129,7 +130,7 @@
 - (void)setupUI{
     
     ///tableView
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight + 35, kScreenW, kScreenH - SafeAreaTopHeight - SafeAreaTabbarHeight - 35)];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,  35, kScreenW, kScreenH  - SafeAreaTabbarHeight - 35)];
     [self.view addSubview:tableView];
     self.tableView = tableView;
     tableView.delegate = self;
@@ -181,7 +182,7 @@
     cell.passwordLabel.secureTextEntry = YES;
     //            cell.nameLabel.text = _dataArr[indexPath.row];
     cell.nameLabel.text = model.username;
-    cell.passwordLabel.text = model.password;
+    cell.passwordLabel.text = self.passwordField.text;
     return cell;
 //    }
 //        return nil;
@@ -190,7 +191,7 @@
 {
     UPSChildUserAccountModel *model = self.dataArr[indexPath.row];
     
-    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"编辑" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"修改" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
         [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             //            textField.text = _usernameArr[indexPath.row];
@@ -237,6 +238,7 @@
         params[@"childrenUserId"] = @(model.userId);
         [[UPSHttpNetWorkTool sharedApi]POST:@"deleteChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
             NSLog(@"删除子账号成功%@",responseObject);
+            
             [self.tableView reloadData];
         } fail:^(NSURLSessionDataTask *task, NSError *error) {
             NSLog(@"删除子账号失败%@",error);

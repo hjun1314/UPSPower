@@ -20,6 +20,7 @@
     attrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:20];
     [bar setTitleTextAttributes:attrs];
     [bar setBarTintColor:UICOLOR_RGB(33, 151, 216, 1)];
+//    [bar setBarTintColor:[UIColor whiteColor]];
     // 设置导航条背景图片
     //[bar setBackgroundImage:[UIImage imageNamed:@"navigationbarBackgroundWhite"] forBarMetrics:UIBarMetricsDefault];
 }

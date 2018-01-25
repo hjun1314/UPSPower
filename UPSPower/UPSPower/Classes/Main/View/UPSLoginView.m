@@ -7,13 +7,14 @@
 //
 
 #import "UPSLoginView.h"
-//#import "UPSLoginBackView.h"
-//#import "UPSLoginTextField.h"
+#import "UPSRememberBtn.h"
 @interface UPSLoginView()<UITextFieldDelegate>
 //@property (nonatomic,strong)UPSLoginBackView *backgroundView;
 
-@property (nonatomic, strong) UIButton *loginButton;
 @property (nonatomic, strong) UIActivityIndicatorView *logioningActivityIndicatorView;
+@property (nonatomic,strong)UIButton *selectBtn;
+@property (nonatomic,strong)UIButton *passwordSelectBtn;
+@property (nonatomic,assign)BOOL isSelect;
 
 //@property (nonatomic, assign) BOOL isUserEmpty;
 //@property (nonatomic, assign) BOOL isPasswordEmpty;
@@ -34,9 +35,9 @@
     UIImageView *imageView = [[UIImageView alloc]init];
     [self addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.offset(30).equalTo(self);
+        make.top.offset(SafeAreaTopHeight).equalTo(self);
         make.centerX.equalTo(self);
-        make.height.width.offset(200);
+        make.height.width.offset(100);
         
     }];
     imageView.image = [UIImage imageNamed:@"upslogo"];
@@ -44,7 +45,7 @@
     UIView *accountView = [[UIView alloc]init];
     [self addSubview:accountView];
     [accountView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(imageView.mas_bottom).offset(20);
+        make.top.equalTo(imageView.mas_bottom).offset(15);
         make.leading.equalTo(self).offset(10);
         make.trailing.equalTo(self).offset(-10);
         make.centerX.equalTo(self);
@@ -74,7 +75,7 @@
     UIView *passwordView = [[UIView alloc]init];
     [self addSubview:passwordView];
     [passwordView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(accountView.mas_bottom).offset(15);
+        make.top.equalTo(accountView.mas_bottom).offset(10);
         make.leading.equalTo(self).offset(10);
         make.trailing.equalTo(self).offset(-10);
         make.centerX.equalTo(self);
@@ -94,16 +95,70 @@
         make.top.trailing.bottom.equalTo(passwordView);
     }];
     passwordTextField.placeholder = @"请输入密码";
-    passwordTextField.secureTextEntry = YES;
+//    passwordTextField.secureTextEntry = YES;
     passwordTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.passwordTextField = passwordTextField;
     passwordTextField.delegate = self;
     
-    UIButton *sureBtn = [[UIButton alloc]initWithFrame:CGRectMake(4, 4, 26, 23)];
+    UIView *rememberView = [[UIView alloc]init];
+    [self addSubview:rememberView];
+    [rememberView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(passwordView.mas_bottom).offset(10);
+        make.leading.equalTo(self).offset(10);
+        make.trailing.equalTo(self).offset(-10);
+        make.centerX.equalTo(self);
+        make.height.offset(20);
+    }];
+//    rememberView.backgroundColor = [UIColor redColor];
+    
+    UPSRememberBtn *rememberAccount = [[UPSRememberBtn alloc]initWithFrame:CGRectMake(kScreenW / 6, 0, kScreenW / 4 ,20)];
+    [rememberView addSubview:rememberAccount];
+    [rememberAccount setTitle:@"记住账号" forState:UIControlStateNormal];
+    [rememberAccount setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [rememberAccount setImage:[UIImage imageNamed:@"xkuang_nor"] forState:UIControlStateNormal];
+    [rememberAccount setImage:[UIImage imageNamed:@"xkuang_onclick"] forState:UIControlStateSelected];
+    [rememberAccount addTarget:self action:@selector(clickAccountBtn:) forControlEvents:UIControlEventTouchUpInside];
+    if (iphone4 || iphone5) {
+        rememberAccount.titleLabel.font = [UIFont systemFontOfSize:13];
+        
+    }else if(iphone6 || iphoneX){
+        rememberAccount.titleLabel.font = [UIFont systemFontOfSize:14];
+        
+    }else{
+        rememberAccount.titleLabel.font = [UIFont systemFontOfSize:15];
+        
+    }//    rememberAccount.contentEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
+//
+//    // 重点位置开始
+//    rememberAccount.imageEdgeInsets = UIEdgeInsetsMake(0, rememberAccount.titleLabel.width + 2.5, 0, -rememberAccount.titleLabel.width - 2.5);
+//    rememberAccount.titleEdgeInsets = UIEdgeInsetsMake(0, -rememberAccount.currentImage.size.width, 0, rememberAccount.currentImage.size.width);
+//    // 重点位置结束
+//    rememberAccount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+//
+    UPSRememberBtn *rememberPassword = [[UPSRememberBtn alloc]initWithFrame:CGRectMake(kScreenW / 6 + kScreenW / 4 + kScreenW / 6, 0, kScreenW / 4, 20)];
+    [rememberView addSubview:rememberPassword];
+    [rememberPassword setImage:[UIImage imageNamed:@"xkuang_nor"] forState:UIControlStateNormal];
+    [rememberPassword setImage:[UIImage imageNamed:@"xkuang_onclick"] forState:UIControlStateSelected];
+    [rememberPassword setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [rememberPassword setTitle:@"记住密码" forState:UIControlStateNormal];
+    [rememberPassword addTarget:self action:@selector(clickPasswordBtn:) forControlEvents:UIControlEventTouchUpInside];
+    if (iphone4 || iphone5) {
+        rememberPassword.titleLabel.font = [UIFont systemFontOfSize:13];
+        
+    }else if(iphone6 || iphoneX){
+        rememberPassword.titleLabel.font = [UIFont systemFontOfSize:14];
+        
+    }else{
+        rememberPassword.titleLabel.font = [UIFont systemFontOfSize:15];
+        
+    }
+    
+    UPSRememberBtn *sureBtn = [[UPSRememberBtn alloc]init];
+//WithFrame:CGRectMake(4, 4, 26, 23)];
     [self addSubview:sureBtn];
     [sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.top.equalTo(passwordView.mas_bottom).offset(20);
+        make.top.equalTo(rememberView.mas_bottom).offset(10);
         make.leading.equalTo(self).offset(10);
         make.trailing.equalTo(self).offset(-10);
         make.centerX.equalTo(self);
@@ -118,8 +173,7 @@
 //    [sureBtn setBackgroundColor:[UIColor lightGrayColor]];
     [sureBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.loginButton = sureBtn;
-    [sureBtn setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-   
+    self.loginButton.backgroundColor = UICOLOR_RGB(33, 151, 216, 1);
     
     UILabel *bottomLabel = [[UILabel alloc]init];
     [self addSubview:bottomLabel];
@@ -142,8 +196,6 @@
         
     }
     
-    
-    
     UILabel *copyRightLabel = [[UILabel alloc]init];
     [self addSubview:copyRightLabel];
     [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -165,32 +217,32 @@
 
 #pragma mark - textfieldDelegate
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSCharacterSet *cs;
-    cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS]invertedSet];
-    
-    NSString *toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if (self.userTextField == textField) {
-        
-    }
-    if (self.passwordTextField == textField) {
-        if (toBeString.length > 0) {
-            self.loginButton.backgroundColor = UICOLOR_RGB(33, 151, 216, 1);          self.loginButton.enabled = YES;
-        }else{
-            self.loginButton.enabled = NO;
-            self.loginButton.backgroundColor = [UIColor lightGrayColor];
-        }
-    }
-    
-    
-    
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""]; //按cs分离出数组,数组按@""分离出字符串
-    
-    BOOL canChange = [string isEqualToString:filtered];
-    
-    return canChange;
-}
-
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+//    NSCharacterSet *cs;
+//    cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS]invertedSet];
+//
+//    NSString *toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//    if (self.userTextField == textField) {
+//
+//    }
+//    if (self.passwordTextField == textField) {
+//        if (toBeString.length > 0) {
+//            self.loginButton.backgroundColor = UICOLOR_RGB(33, 151, 216, 1);          self.loginButton.enabled = YES;
+//        }else{
+//            self.loginButton.enabled = NO;
+//            self.loginButton.backgroundColor = [UIColor lightGrayColor];
+//        }
+//    }
+//
+//
+//
+//    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""]; //按cs分离出数组,数组按@""分离出字符串
+//
+//    BOOL canChange = [string isEqualToString:filtered];
+//
+//    return canChange;
+//}
+//
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 
@@ -201,90 +253,33 @@
     [self.passwordTextField resignFirstResponder];
     
 }
+///点击记住账号密码
+- (void)clickAccountBtn:(UIButton *)accountBtn{
+//    self.selectBtn.selected = NO;
+//    accountBtn.selected = YES;
+//
+//    self.selectBtn = accountBtn;
+    accountBtn.selected = !accountBtn.selected;
+    self.isSelect = accountBtn.selected;
+    if (self.isSelect == YES) {
+        self.userTextField.text = [UPSTool getUserName];
+    }else{
+        self.userTextField.text = nil;
+    }
+}
+- (void)clickPasswordBtn:(UIButton *)passwordBtn{
+//    self.passwordSelectBtn.selected = NO;
+//    passwordBtn.selected = YES;
+//    self.passwordSelectBtn = passwordBtn;
+    passwordBtn.selected = !passwordBtn.selected;
+    self.isSelect = passwordBtn.selected;
+    if (self.isSelect == YES) {
+        self.passwordTextField.text = [UPSTool getPassword];
+    }else{
+        self.passwordTextField.text = nil;
+    }
+}
 
-
-//
-////添加textField的背景View
-//- (void)addLoginBackgroundView:(CGRect)frame{
-//    CGFloat backgroundX = 0;
-//    CGFloat backgroundY = 0;
-//    CGFloat backgroundW = frame.size.width;
-//    CGFloat backgroundH = 80;
-//    self.backgroundView = [[UPSLoginBackView alloc] initWithFrame:CGRectMake(backgroundX, backgroundY, backgroundW, backgroundH)];
-//    [self.backgroundView setBackgroundColor:[UIColor yellowColor]];
-//    [self.backgroundView.layer setCornerRadius:5.0];
-//    [self.backgroundView.layer setBorderWidth:1.0];
-//    [self.backgroundView.layer setBorderColor:UICOLOR_RGB(207, 207, 207, 1).CGColor];
-//    [self addSubview:self.backgroundView];
-////    self.backgroundView.backgroundColor = [UIColor redColor];
-//}
-//
-//- (void)customAllButtons:(CGRect)frame{
-////    //返回button
-////    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(19, 35, 22, 22)];
-////    [backButton setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-////    [backButton addTarget:self action:@selector(clickTheBackButton:) forControlEvents:UIControlEventTouchDown];
-////    [self addSubview:backButton];
-////    [backButton setBackgroundColor:[UIColor orangeColor]];
-//    //登录button
-//    CGFloat loginButtonX = 20;
-//    CGFloat loginButtonY = self.backgroundView.origin.y + self.backgroundView.height + 30;
-//    CGFloat loginButtonW = frame.size.width - 40;
-//    self.loginButton = [[UIButton alloc] initWithFrame:CGRectMake(loginButtonX, loginButtonY, loginButtonW, 40)];
-////    [self.loginButton setEnabled:NO];
-//    self.loginButton.titleLabel.alpha = 0.5;
-//    [self.loginButton.layer setCornerRadius:3.0];
-//    [self.loginButton setTitle:@"登录" forState:UIControlStateNormal];
-//    [self.loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateReserved];
-//    [self.loginButton setBackgroundColor:UICOLOR_RGB(133, 122, 250, 1)];
-//    [self.loginButton addTarget:self action:@selector(clickLoginBtn:) forControlEvents:UIControlEventTouchUpInside];
-//    [self addSubview:self.loginButton];
-//    //忘记密码
-//    CGFloat forgetButtonW = 73;
-//    CGFloat forgetButtonX = loginButtonX + loginButtonW - forgetButtonW;
-//    CGFloat forgetButtonY = 0.916 * (loginButtonY + 100);
-//    CGFloat forgetButtonH = 20;
-//    UIButton *forgetButton = [[UIButton alloc] initWithFrame:CGRectMake(forgetButtonX, forgetButtonY, forgetButtonW, forgetButtonH)];
-//    [forgetButton addTarget:self action:@selector(clickForgetpasswordTextFieldButton:) forControlEvents:UIControlEventTouchDown];
-//    [forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-//    [forgetButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
-//    [forgetButton setTitleColor:UICOLOR_RGB(74, 74, 74, 1)forState:UIControlStateNormal];
-//    [self addSubview:forgetButton];
-//}
-//
-//- (void)customUserTextField:(CGRect)frame{
-//    self.userTextField = [[UPSLoginTextField alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 40)];
-//    self.userTextField.keyboardType = UIKeyboardTypeNumberPad;
-//    self.userTextField.delegate = self;
-//    self.userTextField.tag = 7;
-//    self.userTextField.placeholder = @"请输入账号";
-//    [self.userTextField setFont:[UIFont systemFontOfSize:14]];
-//    UIImageView *userTextFieldImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"account"]];
-//    self.userTextField.leftView = userTextFieldImage;
-//    self.userTextField.leftViewMode = UITextFieldViewModeAlways;
-//    self.userTextField.clearButtonMode = UITextFieldViewModeAlways;
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userTextFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.userTextField];
-//    self.isPasswordEmpty = YES;
-//    [self.backgroundView addSubview:self.userTextField];
-//}
-//
-//- (void)customPasswordTextField:(CGRect)frame{
-//    self.passwordTextField = [[UPSLoginTextField alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 40)];
-//    self.passwordTextField.delegate = self;
-//    self.passwordTextField.tag = 11;
-//    self.passwordTextField.placeholder = @"请输入密码";
-//    [self.passwordTextField setFont:[UIFont systemFontOfSize:14]];
-//    UIImageView *passwordTextFieldImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"password"]];
-//    self.passwordTextField.leftView = passwordTextFieldImage;
-//    self.passwordTextField.leftViewMode = UITextFieldViewModeAlways;
-//   // self.passwordTextField.clearButtonMode = UITextFieldViewModeAlways;
-//    self.passwordTextField.secureTextEntry = YES;
-//    //设置监听
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(passwordTextFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.passwordTextField];
-//    self.isUserEmpty = YES;
-//    [self.backgroundView addSubview:self.passwordTextField];
-//}
-//
 - (void)addLogioningActivityIndicatorView{
     CGFloat logioningActivityIndicatorViewX = self.loginButton.frame.origin.x + 80;
     CGFloat logioningActivityIndicatorViewY = self.loginButton.frame.origin.y;

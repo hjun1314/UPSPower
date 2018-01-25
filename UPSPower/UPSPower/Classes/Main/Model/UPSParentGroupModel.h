@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UPSGroupUPSModel.h"
 @interface UPSParentGroupModel : NSObject
 //Singleton_h(UPSParentGroupModel);
 ///分组id
@@ -16,6 +17,7 @@
 
 ///cell的数据
 @property (nonatomic,strong)NSMutableArray *groupCellData;
+@property (nonatomic,strong)UPSGroupUPSModel *upsModel;
 
 
 @end

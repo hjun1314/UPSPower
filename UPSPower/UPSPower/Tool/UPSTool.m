@@ -10,6 +10,8 @@
 #define Access_token @"token"
 #define Access_ID @"ID"
 #define Access_CID @"CID"
+#define Access_userName @"userName"
+#define Access_password @"password"
 @implementation UPSTool
 // 存储token
 +(void)saveToken:(NSString *)token
@@ -51,6 +53,28 @@
     return [[NSUserDefaults standardUserDefaults]objectForKey:Access_CID];
     
 }
+
++ (void)saveUserName:(NSString *)username{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:username forKey:Access_userName];
+    [userDefaults synchronize];
+}
++ (NSString *)getUserName{
+    return [[NSUserDefaults standardUserDefaults]objectForKey:Access_userName];
+    
+}
+
+///存密码
++ (void)savePassWord:(NSString *)password{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:password forKey:Access_password];
+    [defaults synchronize];
+}
++ (NSString *)getPassword{
+    return [[NSUserDefaults standardUserDefaults]objectForKey:Access_password];
+}
+
+
 + (NSString *)strwithInteger:(long)interger
 {
    NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:interger];
@@ -80,7 +104,7 @@
 
 + (NSString *)stringWithNsdate:(NSString *)str{
 //    NSString *str=@"1368082020";//时间戳
-    NSTimeInterval time=[str doubleValue]+28800;//因为时差问题要加8小时 == 28800 sec
+    NSTimeInterval time=[str doubleValue] / 1000.0;//因为时差问题要加8小时 == 28800 sec
     NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
     //实例化一个NSDateFormatter对象
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

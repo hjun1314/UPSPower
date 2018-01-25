@@ -24,6 +24,14 @@
 ///取cid
 + (NSString *)getGeTuiCid;
 
+///存账号
++ (void)saveUserName:(NSString *)username;
++ (NSString *)getUserName;
+///存密码
++ (void)savePassWord:(NSString *)password;
++ (NSString *)getPassword;
+
+
 ///nadate转字符串
 + (NSString *)strwithInteger:(long)interger;
 

@@ -17,6 +17,8 @@
 
 - (void)saveContext;
 
+- (void)showWindowHome:(NSString *)windowType;
+
 
 @end
 

@@ -17,7 +17,15 @@
 @end
 
 @implementation AppDelegate
-
+///实现注销功能方法
+- (void)showWindowHome:(NSString *)windowType{
+    if ([windowType isEqualToString:@"logout"]) {
+        UPSMainVC *login = [[UPSMainVC alloc]init];
+        [login setHidesBottomBarWhenPushed:YES];
+        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:login];
+        self.window.rootViewController = nav;
+    }
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);

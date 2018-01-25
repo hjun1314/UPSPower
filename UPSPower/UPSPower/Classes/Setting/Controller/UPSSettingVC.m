@@ -54,7 +54,7 @@
 - (void)setupTableView{
     
     
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTopHeight  - SafeAreaTabbarHeight)];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenW, kScreenH - SafeAreaTabbarHeight)];
 //    tableView.backgroundColor = [UIColor brownColor];
     self.tableView = tableView;
     self.tableView.delegate = self;

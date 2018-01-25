@@ -13,6 +13,8 @@
 #import "UPSMainModel.h"
 #import "UPSMainVC.h"
 #import "UPSAlarmModel.h"
+#import "UPSChangePasswordVC.h"
+#import "AppDelegate.h"
 @interface UPSMineVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)UPSMainModel *mainModel;
 
@@ -30,7 +32,9 @@
 }
 
 - (void)setup{
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SafeAreaTopHeight, kScreenW, kScreenH - SafeAreaTabbarHeight - SafeAreaTopHeight) style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenW, kScreenH - SafeAreaTabbarHeight)];
+    UIView *foot = [[UIView alloc]initWithFrame:CGRectZero];
+    tableView.tableFooterView = foot;
     [self.view addSubview:tableView];
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     tableView.dataSource = self;
@@ -75,31 +79,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.row == 0 ) {
-        
-  
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"修改父账号密码" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            textField.placeholder = @"修改密码";
-            textField.secureTextEntry = YES;
-        }];
-        [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        ///http://192.168.1.147:12345/ups-interface/updateParentPassword
-            NSMutableDictionary *params = [NSMutableDictionary dictionary];
-            params[@"token"] = self.mainModel.token;
-            params[@"userId"] = @(self.mainModel.userId);
-            params[@"newPassword"] = alert.textFields[0].text;
-            [[UPSHttpNetWorkTool sharedApi]POST:@"updateParentPassword" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-                NSLog(@"密码修改成功%@",responseObject);
-                UPSMainVC *main = [[UPSMainVC alloc]init];
-                [self.navigationController pushViewController:main animated:YES];
-            } fail:^(NSURLSessionDataTask *task, NSError *error) {
-                
-            }];
-            
-        }]];
-        
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+
+        UPSChangePasswordVC *changeVC = [[UPSChangePasswordVC alloc]init];
+        [self.navigationController pushViewController:changeVC animated:YES];
         
     }else if (indexPath.row == 1){
         
@@ -107,13 +89,11 @@
         [self.navigationController pushViewController:childUserVC animated:YES];
         
     }else if (indexPath.row == 2){
-        ///http://192.168.1.147:12345/ups-interface/upsAlarmConfigureList
        
         UPSAlarmVC *alarmVC = [[UPSAlarmVC alloc]init];
         [self.navigationController pushViewController:alarmVC animated:YES];
 
     }else if (indexPath.row == 3){
-        
         UPSAboutUsVC *aboutVC = [[UPSAboutUsVC alloc]init];
         [self.navigationController pushViewController:aboutVC animated:YES];
         
@@ -130,9 +110,9 @@
             NSDictionary *params = @{@"token": [UPSTool getToken] ,@"userId":@([UPSTool getID])};
             [[UPSHttpNetWorkTool sharedApi]POST:@"logout" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
                 NSLog(@"注销成功");
-                UPSMainVC *main = [[UPSMainVC alloc]init];
-                [main setHidesBottomBarWhenPushed:YES];
-                [self.navigationController pushViewController:main animated:YES];
+                [(AppDelegate *)[UIApplication sharedApplication].delegate showWindowHome:@"logout"];
+                [SVProgressHUD showSuccessWithStatus:@"注销成功"];
+                
             } fail:^(NSURLSessionDataTask *task, NSError *error) {
                 NSLog(@"注销失败");
             }];
