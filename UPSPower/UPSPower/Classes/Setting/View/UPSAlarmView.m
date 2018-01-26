@@ -13,6 +13,8 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         [self setup];
+        self.clipsToBounds = YES;
+        self.layer.cornerRadius = 10;
     }
     return self;
 }

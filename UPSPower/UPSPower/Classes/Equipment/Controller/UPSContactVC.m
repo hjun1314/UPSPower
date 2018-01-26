@@ -31,6 +31,11 @@
     [self initUI];
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
+//    if (@available(iOS 11.0, *)){
+//        //表示只在ios11以上的版本执行
+//        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//
+//    }
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -60,7 +65,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableHeaderView = self.addHeadView;
-        _tableView.tableFooterView = [[UIView alloc]init];
+        _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
         _tableView.tableFooterView.backgroundColor = [UIColor groupTableViewBackgroundColor];
         [self.view addSubview:_tableView];
     }
@@ -84,7 +89,7 @@
         addBtn.frame = CGRectMake(0, 0, kScreenW, 60);
         [addBtn addTarget:self action:@selector(addGroupAlert) forControlEvents:UIControlEventTouchUpInside];
         [_addHeadView addSubview:addBtn];
-        [_tableView.tableHeaderView addSubview:_addHeadView];
+//        [_tableView.tableHeaderView addSubview:_addHeadView];
     }
     return _addHeadView;
 }

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UPSBaseInfoVC : UIViewController
+@property (nonatomic,strong)NSMutableArray *baseModerArr;
 
 @end

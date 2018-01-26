@@ -19,7 +19,8 @@
 @implementation UPSTabVC
 + (void)load{
     // 获取哪个类中UITabBarItem
-    
+//    [[UITabBar appearance] setTranslucent:NO];
+
     UITabBarItem *item = [UITabBarItem appearanceWhenContainedInInstancesOfClasses:@[self]];
     
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];

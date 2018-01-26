@@ -14,16 +14,32 @@
 
 @implementation UPSNacVC
 + (void)load{
+//    [[UINavigationBar appearance] setTranslucent:NO];
+
     UINavigationBar *bar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[self]];
     ///设置导航栏字体
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     attrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:20];
     [bar setTitleTextAttributes:attrs];
-    [bar setBarTintColor:UICOLOR_RGB(33, 151, 216, 1)];
+    [bar setBarTintColor:UICOLOR_RGB(55.0, 157.0, 246.0, 1)];
 //    [bar setBarTintColor:[UIColor whiteColor]];
     // 设置导航条背景图片
-    //[bar setBackgroundImage:[UIImage imageNamed:@"navigationbarBackgroundWhite"] forBarMetrics:UIBarMetricsDefault];
+//    [bar setBackgroundImage:[UIImage imageNamed:@"navigationbarBackgroundWhite"] forBarMetrics:UIBarMetricsDefault];
+   // [bar setBackgroundImage:[self createImageWithColor: UICOLOR_RGB(55.0, 157.0, 246.0, 1)] forBarMetrics:UIBarMetricsDefault];
 }
++ (UIImage*)createImageWithColor:(UIColor*)color{
+    
+    CGRect rect = CGRectMake(0.0f,0.0f,1.0f,1.0f);UIGraphicsBeginImageContext(rect.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    
+    CGContextFillRect(context, rect);
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

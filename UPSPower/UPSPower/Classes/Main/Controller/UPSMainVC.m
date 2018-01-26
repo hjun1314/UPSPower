@@ -14,6 +14,7 @@
 #import "UPSParentGroupModel.h"
 #import "UPSGroupUPSModel.h"
 #import "UPSEquipmentVC.h"
+#import "MBProgressHUD.h"
 @interface UPSMainVC ()
 
 @property (nonatomic,strong)UPSLoginView *loginView;
@@ -66,6 +67,7 @@
     //    [self.navigationController pushViewController:tab animated:YES];
     [SVProgressHUD showWithStatus:@"正在登陆"];
     [SVProgressHUD setBackgroundColor:UICOLOR_RGB(0, 0, 0, 0.3)];
+
     //192.168.1.147:12345/ups-interface/login
     NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":[UPSTool getGeTuiCid]};
     

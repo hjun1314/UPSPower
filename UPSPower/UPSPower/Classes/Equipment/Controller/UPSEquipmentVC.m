@@ -20,6 +20,7 @@
 #import "UPSContactVC.h"
 #import "UPSBaseInfoVC.h"
 #import "CPMoveCellTableView.h"
+#import "UPSBaseInfoModel.h"
 #define IS_IOS7 [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0
 @interface UPSEquipmentVC ()<UITableViewDelegate,UITableViewDataSource,CPMoveCellTableViewDelegate,CPMoveCellTableViewDataSource>{
     NSIndexPath *_indexPath; // 保存当前选中的单元格
@@ -62,11 +63,6 @@
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
     [self loadData];
-    
-    
-    
-    
-    
     
 }
 
@@ -199,6 +195,7 @@
     // 取消选中后的高亮状态(默认是：选中单元格后一直处于高亮状态，直到下次重新选择)
     //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     //    _indexPath = indexPath;
+    [SVProgressHUD showWithStatus:@"正在加载"];
     UPSGroupUPSModel *upsGroup = self.upsData[indexPath.row];
     ///查看ups历史数据http://192.168.1.147:12345/ups-interface/checkUpsSituation
     ///显示ups基本信息http://192.168.1.147:12345/ups-interface/checkUpsBaseParameter
@@ -207,9 +204,16 @@
     params[@"userId"] = @(self.mainModel.userId);
     params[@"upsId"] = @(upsGroup.id);
     [[UPSHttpNetWorkTool sharedApi]POST:@"checkUpsBaseParameter" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+      
+        NSDictionary *dict = responseObject[@"data"];
+        NSMutableArray *tempArr = [NSMutableArray array];
+        UPSBaseInfoModel *model = [UPSBaseInfoModel mj_objectWithKeyValues:dict];
+        [tempArr addObject:model];
         UPSBaseInfoVC *baseVC = [[UPSBaseInfoVC alloc]init];
         [self.navigationController pushViewController:baseVC animated:YES];
-        NSLog(@"%@获取UPS历史数据成功@",responseObject);
+        baseVC.baseModerArr = tempArr;
+        NSLog(@"%@获取UPS历史数据成功",responseObject);
+        [SVProgressHUD showSuccessWithStatus:@"加载成功"];
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"获取ups历史数据失败%@",error);
     }];
