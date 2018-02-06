@@ -15,10 +15,13 @@
 #import "UPSSingalAlarmRecordModel.h"
 #import "GKCover.h"
 #import "UPSAlarmView.h"
+#import "YCXMenu.h"
+#import "YCXMenuItem.h"
 @interface UPSSettingVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)NSMutableArray *dataArr;
 @property (nonatomic,strong)UPSMainModel *mainModel;
+@property (nonatomic,strong)NSMutableArray *items;
 
 @end
 
@@ -26,7 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"报警信息";
+    [self setNav];
     [self setupTableView];
     UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
     self.mainModel = model;
@@ -51,6 +54,10 @@
     }];
     
 }
+- (void)setNav{
+    self.title = @"报警信息";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"select"] style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem:)];
+}
 - (void)setupTableView{
     
     
@@ -62,7 +69,20 @@
     [self.view addSubview:tableView];
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
 }
-
+- (void)clickRightBarItem:(id)sender{
+    if (sender == self.navigationItem.rightBarButtonItem){
+        [YCXMenu setTintColor:UICOLOR_RGB(33, 151, 216, 1)];
+        [YCXMenu setSelectedColor:[UIColor redColor]];
+        if ([YCXMenu isShow]){
+            [YCXMenu dismissMenu];
+        } else {
+            [YCXMenu showMenuInView:self.view fromRect:CGRectMake(self.view.width - 50, SafeAreaTopHeight, 50, 0) menuItems:self.items selected:^(NSInteger index, YCXMenuItem *item) {
+                //NSLog(@"%@",item);
+            }];
+        }
+    }
+    
+}
    
 #pragma mark- 代理方法
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -159,9 +179,30 @@
     }];
   
 }
+#pragma mark- 懒加载
+- (NSMutableArray *)items {
+    if (!_items) {
+        
+        YCXMenuItem *all = [YCXMenuItem menuItem:@"20条信息" image:nil target:self action:@selector(clickAll:)];
+        
+        YCXMenuItem *runInfo = [YCXMenuItem menuItem:@"30条信息" image:nil target:self action:@selector(clickRunInfo:)];
+        runInfo.tag = 10;
+        YCXMenuItem *general = [YCXMenuItem menuItem:@"50条信息" image:nil target:self action:@selector(clickGeneral:)];
+        general.tag = 20;
+        YCXMenuItem *serious = [YCXMenuItem menuItem:@"100条信息" image:nil target:self action:@selector(clickSerious:)];
+        serious.tag = 30;
+        serious.foreColor = [UIColor whiteColor];
+        serious.alignment = NSTextAlignmentCenter;
+        //set item
+        _items = [@[
+                    all,runInfo,general ,serious
+                    ] mutableCopy];
+    }
+    return _items;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 

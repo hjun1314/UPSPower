@@ -10,5 +10,6 @@
 
 @interface UPSBaseInfoVC : UIViewController
 @property (nonatomic,strong)NSMutableArray *baseModerArr;
+@property (nonatomic,strong)NSMutableArray *upsDataArr;
 
 @end

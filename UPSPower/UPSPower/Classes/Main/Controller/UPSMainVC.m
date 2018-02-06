@@ -69,7 +69,7 @@
     [SVProgressHUD setBackgroundColor:UICOLOR_RGB(0, 0, 0, 0.3)];
 
     //192.168.1.147:12345/ups-interface/login
-    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":[UPSTool getGeTuiCid]};
+    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":@"1a1018970aa361f103f"};
     
     [[UPSHttpNetWorkTool sharedApi]POST:@"login" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
         

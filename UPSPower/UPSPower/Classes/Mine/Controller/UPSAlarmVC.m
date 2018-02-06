@@ -88,7 +88,7 @@
     
     self.navigationItem.title = @"告警定义设置";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStylePlain target:self action:@selector(clickBack)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"告警刷选" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightItem:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"select"] style:UIBarButtonItemStylePlain target:self action:@selector(clickRightItem:)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 }
 - (void)clickBack{
@@ -102,7 +102,7 @@
         if ([YCXMenu isShow]){
             [YCXMenu dismissMenu];
         } else {
-            [YCXMenu showMenuInView:self.view fromRect:CGRectMake(self.view.width - 75, SafeAreaTopHeight, 50, 0) menuItems:self.items selected:^(NSInteger index, YCXMenuItem *item) {
+            [YCXMenu showMenuInView:self.view fromRect:CGRectMake(self.view.width - 50, SafeAreaTopHeight, 50, 0) menuItems:self.items selected:^(NSInteger index, YCXMenuItem *item) {
                 //NSLog(@"%@",item);
             }];
         }
