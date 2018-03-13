@@ -31,13 +31,14 @@
     [super viewDidLoad];
     [self setNav];
     [self setupTableView];
+    //[self configSuperViewFrame:CGRectMake(0, 0, kScreenW, kScreenH - SafeAreaTabbarHeight)];
     UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
     self.mainModel = model;
-    ///http://192.168.1.147:12345/ups-interface/getAlarmLog
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"token"] = self.mainModel.token;;
     params[@"userId"] = @(self.mainModel.userId);
     params[@"companyId"] = @(self.mainModel.companyId);
+    //    params[@"pages"] = @(self.currPage);
     [[UPSHttpNetWorkTool sharedApi]POST:@"getAlarmLog" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
         NSMutableArray *dataM = responseObject[@"data"];
         NSMutableArray *alarmRecordArr = [NSMutableArray array];
@@ -53,14 +54,18 @@
         
     }];
     
+    //[self addMJRefreshHeader:NO addFooter:YES];
+//   [self.tableView.mj_header beginRefreshing];
+   
 }
 - (void)setNav{
     self.title = @"报警信息";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"select"] style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem:)];
 }
+
 - (void)setupTableView{
-    
-    
+
+
     UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenW, kScreenH - SafeAreaTabbarHeight)];
 //    tableView.backgroundColor = [UIColor brownColor];
     self.tableView = tableView;
@@ -69,6 +74,50 @@
     [self.view addSubview:tableView];
     self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
 }
+//- (void)headerRereshing{
+//    [self.dataArray removeAllObjects];
+//    [self checkNetworkState];
+//    [self.tableView.mj_header endRefreshing];
+//}
+//- (void)footerRereshing{
+//    [self checkNetworkState];
+//    [self.tableView.mj_footer beginRefreshing];
+//}
+
+//- (void)checkNetworkState{
+//    if (!self.dataArray.count) {
+//        self.currPage = 1;
+//    }else{
+//        self.currPage ++;
+//    }
+//    [self getDataWithTableView];
+//}
+//- (void)getDataWithTableView{
+//    ///http://192.168.1.147:12345/ups-interface/getAlarmLog
+//    UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
+//    self.mainModel = model;
+//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//    params[@"token"] = self.mainModel.token;;
+//    params[@"userId"] = @(self.mainModel.userId);
+//    params[@"companyId"] = @(self.mainModel.companyId);
+////    params[@"pages"] = @(self.currPage);
+//    [[UPSHttpNetWorkTool sharedApi]POST:@"getAlarmLog" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+//        NSMutableArray *dataM = responseObject[@"data"];
+//        NSMutableArray *alarmRecordArr = [NSMutableArray array];
+//        for (int i = 0; i < dataM.count; i++) {
+//            UPSAlarmRecordModel *alarmRecordModel = [UPSAlarmRecordModel mj_objectWithKeyValues:dataM[i]];
+//            [alarmRecordArr addObject:alarmRecordModel];
+//        }
+//        self.dataArray = alarmRecordArr;
+//        [self.tableView reloadData];
+//        NSLog(@"获取告警记录成功%@",responseObject);
+//
+//    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+//
+//    }];
+//
+//}
+
 - (void)clickRightBarItem:(id)sender{
     if (sender == self.navigationItem.rightBarButtonItem){
         [YCXMenu setTintColor:UICOLOR_RGB(33, 151, 216, 1)];

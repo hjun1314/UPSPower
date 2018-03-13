@@ -162,7 +162,14 @@ typedef void (^LHProgress)(NSProgress *progress);
                                      success:(void (^)(NSURLResponse *, NSURL *))success
                                         fail:(void (^)(NSError *))fail;
 
-
+///上传含有数组参数的post请求
+-(void)POSTArr:(NSString *)url
+    baseURL:(NSString *)baseUrl
+     params:(NSDictionary *)params
+     needToken:(BOOL)need
+    isJSON:(BOOL)isJSON
+    success:(LHResponseSuccess)success
+       fail:(LHResponseFail)fail;
 
 ///开启网络状态
 + (void)startMonitorNetworkStatus;

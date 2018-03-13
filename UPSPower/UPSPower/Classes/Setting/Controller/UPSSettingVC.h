@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "UPSPageBaseController.h"
 @interface UPSSettingVC : UIViewController
 
 @end

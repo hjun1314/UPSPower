@@ -1,10 +1,3 @@
-//
-//  CPMoveCellTableView.m
-//  FYDHouTai
-//
-//  Created by 王程鹏 on 2017/5/5.
-//  Copyright © 2017年 baling. All rights reserved.
-//
 
 #import "CPMoveCellTableView.h"
 

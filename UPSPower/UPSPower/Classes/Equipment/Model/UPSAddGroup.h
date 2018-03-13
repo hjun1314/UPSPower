@@ -16,6 +16,7 @@
 ///新分组名称
 @property (nonatomic,copy)NSString *groupName;
 
+//@property (nonatomic,strong)NSMutableArray *groupCellData;
 
 
 @end

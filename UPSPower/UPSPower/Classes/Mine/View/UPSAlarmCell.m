@@ -93,6 +93,7 @@
     
     UPSAlarmBtn *allBtn = [[UPSAlarmBtn alloc]initWithFrame:CGRectMake(0, 0, kScreenW, self.height)];
     [self.contentView addSubview:allBtn];
+    allBtn.tag = 10;
     [allBtn setBackgroundColor:[UIColor clearColor]];
      [allBtn addTarget:self action:@selector(clickAllBtn:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -101,10 +102,11 @@
     self.selectBtn.selected = !self.selectBtn.selected;
     if (self.cartBlock) {
         self.cartBlock(self.selectBtn.selected);
-    }}
+    }
+}
 
 -(void)reloadDataWith:(UPSAlarmModel *)model {
-     
+//    NSLog(@"%@",model.alarmName);
     self.selectBtn.selected = self.isSelected;
     
 }

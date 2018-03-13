@@ -46,13 +46,9 @@
 
 @property (nonatomic,strong)NSMutableArray *cellData;
 
-///修改ups设备名称
-@property (nonatomic,strong)UITextField *textField;
-
 ///显示异常和正常数的label
 @property (nonatomic,strong)UILabel *normaleLabel;
 @property (nonatomic,strong)UILabel *unnormalLabel;
-//@property (nonatomic,assign)NSInteger statId;
 
 
 
@@ -97,8 +93,8 @@
     params[@"token"] = self.mainModel.token;
     params[@"userId"] = @(self.mainModel.userId);
     [[UPSHttpNetWorkTool sharedApi]POST:@"refreshUpsList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSDictionary *parentData = responseObject[@"data"][@"parentGroup"];
-        NSDictionary *upsData = responseObject[@"data"][@"groupUps"];
+        NSMutableArray *parentData = responseObject[@"data"][@"parentGroup"];
+        NSMutableArray *upsData = responseObject[@"data"][@"groupUps"];
         NSMutableArray *upsM = [NSMutableArray array];
         NSLog(@"设备列表%@",responseObject);
         NSMutableArray *parentM = [NSMutableArray array];
@@ -112,7 +108,7 @@
             [parentM addObject:p];
         }
         upsM = [UPSGroupUPSModel mj_objectArrayWithKeyValuesArray:upsData];
-//        self.parentData = parentM;
+        //        self.parentData = parentM;
         self.upsData = upsM;
         NSMutableArray *parentArr = [NSMutableArray array];
         for (NSDictionary *parentDict in parentData) {
@@ -163,11 +159,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-  
+    
     UPSParentGroupModel *parentModel = self.parentData[section];
-
-//    NSLog(@"%@",parentArr);
-//    NSLog(@"cellde行数%lu",(unsigned long)parentModel.groupCellData.count);
+    
+    //    NSLog(@"%@",parentArr);
+    //    NSLog(@"cellde行数%lu",(unsigned long)parentModel.groupCellData.count);
     if ([self.switchArr[section] boolValue] == YES ) {
         return parentModel.groupCellData.count;
     } else {
@@ -188,20 +184,20 @@
     cell.originalLabel.text = upsGroup.originalUpsName;
     if (upsGroup.statId < 5) {
         cell.iconView.image = [UIImage imageNamed:@"red"];
-
+        
     }else if(upsGroup.statId < 10 && upsGroup.statId >= 5){
         cell.iconView.image = [UIImage imageNamed:@"green"];
     }else{
         cell.iconView.image = [UIImage imageNamed:@"unknown_"];
     }
-
+    
     //}
     // 添加单元格的长按手势
     //      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGestureRecognized:)];
     //    [cell addGestureRecognizer:longPress];
     return cell;
 }
-//
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //[self.view endEditing:YES];
     // 取消选中后的高亮状态(默认是：选中单元格后一直处于高亮状态，直到下次重新选择)
@@ -215,7 +211,7 @@
     params[@"token"] = self.mainModel.token;
     params[@"userId"] = @(self.mainModel.userId);
     params[@"upsId"] = @(upsGroup.id);
-    [[UPSHttpNetWorkTool sharedApi]POST:@"checkUpsBaseParameter" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [[UPSHttpNetWorkTool sharedApi]POST:@"checkUpsSituation" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSDictionary *dict = responseObject[@"data"];
         NSMutableArray *tempArr = [NSMutableArray array];
@@ -237,11 +233,11 @@
 //
 // 行高
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60 / 375.0 * kScreenW;
+    return 50 / 375.0 * kScreenW;
 }
 // 分区头的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 50 / 375.0 * kScreenW;
+    return 40.3;
 }
 //// 分区尾的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -258,7 +254,7 @@
     view.backgroundColor = [UIColor whiteColor];
     
     // 边界线
-    UIView *borderView = [[UIView alloc]initWithFrame:CGRectMake(0, 40 + 0.5, kScreenW, 0.5)];
+    UIView *borderView = [[UIView alloc]initWithFrame:CGRectMake(0, 40 + 0.3, kScreenW, 0.3)];
     //    UIView *borderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320 / 375.0 * kScreenW, 0.5)];
     
     borderView.backgroundColor = RGB_HEX(0xC8C7CC);
@@ -288,7 +284,7 @@
     normalLabel.textAlignment = NSTextAlignmentRight;
     self.normaleLabel = normalLabel;
     normalLabel.textColor = [UIColor greenColor];
-//    normalLabel.text = @"3";
+    //    normalLabel.text = @"3";
     //    normalLabel.backgroundColor = [UIColor orangeColor];
     [memberView addSubview:normalLabel];
     
@@ -298,25 +294,26 @@
     
     UILabel *abnormalLabel = [[UILabel alloc]initWithFrame:CGRectMake(28, 0, 22, view.height)];
     [memberView addSubview:abnormalLabel];
-//        abnormalLabel.backgroundColor = [UIColor redColor];
-//    abnormalLabel.text = @"4";
+    //        abnormalLabel.backgroundColor = [UIColor redColor];
+    //    abnormalLabel.text = @"4";
     self.unnormalLabel = abnormalLabel;
     abnormalLabel.textColor = [UIColor redColor];
     NSInteger onlineCount = 0;
+    NSInteger unlineCount = 0;
     for (UPSGroupUPSModel *upsModel in model.groupCellData) {
         if (upsModel.statId < 5) {
-            onlineCount++;
+            unlineCount++;
         }
     }
-    abnormalLabel.text = [NSString stringWithFormat:@"%ld",onlineCount];
-
+    abnormalLabel.text = [NSString stringWithFormat:@"%ld",unlineCount];
+    
     for (UPSGroupUPSModel *upsModel in model.groupCellData) {
         if (upsModel.statId < 10 && upsModel.statId >= 5) {
             onlineCount++;
         }
     }
     normalLabel.text = [NSString stringWithFormat:@"%ld",onlineCount];
-
+    
     // 初始化一个手势
     UITapGestureRecognizer *myTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(openClick:)];
     // 给view添加手势
@@ -382,7 +379,6 @@
         
         UIAlertController * editAlert = [UIAlertController alertControllerWithTitle:@"修改ups设备名称" message:@"" preferredStyle:UIAlertControllerStyleAlert];
         [editAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            self.textField = textField;
         }];
         [self presentViewController:editAlert animated:YES completion:nil];
         
@@ -390,14 +386,26 @@
         [editAlert addAction:action3];
         UIAlertAction * action4 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             //修改UPS设备名称http://192.168.1.147:12345/ups-interface/updateUpsName
-            UPSGroupUPSModel *upsGroup = self.upsData[indexPath.row];
+            UPSParentGroupModel *parentModel = self.parentData[indexPath.section];
+            UPSGroupUPSModel *upsModel = parentModel.groupCellData[indexPath.row];
+            UITextField *editAlertTextField = editAlert.textFields.firstObject;
             NSMutableDictionary *params = [NSMutableDictionary dictionary];
             params[@"token"] = self.mainModel.token;
             params[@"userId"] = @(self.mainModel.userId);
-            params[@"upsId"] = @(upsGroup.id);
-            params[@"newUpsName"] = self.textField.text;
+            params[@"upsId"] = @(upsModel.id);
+            params[@"newUpsName"] = editAlertTextField.text;
+            if (editAlertTextField.text.length == 0) {
+                [SVProgressHUD showErrorWithStatus:@"更改的设备名不能为空"];
+                return ;
+            }
+            for (UPSGroupUPSModel *model in parentModel.groupCellData) {
+                if ([model.userDefinedUpsName isEqualToString:editAlertTextField.text]) {
+                    [SVProgressHUD showErrorWithStatus:@"更改的设备名不能重名"];
+                    return;
+                }
+            }
             [[UPSHttpNetWorkTool sharedApi]POST:@"updateUpsName" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-                upsGroup.userDefinedUpsName = self.textField.text;
+                upsModel.userDefinedUpsName = editAlertTextField.text;
                 [self.tableView reloadData];
                 [SVProgressHUD showSuccessWithStatus:@"设备名修改成功"];
                 //                NSLog(@"设备名修改成功%@",responseObject);
@@ -457,14 +465,7 @@
     }
     return _cellData;
 }
-
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-
-
 @end

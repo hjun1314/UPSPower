@@ -13,8 +13,10 @@
 #import "UPSGroupUPSModel.h"
 #import "UPSBaseInfoBtn.h"
 #import "UPSPower.h"
+#import "UPSMainModel.h"
 @interface UPSBaseInfoVC ()
-@property (nonatomic,strong)UITextView *textView;
+@property (nonatomic,strong)UIView *textView;
+@property (nonatomic,strong)UPSMainModel *mainModel;
 
 @end
 
@@ -25,17 +27,36 @@
     [self setNav];
     [self setUI];
     self.view.backgroundColor = [UIColor whiteColor];
+    UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
+    self.mainModel = mainModel;
+    [self loadData];
 }
+
+- (void)loadData{
+     ///查看ups历史数据http://192.168.1.147:12345/ups-interface/checkUpsSituation
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"token"] = self.mainModel.token;
+    params[@"userId"] = @(self.mainModel.userId);
+    for (UPSGroupUPSModel *model in self.upsDataArr) {
+        params[@"upsId"] = @(model.id);
+    }
+//    [[UPSHttpNetWorkTool sharedApi]POST:@"checkUpsSituation" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+//        NSLog(@"..........%@",responseObject);
+//    } fail:^(NSURLSessionDataTask *task, NSError *error) {
+//
+//    }];
+}
+
 - (void)setNav{
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"基础信息" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightItem)];
-    for (UPSGroupUPSModel *model in self.upsDataArr) {
-        self.navigationItem.title = model.userDefinedUpsName;
-
-    }
-    for (int i = 0; i < self.upsDataArr.count; i++) {
-        UPSGroupUPSModel *model = [[UPSGroupUPSModel alloc]init];
-        self.navigationItem.title = model.userDefinedUpsName;
-    }
+//    for (UPSGroupUPSModel *model in self.upsDataArr) {
+//        self.navigationItem.title = model.userDefinedUpsName;
+//
+//    }
+//    for (int i = 0; i < self.upsDataArr.count; i++) {
+//        UPSGroupUPSModel *model = [[UPSGroupUPSModel alloc]init];
+//        self.navigationItem.title = model.userDefinedUpsName;
+//    }
 }
 - (void)clickRightItem{
     UPSBaseInfoView *info = [[UPSBaseInfoView alloc]init];
@@ -62,10 +83,14 @@
     UPSBaseInfoBtn *imputBtn = [[UPSBaseInfoBtn alloc]initWithFrame:CGRectMake(5, SafeAreaTopHeight + 5, KScreenW / 5, 30)];
    [imputBtn setBackgroundColor:UICOLOR_RGB(55.0, 157.0, 246.0, 1)];
     [imputBtn setTitle:@"旁路输入" forState:UIControlStateNormal];
+    imputBtn.tag = 100;
+    [imputBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
    [self.view addSubview:imputBtn];
     
     UPSBaseInfoBtn *faultBtn = [[UPSBaseInfoBtn alloc]initWithFrame:CGRectMake(KScreenW - KScreenW /5 - 5, SafeAreaTopHeight + 5, KScreenW / 5, 30)];
     [self.view addSubview:faultBtn];
+    faultBtn.tag = 200;
+    [faultBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
     [faultBtn setTitle:@"异常信息" forState:UIControlStateNormal];
     [faultBtn setBackgroundColor:[UIColor redColor]];
     
@@ -80,6 +105,8 @@
     }];
     [ACinputBtn setBackgroundColor:UICOLOR_RGB(55.0, 157.0, 246.0, 1)];
     [ACinputBtn setTitle:@"交流输入" forState:UIControlStateNormal];
+    ACinputBtn.tag = 300;
+    [ACinputBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     UPSBaseInfoBtn *ACoutputBtn = [[UPSBaseInfoBtn alloc]init];
     [self.view addSubview:ACoutputBtn];
@@ -91,6 +118,8 @@
     }];
     [ACoutputBtn setTitle:@"交流输出" forState:UIControlStateNormal];
     [ACoutputBtn setBackgroundColor:UICOLOR_RGB(55.0, 157.0, 246.0, 1)];
+    ACoutputBtn.tag = 400;
+    [ACoutputBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     UPSBaseInfoBtn *batteryBtn = [[UPSBaseInfoBtn alloc]init];
     [self.view addSubview:batteryBtn];
@@ -102,18 +131,66 @@
     }];
     [batteryBtn setTitle:@"电池" forState:UIControlStateNormal];
     [batteryBtn setBackgroundColor:UICOLOR_RGB(55.0, 157.0, 246.0, 1)];
-    [batteryBtn addTarget:self action:@selector(clickBatteryBtn:) forControlEvents:UIControlEventTouchUpInside];
+    batteryBtn.tag = 500;
+    [batteryBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     
 }
-- (void)clickBatteryBtn:(UIButton *)btn{
-    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
-    [self.view addSubview:textView];
-    self.textView = textView;
-   textView.backgroundColor = [UIColor redColor];
+- (void)clickBtn:(UIButton *)btn{
+    if (btn.tag == 100) {
+        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+        [self.view addSubview:textView];
+        self.textView = textView;
+//        textView.backgroundColor = [UIColor blueColor];
+        UILabel *title = [[UILabel alloc]init];
+//                          WithFrame:CGRectMake((textView.width - 80)/2, textView.origin.y + 10, 80, 44)];
+        [textView addSubview:title];
+        [title mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(textView).mas_offset(10);
+            make.centerX.equalTo(textView);
+            make.height.mas_equalTo(44);
+            make.width.mas_equalTo(80);
+        }];
+        title.text = @"旁路输入";
+        title.textColor = [UIColor lightGrayColor];
+        title.backgroundColor = [UIColor lightTextColor];
+        //    textView.userInteractionEnabled = NO;
+//        textView.backgroundColor = [UIColor yellowColor];
+
+    }else if (btn.tag == 200){
+        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+        [self.view addSubview:textView];
+        self.textView = textView;
+        //    textView.userInteractionEnabled = NO;
+        textView.backgroundColor = [UIColor redColor];
+
+    }else if (btn.tag == 300){
+        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+        [self.view addSubview:textView];
+        self.textView = textView;
+        //    textView.userInteractionEnabled = NO;
+        textView.backgroundColor = [UIColor orangeColor];
+
+    }else if (btn.tag == 400){
+        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+        [self.view addSubview:textView];
+        self.textView = textView;
+        //    textView.userInteractionEnabled = NO;
+        textView.backgroundColor = [UIColor brownColor];
+
+    }else{
+        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+        [self.view addSubview:textView];
+       self.textView = textView;
+        //    textView.userInteractionEnabled = NO;
+        textView.backgroundColor = [UIColor cyanColor];
+
+    }
+
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.textView removeFromSuperview];
+//    self.textView.backgroundColor = [UIColor clearColor];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

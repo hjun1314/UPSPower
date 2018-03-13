@@ -46,8 +46,10 @@
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
-    return 5;
+    if (self.mainModel.userChildren == YES) {
+        return 3;
+    }else{
+        return 5;}
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -57,7 +59,15 @@
     if (cell == nil) {
         cell = [tableView dequeueReusableCellWithIdentifier:ID];
         
-    }
+    }if (self.mainModel.userChildren == YES) {
+        if (indexPath.row == 0 ) {
+            cell.textLabel.text = @"修改密码";
+        }else if (indexPath.row == 1){
+            cell.textLabel.text = @"关于我们";
+        }else{
+            cell.textLabel.text = @"用户注销";
+        }
+    }else{
     if (indexPath.row == 0 ) {
         cell.textLabel.text = @"修改密码";
     }else if (indexPath.row == 1){
@@ -69,7 +79,7 @@
     }else{
         cell.textLabel.text = @"用户注销";
     }
-    
+    }
     
     return cell;
     
@@ -77,6 +87,49 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (self.mainModel.userChildren == YES) {
+        if (indexPath.row == 0 ) {
+            
+            UPSChangePasswordVC *changeVC = [[UPSChangePasswordVC alloc]init];
+            [self.navigationController pushViewController:changeVC animated:YES];
+            
+        }else if (indexPath.row == 1){
+            UPSAboutUsVC *aboutVC = [[UPSAboutUsVC alloc]init];
+            [self.navigationController pushViewController:aboutVC animated:YES];
+            
+        }else{
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"是否注销" message:@"确定注销?" preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                ///http://192.168.1.147:12345/ups-interface/logout
+                NSDictionary *params = @{@"token": [UPSTool getToken] ,@"userId":@([UPSTool getID])};
+                [[UPSHttpNetWorkTool sharedApi]POST:@"logout" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                    NSLog(@"注销成功");
+                    [(AppDelegate *)[UIApplication sharedApplication].delegate showWindowHome:@"logout"];
+                    [SVProgressHUD showSuccessWithStatus:@"注销成功"];
+                    
+                } fail:^(NSURLSessionDataTask *task, NSError *error) {
+                    NSLog(@"注销失败");
+                }];
+                
+                
+                
+            }];
+            
+            [alert addAction:cancel];
+            [alert addAction:sure];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            
+        }
+    }else{
     
     if (indexPath.row == 0 ) {
 
@@ -128,7 +181,7 @@
 
         
     }
-    
+    }
     
 }
 

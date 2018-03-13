@@ -18,6 +18,8 @@
 
 @property (nonatomic,assign)NSInteger companyId;
 
+@property (nonatomic,copy)NSString *password;
+
 
 ///存id
 +(void)saveChildrenUserId:(NSInteger)childrenUserId;

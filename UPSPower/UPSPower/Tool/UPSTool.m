@@ -77,33 +77,33 @@
 
 + (NSString *)strwithInteger:(long)interger
 {
-   NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:interger];
+    NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:interger];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd";
     NSString *string = [formatter stringFromDate:date];
     
-   
-//
-//    NSTimeInterval spaceTime = [date timeIntervalSinceDate:date];
-//    int second = (int)spaceTime;
-//    int minute = second / 60;
-//    int hour = minute / 60;
-//    if (minute < 1) {
-//        string = @"刚刚";
-//    }else if (hour < 1 && minute >= 1) {
-//       string = [NSString stringWithFormat:@"%d分钟前",minute];
-//    }else if (hour >= 1 && hour < 24) {
-//        string = [NSString stringWithFormat:@"%d小时前",hour];
-//    }else if (hour >= 24 && hour < 10 * 24) {
-//        string = [NSString stringWithFormat:@"%d天前",hour / 24];
-//    }else if (hour > 24 * 10) {
-//        string = string;
-//    }
+    
+    //
+    //    NSTimeInterval spaceTime = [date timeIntervalSinceDate:date];
+    //    int second = (int)spaceTime;
+    //    int minute = second / 60;
+    //    int hour = minute / 60;
+    //    if (minute < 1) {
+    //        string = @"刚刚";
+    //    }else if (hour < 1 && minute >= 1) {
+    //       string = [NSString stringWithFormat:@"%d分钟前",minute];
+    //    }else if (hour >= 1 && hour < 24) {
+    //        string = [NSString stringWithFormat:@"%d小时前",hour];
+    //    }else if (hour >= 24 && hour < 10 * 24) {
+    //        string = [NSString stringWithFormat:@"%d天前",hour / 24];
+    //    }else if (hour > 24 * 10) {
+    //        string = string;
+    //    }
     return string;
 }
 
 + (NSString *)stringWithNsdate:(NSString *)str{
-//    NSString *str=@"1368082020";//时间戳
+    //    NSString *str=@"1368082020";//时间戳
     NSTimeInterval time=[str doubleValue] / 1000.0;//因为时差问题要加8小时 == 28800 sec
     NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
     //实例化一个NSDateFormatter对象

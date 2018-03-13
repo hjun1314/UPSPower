@@ -381,14 +381,14 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
     alertWindow.windowLevel = UIWindowLevelAlert + 1;
     [alertWindow makeKeyAndVisible];
     [alertWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-    
-  
+
+
 //    UPSMainVC *main = [[UPSMainVC alloc]init];
 //
 //    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:main];
 //    self.window.rootViewController = nav;
 //    [nav pushViewController:main animated:YES];
-    
+
 }
 
 #pragma mark - background fetch  唤醒

@@ -44,6 +44,7 @@
 @property (nonatomic,assign)int flag;
 
 
+@property (nonatomic,strong)NSMutableArray *dataM;
 
 
 
@@ -70,6 +71,7 @@
     [[UPSHttpNetWorkTool sharedApi]POST:@"upsAlarmConfigureList" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSMutableArray *dataM = responseObject[@"data"];
+        self.dataM = dataM;
         NSMutableArray *tempArr = [NSMutableArray array];
         for (int i = 0 ; i < dataM.count; i++) {
             UPSAlarmModel *alermModel = [UPSAlarmModel mj_objectWithKeyValues:dataM[i]];
@@ -77,6 +79,7 @@
         }
         NSLog(@"告警信息成功%@",tempArr);
         self.alarmArr = tempArr;
+        self.dataM = dataM;
         [self.tableView reloadData];
         [SVProgressHUD showSuccessWithStatus:@"加载成功"];
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
@@ -127,20 +130,25 @@
     [codeBtn setTitle:@" 编 码" forState:UIControlStateNormal];
     [self.titleView addSubview:codeBtn];
     [codeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    codeBtn.titleLabel.font = [UIFont systemFontOfSize:13.0];
     
     UPSAlarmBtn *eventBtn = [[UPSAlarmBtn alloc]initWithFrame:CGRectMake(titleBtnW, 0, titleBtnBw, titleBtnH)];
     [eventBtn setTitle:@"事件名称" forState:UIControlStateNormal];
     [self.titleView addSubview:eventBtn];
     [eventBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    eventBtn.titleLabel.font = [UIFont systemFontOfSize:13.0];
     
     UPSAlarmBtn *alarmBtn = [[UPSAlarmBtn alloc]initWithFrame:CGRectMake(titleBtnW + titleBtnBw, 0, titleBtnW, titleBtnH)];
     [alarmBtn setTitle:@"报警级别" forState:UIControlStateNormal];
     [self.titleView addSubview:alarmBtn];
     [alarmBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    alarmBtn.titleLabel.font = [UIFont systemFontOfSize:13.0];
     
     UPSAlarmBtn *activationBtn = [[UPSAlarmBtn alloc]initWithFrame:CGRectMake((titleBtnW *2 + titleBtnBw), 0, titleBtnW, titleBtnH)];
     [activationBtn setTitle:@" 激活" forState:UIControlStateNormal];
     [self.titleView addSubview:activationBtn];
+    activationBtn.titleLabel.font = [UIFont systemFontOfSize:13.0];
+    
     self.selectAllBtn = activationBtn;
     [activationBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [activationBtn setImage:[UIImage imageNamed:@"cart_unSelect_btn"] forState:UIControlStateNormal];
@@ -170,6 +178,8 @@
         for (UPSAlarmModel *model in self.alarmArr) {
             [self.alarmData addObject:model];
         }
+        ///http://192.168.1.147:12345/ups-interface/settingUpsAlarm
+        [self clickLevelBtn];
     }else{
         [self.alarmData removeAllObjects];
     }
@@ -181,54 +191,132 @@
 
 - (void)clickLevelBtn{
     
-    //    ///更新告警测试http://192.168.1.147:12345/ups-interface/settingUpsAlarm
-    //    NSMutableArray *paramsArr = [NSMutableArray array];
-    //    NSMutableArray *paramsData = [NSMutableArray array];
-    //    ///取数组参数
-    //    for (int i = 0; i < paramsData.count ; i++ ) {
-    //        UPSUpdateAlermSettingModel *model = paramsData[i];
-    //
-    //        NSString *upsSettingId = [[NSString alloc]initWithFormat:@"%ld",model.upsSettingId];
-    //        NSString *isUsed = [[NSString alloc]initWithFormat:@"%d",model.isUse];
-    //
-    //        NSDictionary *temp = @{@"upsSettingId": upsSettingId,@"isUsed":isUsed};
-    //
-    //        [paramsArr addObject:temp];
-    //    }
-    //
-    //        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    //        params[@"token"] = self.mainModel.token;;
-    //        params[@"userId"] = @(self.mainModel.userId);
-    //    params[@"configureInputDTOList"] = paramsArr;
-    //
-    //    [manager POST:@"http://192.168.1.147:12345/ups-interface/settingUpsAlarm" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //                NSMutableArray *dataM = responseObject[@"data"];
-    //                NSMutableArray *tempArr = [NSMutableArray array];
-    //
-    //
-    //                for (int i = 0 ; i < dataM.count; i++) {
-    //                    UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
-    //                    [tempArr addObject:updateModel];
-    //                }
-    //                NSLog(@"更新告警测试成功%@",tempArr);
-    //    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    //        NSLog(@"更新告警测试失败%@",error);
-    //    }];
-    //    [[UPSHttpNetWorkTool sharedApi]POST:@"settingUpsAlarm" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-    //        NSMutableArray *dataM = responseObject[@"data"];
-    //        NSMutableArray *tempArr = [NSMutableArray array];
-    //
-    //
-    //        for (int i = 0 ; i < dataM.count; i++) {
-    //            UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
-    //            [tempArr addObject:updateModel];
-    //        }
-    //        NSLog(@"更新告警测试成功%@",tempArr);
-    //
-    //    } fail:^(NSURLSessionDataTask *task, NSError *error) {
-    //        NSLog(@"更新告警测试失败%@",error);
-    //    }];
+        ///更新告警测试http://192.168.1.147:12345/ups-interface/settingUpsAlarm
+//    NSMutableArray *array = [NSMutableArray arrayWithCapacity:self.alarmArr.count];
+    NSMutableArray *tempArr = [NSMutableArray array];
+    for (UPSAlarmModel *model in self.alarmArr) {
+//        [array addObject:[NSString stringWithFormat:@"%ld",model.upsSettingId]];
+//         [array addObject:[NSString stringWithFormat:@"%d",model.isUse]];
+//        UPSAlarmModel *model = [[UPSAlarmModel alloc]init];
+//        model.upsSettingId = [dict[@"upsSettingId"]integerValue];
+//        model.isUse = [dict[@"isUse"]boolValue];
+//        [tempArr addObject:@(model.upsSettingId)];
+//        [tempArr addObject:@(model.isUse)];
+        
+//        NSLog(@"model%@",model);
+        
+        NSString *upsSettingId = [[NSString alloc]initWithFormat:@"%ld",model.upsSettingId];
+       NSString *isUsed = [[NSString alloc]initWithFormat:@"%d",model.isUse];
+//
+        NSDictionary *temp = @{@"upsSettingId": upsSettingId,@"isUsed":isUsed};
+       [tempArr addObject:temp];
+    }
+
+  
+  
     
+//    if (!jsonData) {
+//
+//        NSLog(@"%@",error);
+//
+//    }else{
+    
+//        jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    //}
+    //    NSMutableArray *array = [NSMutableArray arrayWithCapacity:tempArr.count];
+
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:tempArr.firstObject options:NSJSONWritingPrettyPrinted error:nil];
+//    [params setObject:jsonData forKey:@"configureInputDTOList"];
+    
+//    params[@"configureInputDTO"] = [tempArr firstObject];
+//    [params setObject:[tempArr componentsJoinedByString:@","] forKey:@"configureInputDTO"];
+    
+//    NSMutableArray *paramsArr = [NSMutableArray arrayWithCapacity:paramsData.count];
+//    NSLog(@"paramsArr%@",paramsArr);
+   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:tempArr options:NSJSONWritingPrettyPrinted error:nil];
+//    NSLog(@"jsonData%@",jsonData);
+    NSString *jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
+    NSRange range = {0,jsonString.length};
+    
+    //去掉字符串中的空格
+    
+    [mutStr replaceOccurrencesOfString:@" " withString:@"" options:NSLiteralSearch range:range];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSRange range2 = {0,mutStr.length};
+   [mutStr replaceOccurrencesOfString:@"\\" withString:@"" options:NSLiteralSearch range:range2];
+    jsonString=[jsonString stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    //去掉字符串中的换行符
+        NSRange range3 = {0,mutStr.length};
+
+//
+    [mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range3];
+
+//    NSString *ssss = nil;
+//    ssss = [mutStr substringWithRange:range3];
+//    if ([ssss isEqualToString:@"/"]) {
+//        [ssss stringByReplacingCharactersInRange:range3 withString:@""];
+//    }NSLog(@"ssss%@",ssss);
+//    [mutStr replaceOccurrencesOfString:@"\\" withString:@"" options:NSLiteralSearch range:range3];
+//    NSString *str = @"{\"upsSettingId\":\"143\",\"isUsed\":\"1\"}";
+//    NSData *datasss = [NSJSONSerialization dataWithJSONObject:str options:NSJSONWritingPrettyPrinted  error:nil];
+//    NSString *jsonsssss = [[NSString alloc]initWithData:datasss encoding:NSUTF8StringEncoding ];
+//    NSLog(@"jsonsssss%@",jsonsssss);
+    
+//    params[@"configreInputDTOList"] = jsonsssss;
+//    NSLog(@"params%@",params);
+//        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//        params[@"configureInputDTO"] = mutStr;
+//        params[@"token"] = self.mainModel.token;;
+//        params[@"userId"] = @(self.mainModel.userId);
+//        [[UPSHttpNetWorkTool sharedApi]POST:@"settingUpsAlarm" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+//            NSMutableArray *dataM = responseObject[@"data"];
+//            NSMutableArray *tempArr = [NSMutableArray array];
+//            NSLog(@"....%@",responseObject);
+//
+//            for (int i = 0 ; i < dataM.count; i++) {
+//                UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
+//                [tempArr addObject:updateModel];
+//            }
+//            NSLog(@"更新告警测试成功%@",tempArr);
+//
+//        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+//            NSLog(@"更新告警测试失败%@",error);
+//        }];
+
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.HTTPAdditionalHeaders = @{@"token":self.mainModel.token,@"userId":[NSString stringWithFormat:@"%ld",(long)self.mainModel.userId]};
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+   manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",nil];
+//    [manager.requestSerializer setValue:self.mainModel.token forHTTPHeaderField:@"token"];
+//    [manager.requestSerializer setValue:[NSString stringWithFormat:@"%@",@(self.mainModel.userId)] forHTTPHeaderField:@"userId"];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"configureInputDTO"] = tempArr;
+    params[@"token"] = self.mainModel.token;;
+   params[@"userId"] = @(self.mainModel.userId);
+
+   
+//    [manager POST:@"http://192.168.1.147:80/ups-interface/settingUpsAlarm" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//                    NSMutableArray *dataM = responseObject[@"data"];
+//                    NSMutableArray *temp = [NSMutableArray array];
+//                    NSLog(@"....%@",responseObject);
+//
+//                    for (int i = 0 ; i < dataM.count; i++) {
+//                        UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
+//                        [temp addObject:updateModel];
+//                    }
+//                    NSLog(@"更新告警测试成功%@",temp);
+//
+//
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//
+//    }];
+
     
 }
 
@@ -262,7 +350,7 @@
     if (cell == nil) {
         cell = [[UPSAlarmCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-   // cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.isSelected = self.isSelect;
     ///是否被选中
     if ([self.alarmData containsObject:[self.alarmArr objectAtIndex:indexPath.row]]) {
@@ -289,6 +377,8 @@
     [cell reloadDataWith:[self.alarmArr objectAtIndex:indexPath.row]];
     
     UPSAlarmModel *model = self.alarmArr[indexPath.row];
+    
+    
     //    cell.textLabel.text = model.alarmCode;
     [cell.nameBtn setTitle:model.alarmCode forState:UIControlStateNormal];
     [cell.eventBtn setTitle:model.alarmName forState:UIControlStateNormal];
@@ -320,6 +410,19 @@
         
     }
    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    UPSAlarmModel *model = self.alarmArr[indexPath.row];
+    NSLog(@"dddddd%@",model.alarmName);
+    NSMutableArray *paramsArr = [NSMutableArray array];
+    NSString *upsSettingId = [[NSString alloc]initWithFormat:@"%ld",model.upsSettingId];
+    NSString *isUsed = [[NSString alloc]initWithFormat:@"%d",model.isUse];
+    
+    NSDictionary *temp = @{@"upsSettingId": upsSettingId,@"isUsed":isUsed};
+    NSLog(@"temp%@",temp);
+    [paramsArr addObject:temp];
+    NSLog(@"paramsArr%@",paramsArr);
 }
 
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -41,7 +41,7 @@ blue:((CGFloat)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
 #import <SVProgressHUD.h>
 #import <MJExtension.h>
 #import "FMDB.h"
-//#import <GTSDK/GeTuiSdk.h>
+#import "MJRefresh.h"
 #import <UserNotifications/UserNotifications.h>
 #import "JPUSHService.h"
 
@@ -52,6 +52,8 @@ blue:((CGFloat)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
 #define API_UserFilePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"user.plist"]
 
 #define NUMBERS @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-#define API_BaseURL @"http://192.168.1.147:12345/ups-interface/"
+#define API_BaseURL @"http://192.168.1.120:10000/ups-interface/"
+
+#define HidenKeybord {[[[UIApplication sharedApplication] keyWindow] endEditing:YES];}
 
 #endif /* UPSPowerPCH_pch */

@@ -49,7 +49,7 @@
         NSLog(@"显示子账号列表%@",responseObject);
         //            NSMutableArray *tempArr = [NSMutableArray array];
         NSMutableArray *dict = responseObject[@"data"];
-        NSMutableArray *tempArr = [NSMutableArray arrayWithObjects:@"0", nil];
+        //        NSMutableArray *tempArr = [NSMutableArray arrayWithObjects:@"0", nil];
         self.dataArr = [UPSChildUserAccountModel mj_objectArrayWithKeyValuesArray:dict];
         //            for (int i = 0; i < dict.count; i++) {
         //                UPSChildUserAccountModel *account = [UPSChildUserAccountModel mj_objectWithKeyValues:dict[i]];
@@ -77,6 +77,7 @@
 - (void)clickBack{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 ///点击rightItem
 - (void)clickRightBtn{
     //[self presentViewController:_alert animated:YES completion:nil];
@@ -100,19 +101,19 @@
         params[@"userId"] = @(self.mainModel.userId);
         params[@"username"] = alert.textFields[0].text;
         params[@"password"] = alert.textFields[1].text;
-
+        
         [[UPSHttpNetWorkTool sharedApi]POST:@"addChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
             NSLog(@"添加子账户成功%@",responseObject);
             NSMutableArray *tempArr = [NSMutableArray array];
             NSDictionary *dict = responseObject[@"data"];
             UPSAddChildModel *model = [UPSAddChildModel mj_objectWithKeyValues:dict];
             [tempArr addObject:model];
-            alert.textFields[0].text = model.username;
-            self.passwordField.text = alert.textFields[1].text;
-
+            //            alert.textFields[0].text = model.username;
+            
             NSString *ChildrenUserId = responseObject[@"data"][@"childrenUserId"];
             [UPSAddChildModel saveChildrenUserId:[ChildrenUserId integerValue]];
-            [self.dataArr addObject:@"0"];
+            //            [self.dataArr addObject:@"0"];
+            //            [self.dataArr addObjectsFromArray:tempArr];
             [self.tableView reloadData];
             
         } fail:^(NSURLSessionDataTask *task, NSError *error) {
@@ -130,7 +131,7 @@
 - (void)setupUI{
     
     ///tableView
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,  35, kScreenW, kScreenH  - SafeAreaTabbarHeight - 35)];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,  35+SafeAreaTopHeight, kScreenW, kScreenH  - SafeAreaTabbarHeight - 35)];
     [self.view addSubview:tableView];
     self.tableView = tableView;
     tableView.delegate = self;
@@ -169,23 +170,22 @@
     return self.dataArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    NSString *str = self.dataArr[indexPath.row];
-//    if ([str isEqualToString:@"0"]) {
+    //    NSString *str = self.dataArr[indexPath.row];
+    //    if ([str isEqualToString:@"0"]) {
     UPSChildUserCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell = [[UPSChildUserCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     }
-    UPSChildUserAccountModel *model = self.dataArr[indexPath.row];
+    UPSAddChildModel *model = self.dataArr[indexPath.row];
     //        cell.textLabel.text = @"hahaha";
     //        cell.detailTextLabel.text = @"呵呵呵呵";
     //            cell.passwordLabel.text = _dataArr[indexPath.row];
     cell.passwordLabel.secureTextEntry = YES;
-    //            cell.nameLabel.text = _dataArr[indexPath.row];
     cell.nameLabel.text = model.username;
-    cell.passwordLabel.text = self.passwordField.text;
+    cell.passwordLabel.text = @"111111";
     return cell;
-//    }
-//        return nil;
+    //    }
+    //        return nil;
 }
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -214,16 +214,15 @@
             params[@"newUsername"] = editAlert.textFields[0].text;
             params[@"password"] = editAlert.textFields[1].text;
             params[@"originalUsername"] = model.username;
+            
             [[UPSHttpNetWorkTool sharedApi]POST:@"updateAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
                 NSLog(@"子账号修改成功%@",responseObject);
                 
                 [self.tableView reloadData];
+                [SVProgressHUD showSuccessWithStatus:@"子账号名称修改成功"];
             } fail:^(NSURLSessionDataTask *task, NSError *error) {
                 NSLog(@"子账号修改失败%@",error);
             }];
-            [self.tableView reloadData];
-            
-            
         }];
         [editAlert addAction:action4];
     }];
@@ -238,6 +237,8 @@
         params[@"childrenUserId"] = @(model.userId);
         [[UPSHttpNetWorkTool sharedApi]POST:@"deleteChildrenAccount" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
             NSLog(@"删除子账号成功%@",responseObject);
+            [self.dataArr removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
             [self.tableView reloadData];
         } fail:^(NSURLSessionDataTask *task, NSError *error) {
@@ -248,7 +249,6 @@
     
     return @[editAction,deleteAction];
 }
-
 
 
 - (void)didReceiveMemoryWarning {

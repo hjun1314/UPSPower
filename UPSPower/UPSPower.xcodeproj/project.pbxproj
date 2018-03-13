@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A3D58CC3654013FE2DA59315 /* libPods-UPSPower.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 750407187259C868BCC2C80B /* libPods-UPSPower.a */; };
+		F01C55E520468034009BC171 /* NullSafe.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C55E420468033009BC171 /* NullSafe.m */; };
 		F01C59AB1FE0C905005BDB12 /* UPSAlarmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C59AA1FE0C905005BDB12 /* UPSAlarmModel.m */; };
 		F01C59AE1FE0CDDF005BDB12 /* UPSUpdateAlermSettingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C59AD1FE0CDDF005BDB12 /* UPSUpdateAlermSettingModel.m */; };
 		F01C59B11FE0CED7005BDB12 /* UPSScreeningAlarmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C59B01FE0CED7005BDB12 /* UPSScreeningAlarmModel.m */; };
@@ -64,6 +65,8 @@
 		F07B2BD11FD9462000BD9F1B /* UPSParentGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F07B2BD01FD9462000BD9F1B /* UPSParentGroupModel.m */; };
 		F07B2BD41FD9467D00BD9F1B /* UPSGroupUPSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F07B2BD31FD9467D00BD9F1B /* UPSGroupUPSModel.m */; };
 		F07C5AE61FCEB28D006C516C /* UPSChildUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F07C5AE51FCEB28D006C516C /* UPSChildUserCell.m */; };
+		F07C8A67204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F07C8A66204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m */; };
+		F07C8A6A204E949300CD0C40 /* UPSBaseParamerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F07C8A69204E949300CD0C40 /* UPSBaseParamerView.m */; };
 		F082E8AF1FF2067800BA3DEF /* UPSEquipmentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F02BEA771FC52633007FCF8A /* UPSEquipmentVC.m */; };
 		F09319951FC5088700D04D82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319941FC5088700D04D82 /* AppDelegate.m */; };
 		F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */; };
@@ -75,6 +78,7 @@
 		F09319E61FC51DE700D04D82 /* UPSTabVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319E51FC51DE700D04D82 /* UPSTabVC.m */; };
 		F09319E91FC51E5B00D04D82 /* UPSNacVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F09319E81FC51E5B00D04D82 /* UPSNacVC.m */; };
 		F0A1D9851FFB738C00FC09F6 /* UPSAlarmView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A1D9841FFB738C00FC09F6 /* UPSAlarmView.m */; };
+		F0A8ABAF2043D5BF00D5003F /* UPSPageBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A8ABAD2043D5BF00D5003F /* UPSPageBaseController.m */; };
 		F0ABAB681FC815A400B32BCF /* UPSAlarmBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = F0ABAB671FC815A400B32BCF /* UPSAlarmBtn.m */; };
 		F0C9438A1FC6A15900A4B7DB /* UPSNormalVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C943891FC6A15900A4B7DB /* UPSNormalVC.m */; };
 		F0C9438D1FC6A17900A4B7DB /* UPSUnknownVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C9438C1FC6A17900A4B7DB /* UPSUnknownVC.m */; };
@@ -129,6 +133,7 @@
 		AADD0DE3F747753B7EDA9FDF /* Pods-UPSPower.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UPSPower.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UPSPower/Pods-UPSPower.debug.xcconfig"; sourceTree = "<group>"; };
 		DB3A93552508C555B6B3BB10 /* libPods-NotificationService.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotificationService.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3FD12E4C475D74F1A321C9C /* Pods-UPSPower.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UPSPower.release.xcconfig"; path = "Pods/Target Support Files/Pods-UPSPower/Pods-UPSPower.release.xcconfig"; sourceTree = "<group>"; };
+		F01C55E420468033009BC171 /* NullSafe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NullSafe.m; sourceTree = "<group>"; };
 		F01C59A91FE0C905005BDB12 /* UPSAlarmModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSAlarmModel.h; sourceTree = "<group>"; };
 		F01C59AA1FE0C905005BDB12 /* UPSAlarmModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSAlarmModel.m; sourceTree = "<group>"; };
 		F01C59AC1FE0CDDF005BDB12 /* UPSUpdateAlermSettingModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSUpdateAlermSettingModel.h; sourceTree = "<group>"; };
@@ -244,6 +249,10 @@
 		F07B2BD31FD9467D00BD9F1B /* UPSGroupUPSModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSGroupUPSModel.m; sourceTree = "<group>"; };
 		F07C5AE41FCEB28D006C516C /* UPSChildUserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSChildUserCell.h; sourceTree = "<group>"; };
 		F07C5AE51FCEB28D006C516C /* UPSChildUserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSChildUserCell.m; sourceTree = "<group>"; };
+		F07C8A65204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSHistoryAlarmLogModel.h; sourceTree = "<group>"; };
+		F07C8A66204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSHistoryAlarmLogModel.m; sourceTree = "<group>"; };
+		F07C8A68204E949300CD0C40 /* UPSBaseParamerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSBaseParamerView.h; sourceTree = "<group>"; };
+		F07C8A69204E949300CD0C40 /* UPSBaseParamerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSBaseParamerView.m; sourceTree = "<group>"; };
 		F09319901FC5088700D04D82 /* UPSPower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UPSPower.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F09319931FC5088700D04D82 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F09319941FC5088700D04D82 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -264,6 +273,8 @@
 		F09319E81FC51E5B00D04D82 /* UPSNacVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSNacVC.m; sourceTree = "<group>"; };
 		F0A1D9831FFB738C00FC09F6 /* UPSAlarmView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSAlarmView.h; sourceTree = "<group>"; };
 		F0A1D9841FFB738C00FC09F6 /* UPSAlarmView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSAlarmView.m; sourceTree = "<group>"; };
+		F0A8ABAD2043D5BF00D5003F /* UPSPageBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSPageBaseController.m; sourceTree = "<group>"; };
+		F0A8ABAE2043D5BF00D5003F /* UPSPageBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSPageBaseController.h; sourceTree = "<group>"; };
 		F0ABAB661FC815A400B32BCF /* UPSAlarmBtn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSAlarmBtn.h; sourceTree = "<group>"; };
 		F0ABAB671FC815A400B32BCF /* UPSAlarmBtn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSAlarmBtn.m; sourceTree = "<group>"; };
 		F0C943881FC6A15900A4B7DB /* UPSNormalVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSNormalVC.h; sourceTree = "<group>"; };
@@ -376,6 +387,8 @@
 				F0DE2D6E1FDA76A50080FAA5 /* UPSAddGroup.m */,
 				F025C6A31FF36D3B00EAFBD6 /* UPSHistoryModel.h */,
 				F025C6A41FF36D3B00EAFBD6 /* UPSHistoryModel.m */,
+				F07C8A65204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.h */,
+				F07C8A66204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m */,
 				F025C6A61FF36DB900EAFBD6 /* UPSBaseInfoModel.h */,
 				F025C6A71FF36DB900EAFBD6 /* UPSBaseInfoModel.m */,
 			);
@@ -389,6 +402,8 @@
 				F05D0E991FC56FF200FD4218 /* UPSEquipmentCell.m */,
 				F04F4F65201AD9100020F9BD /* UPSBaseInfoView.h */,
 				F04F4F66201AD9100020F9BD /* UPSBaseInfoView.m */,
+				F07C8A68204E949300CD0C40 /* UPSBaseParamerView.h */,
+				F07C8A69204E949300CD0C40 /* UPSBaseParamerView.m */,
 				F03660812024338C00596CEB /* UPSBaseInfoBtn.h */,
 				F03660822024338C00596CEB /* UPSBaseInfoBtn.m */,
 			);
@@ -501,8 +516,8 @@
 		F0746DEF1FC518E100429F3B /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */,
 				F093199F1FC5088700D04D82 /* Assets.xcassets */,
+				F093199C1FC5088700D04D82 /* UPSPower.xcdatamodeld */,
 				F09319A11FC5088700D04D82 /* LaunchScreen.storyboard */,
 				F09319A51FC5088700D04D82 /* main.m */,
 				F054D9471FCBED1D002BB8C6 /* alarmLevel.plist */,
@@ -589,6 +604,8 @@
 		F0746DF51FC518E100429F3B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				F0A8ABAE2043D5BF00D5003F /* UPSPageBaseController.h */,
+				F0A8ABAD2043D5BF00D5003F /* UPSPageBaseController.m */,
 				F0DBFDB61FC5249D004F66C9 /* UPSSettingVC.h */,
 				F0DBFDB71FC5249D004F66C9 /* UPSSettingVC.m */,
 			);
@@ -738,6 +755,7 @@
 		F09ECD9D1FD6A58F008E7D2C /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				F01C55E420468033009BC171 /* NullSafe.m */,
 				F03B1FD02019820D003CAF4D /* HUD */,
 				F05D0E5F1FC52A6200FD4218 /* Log */,
 				F0228F7A1FD5310500A53245 /* UPSHttpNetWorkTool.h */,
@@ -996,6 +1014,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F082E8AF1FF2067800BA3DEF /* UPSEquipmentVC.m in Sources */,
+				F07C8A67204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m in Sources */,
 				F04155211FD62A230032A2AF /* UPSLoginBackView.m in Sources */,
 				F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */,
 				F035D52B2016C99300B78B8E /* UPSChangePassword.m in Sources */,
@@ -1020,6 +1039,8 @@
 				F05D0E641FC52A6200FD4218 /* NSObject+Log.m in Sources */,
 				F07945521FE8FFD70002713F /* UPSSettingCell.m in Sources */,
 				F06512A11FC7F94100CC1A87 /* UPSAlarmCell.m in Sources */,
+				F0A8ABAF2043D5BF00D5003F /* UPSPageBaseController.m in Sources */,
+				F07C8A6A204E949300CD0C40 /* UPSBaseParamerView.m in Sources */,
 				F09319E61FC51DE700D04D82 /* UPSTabVC.m in Sources */,
 				F0C9438A1FC6A15900A4B7DB /* UPSNormalVC.m in Sources */,
 				F09319E91FC51E5B00D04D82 /* UPSNacVC.m in Sources */,
@@ -1045,6 +1066,7 @@
 				F025C6AB1FF36F3E00EAFBD6 /* UPSBaseInfoVC.m in Sources */,
 				F0ABAB681FC815A400B32BCF /* UPSAlarmBtn.m in Sources */,
 				F0A1D9851FFB738C00FC09F6 /* UPSAlarmView.m in Sources */,
+				F01C55E520468034009BC171 /* NullSafe.m in Sources */,
 				F01C59B11FE0CED7005BDB12 /* UPSScreeningAlarmModel.m in Sources */,
 				F01D507A1FF4CDF2000AAB27 /* UPSModelTool.m in Sources */,
 				F07C5AE61FCEB28D006C516C /* UPSChildUserCell.m in Sources */,
@@ -1249,6 +1271,8 @@
 			baseConfigurationReference = AADD0DE3F747753B7EDA9FDF /* Pods-UPSPower.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = UPSPower/UPSPower.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1260,6 +1284,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.cl-ele.upspower";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos11.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1269,6 +1294,8 @@
 			baseConfigurationReference = E3FD12E4C475D74F1A321C9C /* Pods-UPSPower.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = UPSPower/UPSPower.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1280,6 +1307,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.cl-ele.upspower";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos11.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

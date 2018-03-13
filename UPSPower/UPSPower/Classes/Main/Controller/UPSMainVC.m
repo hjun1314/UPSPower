@@ -15,6 +15,7 @@
 #import "UPSGroupUPSModel.h"
 #import "UPSEquipmentVC.h"
 #import "MBProgressHUD.h"
+#import "UPSChildUsersVC.h"
 @interface UPSMainVC ()
 
 @property (nonatomic,strong)UPSLoginView *loginView;
@@ -103,10 +104,9 @@
         [UPSTool saveToken:responseObject[@"data"][@"token"]];
         NSString *ID = responseObject[@"data"][@"userId"];
         [UPSTool saveID:[ID integerValue]];
-        
-        UPSTabVC *tab = [[UPSTabVC alloc]init];
-        
-        [self.navigationController pushViewController:tab animated:YES];
+            UPSTabVC *tab = [[UPSTabVC alloc]init];
+            
+            [self.navigationController pushViewController:tab animated:YES];
         [UPSTool saveUserName:self.loginView.userTextField.text];
         [UPSTool savePassWord:self.loginView.passwordTextField.text];
         [SVProgressHUD showSuccessWithStatus:@"登录成功"];

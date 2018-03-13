@@ -29,7 +29,7 @@
     
     UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, (kScreenW - 10) / 3, self.height)];
     [self.contentView addSubview:nameLabel];
-    
+    nameLabel.font = [UIFont systemFontOfSize:13.0];
 //    nameLabel.backgroundColor = [UIColor orangeColor];
     self.nameLabel = nameLabel;
    
@@ -43,6 +43,7 @@
 //    originalLabel.backgroundColor = [UIColor redColor];
     self.originalLabel = originalLabel;
     originalLabel.textAlignment = NSTextAlignmentRight;
+    originalLabel.font = [UIFont systemFontOfSize:13.0];
 }
 
 - (void)clickUnknownBtn:(UIButton *)unknownBtn{

@@ -10,7 +10,7 @@
 
 @interface UPSHttpNetWorkTool()
 
-@property (nonatomic,strong) AFHTTPSessionManager *manager;
+//@property (nonatomic,strong) AFHTTPSessionManager *mgr;
 
 
 @end
@@ -42,9 +42,9 @@
 //    
 //    
 //}
-///// POST请求方法:path传URL地址  params传请求体
-//- (void)POST:(NSString *)path params:(id)params complete:(void(^)(BOOL result,id responseObj))comlete{
-//    [self.manager POST:path parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+/// POST请求方法:path传URL地址  params传请求体
+//- (void)POSTArr:(NSString *)url params:(id)params complete:(void(^)(BOOL result,id responseObj))comlete{
+//    [self.mgr POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //        NSError *error = nil;
 //        id results = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error];
 //        //NSLog(@"result = %@ ----- error = %@",results,error);
@@ -328,14 +328,16 @@
     if (isconfiguration) {
         
         manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url sessionConfiguration:configuration];
+//            manager.requestSerializer = [AFJSONRequestSerializer serializer];
+//            manager.responseSerializer = [AFJSONResponseSerializer serializer];
     }else{
         manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
+       
     }
     
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",nil];
     return manager;
 }
@@ -349,6 +351,7 @@
     return dic;
 }
 
+
 ///  开始监控网络状态
 + (void)startMonitorNetworkStatus{
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
@@ -359,6 +362,51 @@
     }];
 }
 
+///上传含有数组参数的post请求
+-(void)POSTArr:(NSString *)url
+       baseURL:(NSString *)baseUrl
+        params:(NSDictionary *)params
+     needToken:(BOOL)need
+        isJSON:(BOOL)isJSON
+       success:(LHResponseSuccess)success
+          fail:(LHResponseFail)fail{
+    
+    AFHTTPSessionManager *manager = [UPSHttpNetWorkTool managerWithBaseURLArr:baseUrl sessionConfiguration:NO];
+    if (need) {
+        [manager.requestSerializer setValue:[UPSTool getToken] forHTTPHeaderField:@"token"];
 
+    }
+    
+    [manager POST:url parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        id dic = [UPSHttpNetWorkTool responseConfiguration:responseObject];
+        
+        success(task,dic);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        fail(task,error);
+    }];
+    
+}
+
++(AFHTTPSessionManager *)managerWithBaseURLArr:(NSString *)baseURLArr  sessionConfiguration:(BOOL)isconfiguration{
+    
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFHTTPSessionManager *manager =nil;
+    
+    NSURL *url = [NSURL URLWithString:baseURLArr];
+    
+    if (isconfiguration) {
+        
+        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url sessionConfiguration:configuration];
+    }else{
+        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
+    }
+        manager.requestSerializer = [AFJSONRequestSerializer serializer];
+        manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",nil];
+    return manager;
+}
 
 @end

@@ -21,6 +21,7 @@
 @property (nonatomic,strong)UPSMainModel *mainModel;
 
 
+
 @end
 
 @implementation UPSContactVC
@@ -31,11 +32,11 @@
     [self initUI];
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
-//    if (@available(iOS 11.0, *)){
-//        //表示只在ios11以上的版本执行
-//        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-//
-//    }
+    //    if (@available(iOS 11.0, *)){
+    //        //表示只在ios11以上的版本执行
+    //        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    //
+    //    }
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -47,7 +48,7 @@
 }
 
 - (void)clickEditBtn:(UIBarButtonItem *)sender {
-//    NSLog(@"点击了编辑按钮");
+    //    NSLog(@"点击了编辑按钮");
     //设置tableView的编辑状态
     _tableView.editing = !_tableView.editing;
     if (_tableView.isEditing == YES) {
@@ -89,7 +90,7 @@
         addBtn.frame = CGRectMake(0, 0, kScreenW, 60);
         [addBtn addTarget:self action:@selector(addGroupAlert) forControlEvents:UIControlEventTouchUpInside];
         [_addHeadView addSubview:addBtn];
-//        [_tableView.tableHeaderView addSubview:_addHeadView];
+        //        [_tableView.tableHeaderView addSubview:_addHeadView];
     }
     return _addHeadView;
 }
@@ -111,13 +112,32 @@
         params[@"token"] = self.mainModel.token;
         params[@"userId"] = @(self.mainModel.userId);
         params[@"newGroupName"] = addGroupTF.text;
+        if (addGroupTF.text.length == 0) {
+            [SVProgressHUD showErrorWithStatus:@"新添加分组名称不能为空"];
+            return ;
+        }
+        for (UPSParentGroupModel *model in self.parentGroup) {
+            if ([addGroupTF.text isEqualToString:model.groupName]) {
+                [SVProgressHUD showErrorWithStatus:@"添加新分组不能和已有分组名称同名，请重新输入"];
+                return;
+            }
+        }
         [[UPSHttpNetWorkTool sharedApi]POST:@"addGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
             NSLog(@"添加组成功%@",responseObject);
             NSDictionary *dictM = responseObject[@"data"];
             NSMutableArray *addGroupArr = [NSMutableArray array];
             UPSAddGroup *addGroup = [UPSAddGroup mj_objectWithKeyValues:dictM];
             [addGroupArr addObject:addGroup];
-            [self.parentGroup addObject:addGroupArr.firstObject];
+//            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//            for (UPSParentGroupModel *model in self.parentGroup) {
+//
+//            }
+            [self.parentGroup addObjectsFromArray:addGroupArr];
+//            [self.parentGroup addObject:indexPath];
+//            [self.tableView beginUpdates];
+//            [self.tableView insertRowsAtIndexPaths:self.parentGroup withRowAnimation:UITableViewRowAnimationLeft];
+
+//            [self.tableView endUpdates];
             [self.tableView reloadData];
         } fail:^(NSURLSessionDataTask *task, NSError *error) {
             
@@ -166,34 +186,34 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         // 读取文本框的值显示出来
         UITextField *alterGroupTF = alert.textFields.firstObject;
-        //            NSLog(@"新修改的分组名：%@", alterGroupTF.text);
         // 发送修改请求...http://192.168.1.147:12345/ups-interface/updateGroupName
-        NSMutableArray *parentArr = [NSMutableArray array];
-        for (int i = 0; i < self.parentGroup.count; i++) {
-            UPSParentGroupModel *parentG = [UPSParentGroupModel mj_objectWithKeyValues:self.parentGroup[i]];
-            [parentArr addObject:parentG];
-            if (alterGroupTF.text == parentG.groupName) {
-                [SVProgressHUD showErrorWithStatus:@"组名不能重复"];
-            }
-        }
+        
         UPSParentGroupModel *dModel = _parentGroup[indexPath.section];
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         params[@"token"] = self.mainModel.token;
         params[@"userId"] = @(self.mainModel.userId);
         params[@"groupId"] = @(dModel.groupId);
         params[@"newGroupName"] = alterGroupTF.text;
-        //        if (alterGroupTF.text == dModel.groupName) {
-        //            [SVProgressHUD showErrorWithStatus:@"组名不能重复"];
-        //        }else{
+        if (alterGroupTF.text.length == 0) {
+            [SVProgressHUD showErrorWithStatus:@"组名不能为空"];
+            return ;
+        }
+        for (UPSParentGroupModel *model in self.parentGroup) {
+            if ([alterGroupTF.text isEqualToString:model.groupName]) {
+                [SVProgressHUD showErrorWithStatus:@"更改分组不能和已有分组名称同名，请重新输入"];
+                return;
+            }
+        }
         [[UPSHttpNetWorkTool sharedApi]POST:@"updateGroupName" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
             NSLog(@"组名修改成功%@",responseObject);
             dModel.groupName = alterGroupTF.text;
+            [SVProgressHUD showSuccessWithStatus:@"组名更改成功"];
             [self.tableView reloadData];
         } fail:^(NSURLSessionDataTask *task, NSError *error) {
             NSLog(@"组名修改失败%@",error);
         }];
         
-        // }
+        
         
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
@@ -249,8 +269,7 @@
         params[@"token"] = self.mainModel.token;
         params[@"userId"] = @(self.mainModel.userId);
         params[@"groupId"] = @(dModel.groupId);
-        UPSGroupUPSModel *upsGroup = self.upsGroup[indexPath.row];
-        if (upsGroup == nil) {
+        if (dModel.groupCellData.count == 0) {
             [[UPSHttpNetWorkTool sharedApi]POST:@"deleteGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
                 NSLog(@"分组删除成功%@",responseObject);
                 
@@ -267,6 +286,10 @@
         }
         
     }
+//    if (editingStyle == UITableViewCellEditingStyleInsert) {
+//        [self.parentGroup insertObject:@"" atIndex:indexPath.row];
+//        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationAutomatic];
+    //}
 }
 
 #pragma mark- 移动
