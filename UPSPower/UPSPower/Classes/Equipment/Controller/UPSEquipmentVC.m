@@ -21,8 +21,9 @@
 #import "UPSBaseInfoVC.h"
 #import "CPMoveCellTableView.h"
 #import "UPSBaseInfoModel.h"
+#import "ZWMGuideView.h"
 #define IS_IOS7 [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0
-@interface UPSEquipmentVC ()<UITableViewDelegate,UITableViewDataSource,CPMoveCellTableViewDelegate,CPMoveCellTableViewDataSource>{
+@interface UPSEquipmentVC ()<CPMoveCellTableViewDelegate,CPMoveCellTableViewDataSource,ZWMGuideViewLayoutDelegate,ZWMGuideViewDataSource>{
     NSIndexPath *_indexPath; // 保存当前选中的单元格
 }
 
@@ -49,7 +50,11 @@
 ///显示异常和正常数的label
 @property (nonatomic,strong)UILabel *normaleLabel;
 @property (nonatomic,strong)UILabel *unnormalLabel;
-
+///引导图相关
+@property (strong, nonatomic) ZWMGuideView *guideView;
+@property (strong, nonatomic) NSArray *descriptionArrar;
+@property (nonatomic,strong)NSMutableArray *viewsArray;
+@property (nonatomic,strong)UIView *headView;
 
 
 
@@ -65,6 +70,7 @@
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
     [self loadData];
+   
     
 }
 
@@ -73,14 +79,14 @@
     //    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(clickRightBarItem)];
     
-    //    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blackColor];
     self.tableView.hidden = NO;
+//    [self.viewsArray addObject:self.navigationItem.rightBarButtonItem];
+   
     
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.tableView reloadData];
-    //
     
 }
 - (void)loadData{
@@ -128,6 +134,7 @@
                 }
             }
             p.groupCellData = temp;
+            self.upsMoveData = p.groupCellData;
             [parentArr addObject:p];
         }
         self.parentData = parentArr;
@@ -162,8 +169,6 @@
     
     UPSParentGroupModel *parentModel = self.parentData[section];
     
-    //    NSLog(@"%@",parentArr);
-    //    NSLog(@"cellde行数%lu",(unsigned long)parentModel.groupCellData.count);
     if ([self.switchArr[section] boolValue] == YES ) {
         return parentModel.groupCellData.count;
     } else {
@@ -249,18 +254,15 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    //    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320 / 375.0 * kScreenW, 50 / 375.0 * kScreenW)];
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenW, 40)];
     view.backgroundColor = [UIColor whiteColor];
+    self.headView = view;
     
     // 边界线
     UIView *borderView = [[UIView alloc]initWithFrame:CGRectMake(0, 40 + 0.3, kScreenW, 0.3)];
-    //    UIView *borderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320 / 375.0 * kScreenW, 0.5)];
-    
     borderView.backgroundColor = RGB_HEX(0xC8C7CC);
     [view addSubview:borderView];
-    //    // 展开箭头
-    //    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(15 / 375.0 * kScreenW, 19 / 375.0 * kScreenW, 14 / 375.0 * kScreenW, 12 / 375.0 * kScreenW)];
+        // 展开箭头
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(12, 15, 12, 10)];
     //    imageView.backgroundColor = [UIColor orangeColor];
     imageView.image = [UIImage imageNamed:@"pulldownList.png"];
@@ -408,15 +410,8 @@
                 upsModel.userDefinedUpsName = editAlertTextField.text;
                 [self.tableView reloadData];
                 [SVProgressHUD showSuccessWithStatus:@"设备名修改成功"];
-                //                NSLog(@"设备名修改成功%@",responseObject);
-                
             } fail:^(NSURLSessionDataTask *task, NSError *error) {
-                //                NSLog(@"设备名修改失败%@",error);
             }];
-            
-            
-            
-            
         }];
         [editAlert addAction:action4];
     }];
@@ -428,11 +423,11 @@
 #pragma mark- 移动cell相关
 //必选
 - (NSArray *)originalArrayDataForTableView:(CPMoveCellTableView *)tableView{
-    return _upsData;
+    return self.upsData;
 }
 
 - (void)tableView:(CPMoveCellTableView *)tableView newArrayDataForDataSource:(NSArray *)newArray{
-    _upsData = [NSMutableArray arrayWithArray:newArray];
+    self.parentData = [NSMutableArray arrayWithArray:newArray];
 }
 
 #pragma mark- 懒加载
@@ -465,6 +460,49 @@
     }
     return _cellData;
 }
+#pragma mark- 引导图相关
+- (NSMutableArray *)viewsArray{
+    if (_viewsArray == nil) {
+        _viewsArray = [NSMutableArray array];
+    }
+    return _viewsArray;
+}
+- (ZWMGuideView *)guideView
+{
+    if (_guideView == nil) {
+        _guideView = [[ZWMGuideView alloc] initWithFrame:self.view.bounds];
+        _guideView.dataSource = self;
+        _guideView.delegate = self;
+    }
+    return _guideView;
+}
+#pragma mark -- ZWMGuideViewDataSource（必须实现的数据源方法）
+- (NSInteger)numberOfItemsInGuideMaskView:(ZWMGuideView *)guideMaskView{
+    return self.viewsArray.count;
+    
+}
+- (UIView *)guideMaskView:(ZWMGuideView *)guideMaskView viewForItemAtIndex:(NSInteger)index{
+    return self.viewsArray[index];
+    
+}
+- (NSString *)guideMaskView:(ZWMGuideView *)guideMaskView descriptionLabelForItemAtIndex:(NSInteger)index{
+    return self.descriptionArrar[index];
+}
+
+#pragma mark -- ZWMGuideViewLayoutDelegate
+- (CGFloat)guideMaskView:(ZWMGuideView *)guideMaskView cornerRadiusForItemAtIndex:(NSInteger)index
+{
+    if (index == self.viewsArray.count-1)
+    {
+        return 30;
+    }
+    
+    return 5;
+}
+- (UIEdgeInsets)guideMaskView:(ZWMGuideView *)guideMaskView insetsForItemAtIndex:(NSInteger)index{
+    return UIEdgeInsetsMake(-10, -10, -10, -10);
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

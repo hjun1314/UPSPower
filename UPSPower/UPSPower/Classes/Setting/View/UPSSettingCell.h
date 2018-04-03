@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UIView *point;
 @property (weak, nonatomic) IBOutlet UIView *topLine;
 @property (weak, nonatomic) IBOutlet UIView *bottomLine;
+@property (weak, nonatomic) IBOutlet UILabel *detailLabel;
 
 @property (nonatomic,strong)UPSAlarmRecordModel *model;
 

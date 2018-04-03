@@ -234,7 +234,7 @@
     
 //    NSMutableArray *paramsArr = [NSMutableArray arrayWithCapacity:paramsData.count];
 //    NSLog(@"paramsArr%@",paramsArr);
-   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:tempArr options:NSJSONWritingPrettyPrinted error:nil];
+   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:tempArr.firstObject options:NSJSONWritingPrettyPrinted error:nil];
 //    NSLog(@"jsonData%@",jsonData);
     NSString *jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
@@ -285,39 +285,45 @@
 //            NSLog(@"更新告警测试失败%@",error);
 //        }];
 
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    configuration.HTTPAdditionalHeaders = @{@"token":self.mainModel.token,@"userId":[NSString stringWithFormat:@"%ld",(long)self.mainModel.userId]};
+//    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+//    configuration.HTTPAdditionalHeaders = @{@"token":self.mainModel.token,@"userId":[NSString stringWithFormat:@"%ld",(long)self.mainModel.userId]};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
 //    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 //    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",nil];
+//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
-   manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",nil];
-//    [manager.requestSerializer setValue:self.mainModel.token forHTTPHeaderField:@"token"];
+    [manager.requestSerializer setValue:self.mainModel.token forHTTPHeaderField:@"token"];
 //    [manager.requestSerializer setValue:[NSString stringWithFormat:@"%@",@(self.mainModel.userId)] forHTTPHeaderField:@"userId"];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"configureInputDTO"] = tempArr;
-    params[@"token"] = self.mainModel.token;;
+    params[@"configureInputDTO"] = tempArr.firstObject;
+//    params[@"token"] = self.mainModel.token;;
    params[@"userId"] = @(self.mainModel.userId);
 
-   
-//    [manager POST:@"http://192.168.1.147:80/ups-interface/settingUpsAlarm" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//                    NSMutableArray *dataM = responseObject[@"data"];
-//                    NSMutableArray *temp = [NSMutableArray array];
-//                    NSLog(@"....%@",responseObject);
-//
-//                    for (int i = 0 ; i < dataM.count; i++) {
-//                        UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
-//                        [temp addObject:updateModel];
-//                    }
-//                    NSLog(@"更新告警测试成功%@",temp);
-//
-//
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+    [manager POST:@"http://192.168.1.120:10000/ups-interface/settingUpsAlarm" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                    NSMutableArray *dataM = responseObject[@"data"];
+                    NSMutableArray *temp = [NSMutableArray array];
+                    NSLog(@"....%@",responseObject);
+
+                    for (int i = 0 ; i < dataM.count; i++) {
+                        UPSUpdateAlermSettingModel *updateModel = [UPSUpdateAlermSettingModel mj_objectWithKeyValues:dataM[i]];
+                        [temp addObject:updateModel];
+                    }
+                    NSLog(@"更新告警测试成功%@",temp);
+
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+    }];
+
+//    [[UPSHttpNetWorkTool sharedApi]POST:@"settingUpsAlarm" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+//        NSLog(@".....%@",responseObject);
+//    } fail:^(NSURLSessionDataTask *task, NSError *error) {
 //
 //    }];
-
-    
 }
 
 //- (void)dealloc{

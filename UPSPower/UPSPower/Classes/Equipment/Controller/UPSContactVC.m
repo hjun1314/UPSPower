@@ -32,11 +32,11 @@
     [self initUI];
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
-    //    if (@available(iOS 11.0, *)){
-    //        //表示只在ios11以上的版本执行
-    //        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    //
-    //    }
+//        if (@available(iOS 11.0, *)){
+//            //表示只在ios11以上的版本执行
+//            self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//    
+//        }
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];

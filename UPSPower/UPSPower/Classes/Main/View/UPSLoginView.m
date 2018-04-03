@@ -41,6 +41,8 @@
         
     }];
     imageView.image = [UIImage imageNamed:@"upslogo"];
+    imageView.clipsToBounds = YES;
+    imageView.layer.cornerRadius = 10;
     
     UIView *accountView = [[UIView alloc]init];
     [self addSubview:accountView];
@@ -69,6 +71,7 @@
     }];
     accountTextField.placeholder = @"请输入账号";
     accountTextField.clearButtonMode = UITextFieldViewModeAlways;
+    accountTextField.text = [UPSTool getUserName];
     self.userTextField = accountTextField;
     accountTextField.delegate = self;
     ///密码
@@ -95,9 +98,10 @@
         make.top.trailing.bottom.equalTo(passwordView);
     }];
     passwordTextField.placeholder = @"请输入密码";
-//    passwordTextField.secureTextEntry = YES;
+    passwordTextField.secureTextEntry = YES;
     passwordTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.passwordTextField = passwordTextField;
+    passwordTextField.text = [UPSTool getPassword];
     passwordTextField.delegate = self;
     
     UIView *rememberView = [[UIView alloc]init];
@@ -127,7 +131,9 @@
     }else{
         rememberAccount.titleLabel.font = [UIFont systemFontOfSize:15];
         
-    }//    rememberAccount.contentEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
+    }
+    rememberAccount.selected = YES;
+    //    rememberAccount.contentEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
 //
 //    // 重点位置开始
 //    rememberAccount.imageEdgeInsets = UIEdgeInsetsMake(0, rememberAccount.titleLabel.width + 2.5, 0, -rememberAccount.titleLabel.width - 2.5);
@@ -152,6 +158,7 @@
         rememberPassword.titleLabel.font = [UIFont systemFontOfSize:15];
         
     }
+    rememberPassword.selected = YES;
     
     UPSRememberBtn *sureBtn = [[UPSRememberBtn alloc]init];
 //WithFrame:CGRectMake(4, 4, 26, 23)];
@@ -203,8 +210,8 @@
         make.centerX.equalTo(self);
         
     }];
-    copyRightLabel.text = @"Copyright©2017 Shoryo All Rights Reserved";
-    copyRightLabel.font = [UIFont systemFontOfSize:15];
+    copyRightLabel.text = @"Copyright©2018 Shoryo All Rights Reserved";
+    copyRightLabel.font = [UIFont systemFontOfSize:14];
    
     
 }

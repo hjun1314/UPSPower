@@ -19,6 +19,9 @@
 		F025C6A51FF36D3B00EAFBD6 /* UPSHistoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F025C6A41FF36D3B00EAFBD6 /* UPSHistoryModel.m */; };
 		F025C6A81FF36DB900EAFBD6 /* UPSBaseInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F025C6A71FF36DB900EAFBD6 /* UPSBaseInfoModel.m */; };
 		F025C6AB1FF36F3E00EAFBD6 /* UPSBaseInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F025C6AA1FF36F3E00EAFBD6 /* UPSBaseInfoVC.m */; };
+		F02EAAE9206E120600EA4C24 /* XYLaunchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F02EAAE5206E120500EA4C24 /* XYLaunchVC.m */; };
+		F02EAAEA206E120600EA4C24 /* UIImage+XYGif.m in Sources */ = {isa = PBXBuildFile; fileRef = F02EAAE7206E120500EA4C24 /* UIImage+XYGif.m */; };
+		F02EAAED206E3AB300EA4C24 /* ZWMGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = F02EAAEB206E3AB300EA4C24 /* ZWMGuideView.m */; };
 		F030EE101FECB59B00C8DA22 /* UPSContactVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F030EE0F1FECB59B00C8DA22 /* UPSContactVC.m */; };
 		F0317E091FEA51DD0090575D /* UPSAlarmRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0317E081FEA51DD0090575D /* UPSAlarmRecordModel.m */; };
 		F0317E0C1FEA52000090575D /* UPSSingalAlarmRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0317E0B1FEA52000090575D /* UPSSingalAlarmRecordModel.m */; };
@@ -157,6 +160,12 @@
 		F025C6AA1FF36F3E00EAFBD6 /* UPSBaseInfoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSBaseInfoVC.m; sourceTree = "<group>"; };
 		F02BEA761FC52633007FCF8A /* UPSEquipmentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSEquipmentVC.h; sourceTree = "<group>"; };
 		F02BEA771FC52633007FCF8A /* UPSEquipmentVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSEquipmentVC.m; sourceTree = "<group>"; };
+		F02EAAE5206E120500EA4C24 /* XYLaunchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYLaunchVC.m; sourceTree = "<group>"; };
+		F02EAAE6206E120500EA4C24 /* UIImage+XYGif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+XYGif.h"; sourceTree = "<group>"; };
+		F02EAAE7206E120500EA4C24 /* UIImage+XYGif.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XYGif.m"; sourceTree = "<group>"; };
+		F02EAAE8206E120500EA4C24 /* XYLaunchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYLaunchVC.h; sourceTree = "<group>"; };
+		F02EAAEB206E3AB300EA4C24 /* ZWMGuideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZWMGuideView.m; sourceTree = "<group>"; };
+		F02EAAEC206E3AB300EA4C24 /* ZWMGuideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZWMGuideView.h; sourceTree = "<group>"; };
 		F030EE0E1FECB59B00C8DA22 /* UPSContactVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSContactVC.h; sourceTree = "<group>"; };
 		F030EE0F1FECB59B00C8DA22 /* UPSContactVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSContactVC.m; sourceTree = "<group>"; };
 		F0317E071FEA51DD0090575D /* UPSAlarmRecordModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSAlarmRecordModel.h; sourceTree = "<group>"; };
@@ -410,6 +419,17 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		F02EAAE4206E120500EA4C24 /* XYLaunch */ = {
+			isa = PBXGroup;
+			children = (
+				F02EAAE8206E120500EA4C24 /* XYLaunchVC.h */,
+				F02EAAE5206E120500EA4C24 /* XYLaunchVC.m */,
+				F02EAAE6206E120500EA4C24 /* UIImage+XYGif.h */,
+				F02EAAE7206E120500EA4C24 /* UIImage+XYGif.m */,
+			);
+			path = XYLaunch;
+			sourceTree = "<group>";
+		};
 		F03B1FD02019820D003CAF4D /* HUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -640,6 +660,9 @@
 		F0746DF81FC518E100429F3B /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				F02EAAEC206E3AB300EA4C24 /* ZWMGuideView.h */,
+				F02EAAEB206E3AB300EA4C24 /* ZWMGuideView.m */,
+				F02EAAE4206E120500EA4C24 /* XYLaunch */,
 				F0746DF91FC518E100429F3B /* Controller */,
 				F0746DFA1FC518E100429F3B /* Model */,
 				F0746DFB1FC518E100429F3B /* View */,
@@ -1017,6 +1040,7 @@
 				F07C8A67204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m in Sources */,
 				F04155211FD62A230032A2AF /* UPSLoginBackView.m in Sources */,
 				F093199E1FC5088700D04D82 /* UPSPower.xcdatamodeld in Sources */,
+				F02EAAE9206E120600EA4C24 /* XYLaunchVC.m in Sources */,
 				F035D52B2016C99300B78B8E /* UPSChangePassword.m in Sources */,
 				F0228F7B1FD5310500A53245 /* UPSHttpNetWorkTool.m in Sources */,
 				F05D0E5B1FC529E600FD4218 /* UIImage+Image.m in Sources */,
@@ -1065,10 +1089,12 @@
 				F04F3C911FF5D4C100310137 /* CPMoveCellTableView.m in Sources */,
 				F025C6AB1FF36F3E00EAFBD6 /* UPSBaseInfoVC.m in Sources */,
 				F0ABAB681FC815A400B32BCF /* UPSAlarmBtn.m in Sources */,
+				F02EAAED206E3AB300EA4C24 /* ZWMGuideView.m in Sources */,
 				F0A1D9851FFB738C00FC09F6 /* UPSAlarmView.m in Sources */,
 				F01C55E520468034009BC171 /* NullSafe.m in Sources */,
 				F01C59B11FE0CED7005BDB12 /* UPSScreeningAlarmModel.m in Sources */,
 				F01D507A1FF4CDF2000AAB27 /* UPSModelTool.m in Sources */,
+				F02EAAEA206E120600EA4C24 /* UIImage+XYGif.m in Sources */,
 				F07C5AE61FCEB28D006C516C /* UPSChildUserCell.m in Sources */,
 				F0317E0C1FEA52000090575D /* UPSSingalAlarmRecordModel.m in Sources */,
 				F03B1FD72019820D003CAF4D /* MBProgressHUD+MJ.m in Sources */,

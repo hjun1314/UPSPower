@@ -14,7 +14,7 @@
 #import "UPSBaseInfoBtn.h"
 #import "UPSPower.h"
 #import "UPSMainModel.h"
-@interface UPSBaseInfoVC ()
+@interface UPSBaseInfoVC ()<UIGestureRecognizerDelegate>
 @property (nonatomic,strong)UIView *textView;
 @property (nonatomic,strong)UPSMainModel *mainModel;
 
@@ -30,6 +30,11 @@
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
     [self loadData];
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+self.navigationController.interactivePopGestureRecognizer.delegate = self;
+        
+    }
+    
 }
 
 - (void)loadData{
@@ -158,16 +163,33 @@
 //        textView.backgroundColor = [UIColor yellowColor];
 
     }else if (btn.tag == 200){
-        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5 + 20, KScreenW, KScreenH - KScreenH * 0.5 - 20)];
         [self.view addSubview:textView];
         self.textView = textView;
+        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(textView.width / 2 - 30, 10, 60, 30)];
+        [textView addSubview:titleLabel];
+        titleLabel.text = @"异常信息";
+        titleLabel.font = [UIFont systemFontOfSize:14.0];
+        titleLabel.textColor = [UIColor lightGrayColor];
+        
+        UILabel *label = [[UILabel alloc]init];
+        [textView addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(titleLabel.mas_bottom).offset(10);
+            make.left.equalTo(textView).offset(15);
+            make.height.offset(30);
+        }];
+        label.text = @"无异常";
+        label.font = [UIFont systemFontOfSize:13];
+        label.textColor = [UIColor lightGrayColor];
         //    textView.userInteractionEnabled = NO;
-        textView.backgroundColor = [UIColor redColor];
+//        textView.backgroundColor = [UIColor redColor];
 
     }else if (btn.tag == 300){
         UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
         [self.view addSubview:textView];
         self.textView = textView;
+        
         //    textView.userInteractionEnabled = NO;
         textView.backgroundColor = [UIColor orangeColor];
 

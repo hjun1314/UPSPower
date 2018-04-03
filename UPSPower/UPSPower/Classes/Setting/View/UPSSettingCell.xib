@@ -49,11 +49,19 @@
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YEH-6T-QNR">
+                        <rect key="frame" x="258" y="52" width="42" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="bottomLine" destination="3hL-Gi-VVN" id="o9V-7a-lyH"/>
                 <outlet property="contentLabel" destination="fdl-ra-9ux" id="ByK-7b-dvk"/>
+                <outlet property="detailLabel" destination="YEH-6T-QNR" id="k8G-of-x2f"/>
                 <outlet property="point" destination="rj6-pO-e3R" id="CoR-54-qKF"/>
                 <outlet property="timeLabel" destination="FJE-29-kes" id="8yZ-S1-m2W"/>
                 <outlet property="topLine" destination="39o-r9-YyA" id="eC8-EJ-rS1"/>

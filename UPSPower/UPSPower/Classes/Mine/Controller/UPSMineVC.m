@@ -149,10 +149,8 @@
     }else if (indexPath.row == 3){
         UPSAboutUsVC *aboutVC = [[UPSAboutUsVC alloc]init];
         [self.navigationController pushViewController:aboutVC animated:YES];
-        
     }else{
-    
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"是否注销" message:@"确定注销?" preferredStyle:UIAlertControllerStyleAlert];
+       UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"是否注销" message:@"确定注销?" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
@@ -169,23 +167,13 @@
             } fail:^(NSURLSessionDataTask *task, NSError *error) {
                 NSLog(@"注销失败");
             }];
-            
-            
-            
         }];
-        
         [alert addAction:cancel];
         [alert addAction:sure];
-        
         [self presentViewController:alert animated:YES completion:nil];
-
-        
     }
     }
-    
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

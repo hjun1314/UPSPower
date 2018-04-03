@@ -42,7 +42,9 @@ blue:((CGFloat)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
 #import <MJExtension.h>
 #import "FMDB.h"
 #import "MJRefresh.h"
+#ifdef  NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
+#endif
 #import "JPUSHService.h"
 
 

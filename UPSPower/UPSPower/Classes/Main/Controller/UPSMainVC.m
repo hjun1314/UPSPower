@@ -16,6 +16,7 @@
 #import "UPSEquipmentVC.h"
 #import "MBProgressHUD.h"
 #import "UPSChildUsersVC.h"
+#import "AppDelegate.h"
 @interface UPSMainVC ()
 
 @property (nonatomic,strong)UPSLoginView *loginView;
@@ -30,9 +31,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UPSLoginView *loginView = [[UPSLoginView alloc]initWithFrame:CGRectMake(0, 0, kScreenW, kScreenH)];
+    UPSLoginView *loginView = [[UPSLoginView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
     self.loginView = loginView;
-    self.loginView.backgroundColor = UICOLOR_RGB(55.0, 157.0, 246.0, 0.6);
+    self.loginView.backgroundColor = UICOLOR_RGB(55.0, 157.0, 246.0, 0.7);
 //    self.loginView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:loginView];
       [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickLoginViewSureBtn) name:@"didClickSureBtn" object:nil];
@@ -70,7 +71,7 @@
     [SVProgressHUD setBackgroundColor:UICOLOR_RGB(0, 0, 0, 0.3)];
 
     //192.168.1.147:12345/ups-interface/login
-    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":@"1a1018970aa361f103f"};
+    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":@"aaaaaddd1111"};
     
     [[UPSHttpNetWorkTool sharedApi]POST:@"login" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
@@ -104,18 +105,23 @@
         [UPSTool saveToken:responseObject[@"data"][@"token"]];
         NSString *ID = responseObject[@"data"][@"userId"];
         [UPSTool saveID:[ID integerValue]];
-            UPSTabVC *tab = [[UPSTabVC alloc]init];
-            
-            [self.navigationController pushViewController:tab animated:YES];
+        UPSTabVC *tab = [[UPSTabVC alloc]init];
+        [self.navigationController pushViewController:tab animated:YES];
+//         [(AppDelegate *)[UIApplication sharedApplication].delegate showWindowMain:@"logoutTab"];
         [UPSTool saveUserName:self.loginView.userTextField.text];
         [UPSTool savePassWord:self.loginView.passwordTextField.text];
         [SVProgressHUD showSuccessWithStatus:@"登录成功"];
         
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"登录失败%@",error);
-        [SVProgressHUD showErrorWithStatus:@"登录失败"];
+        [SVProgressHUD showErrorWithStatus:@"密码错误,请重新登录"];
     }];
 }
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

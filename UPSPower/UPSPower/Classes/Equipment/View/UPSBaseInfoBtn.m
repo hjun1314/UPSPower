@@ -15,6 +15,7 @@
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 5.0;
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.titleLabel.font = [UIFont systemFontOfSize:14.0];
     }
     return self;
 }

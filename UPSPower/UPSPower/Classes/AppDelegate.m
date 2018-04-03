@@ -10,9 +10,13 @@
 #import "UPSTabVC.h"
 #import "UPSMainVC.h"
 #import "UPSNacVC.h"
-
+#import "XYLaunchVC.h"
+#import "UPSTabVC.h"
+#import "UPSEquipmentVC.h"
 #define JpushAppkey         @"4bdf0bd5c5feeb867e954d76"
 @interface AppDelegate ()<JPUSHRegisterDelegate,UNUserNotificationCenterDelegate>
+@property (nonatomic,strong)XYLaunchVC *appGuide;
+
 
 @end
 
@@ -26,17 +30,34 @@
         self.window.rootViewController = nav;
     }
 }
+- (void)setAppGuide{
+    NSString *versionKey = @"CFBundleShortVersionString";
+    NSString *lastVersionCode = [[NSUserDefaults standardUserDefaults] objectForKey:versionKey];
+    NSString *nowValueCode = [NSBundle mainBundle].infoDictionary[versionKey];
+    //比较两个版本号是否相同
+    if([lastVersionCode isEqualToString:nowValueCode]){
 
+        UPSMainVC *main = [[UPSMainVC alloc]init];
+            UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:main];
+            self.window.rootViewController = nav;
+    }else{
+        //第一次使用软件，先把版本号写入沙盒
+        [[NSUserDefaults standardUserDefaults] setObject:nowValueCode forKey:versionKey];
+        //调用synchronize强制存储，如果不加则随机存储
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        UPSMainVC *main = [[UPSMainVC alloc]init];
+        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:main];
+        self.appGuide = [[XYLaunchVC alloc]initWithRootVC:nav withLaunchType:XYLaunchGuide];
+//        self.appGuide.xyDelegate = self;
+        self.appGuide.xyGuideImgNameArr = @[@"WechatIMG34",@"WechatIMG35",@"WechatIMG36",@"WechatIMG37"];
+        self.window.rootViewController = self.appGuide;
+    }
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    
-    
-    UPSMainVC *main = [[UPSMainVC alloc]init];
-    UPSNacVC *nav = [[UPSNacVC alloc]initWithRootViewController:main];
-    self.window.rootViewController = nav;
-    [self.window makeKeyAndVisible];
+   self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [self setAppGuide];
+   [self.window makeKeyAndVisible];
     
     //Required
     //notice: 3.0.0及以后版本注册可以这样写，也可以继续用之前的注册方式
@@ -171,7 +192,7 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
     
     /// Required - 注册 DeviceToken
     [JPUSHService registerDeviceToken:deviceToken];
-    NSLog(@"deviceToken%@",deviceToken);
+    NSLog(@"deviceToken。。。。%@",deviceToken);
     
 }
 /** 远程通知注册失败委托 */
@@ -242,7 +263,7 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
 
 #pragma mark- JPUSHRegisterDelegate
 
-// iOS 10 Support 处于前台时接收到通知
+#pragma mark- ios10前台和后台接受到的消息
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
@@ -250,7 +271,7 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
         [JPUSHService handleRemoteNotification:userInfo];
         [JPUSHService setBadge:0];
 
-        [self pushRecived];
+//        [self pushRecived];
         
         
     }
@@ -266,34 +287,13 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
         if (userInfo) {
             [self pushRecived];
         }
+    } else {
+        // 判断为本地通知
     }
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     [JPUSHService setBadge:0];
     completionHandler();  // 系统要求执行这个方法
 }
-
-
-#pragma mark- 用户app运行在前台时
-/** SDK收到透传消息回调 */
-
-// 同步本地角标值到服务器
-//- (void)handlePushMessage:(NSDictionary *)dict notification:(UILocalNotification *)localNotification {
-//    //开始处理从通知栏点击进来的推送消息
-//
-//    if ([UIApplication sharedApplication].applicationIconBadgeNumber != 0) {
-//        if (localNotification) {
-//            //删除相应信息栏
-//            [[UIApplication sharedApplication] cancelLocalNotification:localNotification];
-//        }
-//        //应用的数字角标减1
-//        [UIApplication sharedApplication].applicationIconBadgeNumber -= 1;
-//    }
-//    else {
-//        [[UIApplication sharedApplication] cancelAllLocalNotifications];
-//        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-//    }
-//}
-
 #pragma mark本地推送
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 //使用 UNNotification 本地通知
@@ -393,10 +393,7 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
 
 #pragma mark - background fetch  唤醒
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
-    // [ GTSdk ]：Background Fetch 恢复SDK 运行
-    //    [JPUSHService resume];
-    
+        
     completionHandler(UIBackgroundFetchResultNewData);
 }
 

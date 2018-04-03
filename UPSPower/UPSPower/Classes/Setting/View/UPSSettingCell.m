@@ -48,7 +48,9 @@
     _model = model;
     self.contentLabel.text = model.userDefinedUpsName;
     self.timeLabel.text = model.happenTime;
-   
+    self.detailLabel.text = @"异常1";
+    self.detailLabel.textColor = [UIColor redColor];
+    self.detailLabel.font = [UIFont systemFontOfSize:14.0];
       [self setupAutoHeightWithBottomView:self.contentLabel bottomMargin:15];
 }
 
