@@ -32,7 +32,6 @@
     for (NSString *subPath in subPaths) {
         // 拼接完成全路径
         NSString *filePath = [directoryPath stringByAppendingPathComponent:subPath];
-        
         // 删除路径
         [mgr removeItemAtPath:filePath error:nil];
     }
@@ -93,8 +92,6 @@
                 completion(totalSize);
             }
         });
-        
-        
         
     });
     

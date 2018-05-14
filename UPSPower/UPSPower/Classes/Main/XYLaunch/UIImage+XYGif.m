@@ -38,8 +38,6 @@
     return animatedImg;
 }
 
-
-
 + (UIImage *)xy_setAnimatedGIFWithGifName:(NSString *)name{
     CGFloat xyScale = [UIScreen mainScreen].scale;
     if(xyScale >1.0f){
@@ -84,48 +82,4 @@
     CFRelease(cfFrameProperties);
     return frameDuration;
 }
-
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

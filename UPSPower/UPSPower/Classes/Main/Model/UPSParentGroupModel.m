@@ -8,7 +8,6 @@
 
 #import "UPSParentGroupModel.h"
 @implementation UPSParentGroupModel
-//Singleton_m(UPSParentGroupModel);
 
 
 

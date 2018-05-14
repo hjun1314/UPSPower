@@ -15,6 +15,7 @@
 		F01C69AA1FD0F7D300BD280D /* UPSChileUserCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C69A91FD0F7D300BD280D /* UPSChileUserCellModel.m */; };
 		F01C69AD1FD12A2700BD280D /* UPSMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C69AC1FD12A2700BD280D /* UPSMainVC.m */; };
 		F01D507A1FF4CDF2000AAB27 /* UPSModelTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F01D50791FF4CDF2000AAB27 /* UPSModelTool.m */; };
+		F0214054208087F40032523D /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = F0214053208087F40032523D /* UIView+Toast.m */; };
 		F0228F7B1FD5310500A53245 /* UPSHttpNetWorkTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F0228F791FD5310500A53245 /* UPSHttpNetWorkTool.m */; };
 		F025C6A51FF36D3B00EAFBD6 /* UPSHistoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F025C6A41FF36D3B00EAFBD6 /* UPSHistoryModel.m */; };
 		F025C6A81FF36DB900EAFBD6 /* UPSBaseInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F025C6A71FF36DB900EAFBD6 /* UPSBaseInfoModel.m */; };
@@ -150,6 +151,8 @@
 		F01C69AC1FD12A2700BD280D /* UPSMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSMainVC.m; sourceTree = "<group>"; };
 		F01D50781FF4CDF2000AAB27 /* UPSModelTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSModelTool.h; sourceTree = "<group>"; };
 		F01D50791FF4CDF2000AAB27 /* UPSModelTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSModelTool.m; sourceTree = "<group>"; };
+		F0214052208087F40032523D /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
+		F0214053208087F40032523D /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
 		F0228F791FD5310500A53245 /* UPSHttpNetWorkTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPSHttpNetWorkTool.m; sourceTree = "<group>"; };
 		F0228F7A1FD5310500A53245 /* UPSHttpNetWorkTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPSHttpNetWorkTool.h; sourceTree = "<group>"; };
 		F025C6A31FF36D3B00EAFBD6 /* UPSHistoryModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSHistoryModel.h; sourceTree = "<group>"; };
@@ -262,6 +265,7 @@
 		F07C8A66204E3D1F00CD0C40 /* UPSHistoryAlarmLogModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSHistoryAlarmLogModel.m; sourceTree = "<group>"; };
 		F07C8A68204E949300CD0C40 /* UPSBaseParamerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSBaseParamerView.h; sourceTree = "<group>"; };
 		F07C8A69204E949300CD0C40 /* UPSBaseParamerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSBaseParamerView.m; sourceTree = "<group>"; };
+		F0921BC02086D8D100E51D42 /* MacroDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroDefine.h; sourceTree = "<group>"; };
 		F09319901FC5088700D04D82 /* UPSPower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UPSPower.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F09319931FC5088700D04D82 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F09319941FC5088700D04D82 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -353,6 +357,15 @@
 				E3FD12E4C475D74F1A321C9C /* Pods-UPSPower.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		F007247C2080799300B46F3F /* ToastView */ = {
+			isa = PBXGroup;
+			children = (
+				F0214052208087F40032523D /* UIView+Toast.h */,
+				F0214053208087F40032523D /* UIView+Toast.m */,
+			);
+			path = ToastView;
 			sourceTree = "<group>";
 		};
 		F02BEA721FC52614007FCF8A /* Equipment */ = {
@@ -521,8 +534,10 @@
 				F09319931FC5088700D04D82 /* AppDelegate.h */,
 				F09319941FC5088700D04D82 /* AppDelegate.m */,
 				F05D0E721FC5496F00FD4218 /* UPSPowerPCH.pch */,
+				F0921BC02086D8D100E51D42 /* MacroDefine.h */,
 				F01C69A71FD0F0D700BD280D /* UPSPower.h */,
 				F05D0E4F1FC529E600FD4218 /* Category */,
+				F007247C2080799300B46F3F /* ToastView */,
 				F09ECD9D1FD6A58F008E7D2C /* Tool */,
 				F0746DF81FC518E100429F3B /* Main */,
 				F02BEA721FC52614007FCF8A /* Equipment */,
@@ -1074,6 +1089,7 @@
 				F070574B2015C79A00AF2064 /* UPSRememberBtn.m in Sources */,
 				F0DE2D721FDA8A6C0080FAA5 /* UPSAddChildModel.m in Sources */,
 				F025C6A81FF36DB900EAFBD6 /* UPSBaseInfoModel.m in Sources */,
+				F0214054208087F40032523D /* UIView+Toast.m in Sources */,
 				F04155221FD62A230032A2AF /* UPSLoginTextField.m in Sources */,
 				F07B2BD11FD9462000BD9F1B /* UPSParentGroupModel.m in Sources */,
 				F035D52E2016C9BA00B78B8E /* UPSChangePasswordVC.m in Sources */,
@@ -1300,18 +1316,21 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = UPSPower/UPSPower.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
 				GCC_PREFIX_HEADER = /Users/hjun/Desktop/UPSPower/UPSPower/UPSPower/Classes/UPSPowerPCH.pch;
 				INFOPLIST_FILE = UPSPower/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.cl-ele.upspower";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos11.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
 			name = Debug;
 		};
@@ -1323,18 +1342,20 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = UPSPower/UPSPower.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
 				GCC_PREFIX_HEADER = /Users/hjun/Desktop/UPSPower/UPSPower/UPSPower/Classes/UPSPowerPCH.pch;
 				INFOPLIST_FILE = UPSPower/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.cl-ele.upspower";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos11.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
 			name = Release;
 		};
@@ -1342,6 +1363,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
 				INFOPLIST_FILE = UPSPowerTests/Info.plist;
@@ -1357,6 +1379,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
 				INFOPLIST_FILE = UPSPowerTests/Info.plist;
@@ -1371,6 +1394,7 @@
 		F09319C61FC5088800D04D82 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
 				INFOPLIST_FILE = UPSPowerUITests/Info.plist;
@@ -1385,6 +1409,7 @@
 		F09319C71FC5088800D04D82 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2N8A4ABC3;
 				INFOPLIST_FILE = UPSPowerUITests/Info.plist;

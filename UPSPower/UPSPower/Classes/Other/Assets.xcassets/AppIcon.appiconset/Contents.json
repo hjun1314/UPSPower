@@ -3,54 +3,109 @@
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "AppIcons20x20@2x.png",
+      "filename" : "upslogoiPhoneNotification_20pt@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "AppIcons20x20@3x.png",
+      "filename" : "upslogoiPhoneNotification_20pt@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "AppIcons29x29@2x.png",
+      "filename" : "upslogoiPhoneSpootlight5_29pt@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "AppIcons29x29@3x.png",
+      "filename" : "upslogoiPhoneSpootlight5_29pt@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "AppIcons40x40@2x.png",
+      "filename" : "upslogoiPhoneSpootlight7_40pt@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "AppIcons40x40@3x.png",
+      "filename" : "upslogoiPhoneSpootlight7_40pt@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "AppIcons60x60@2x.png",
+      "filename" : "upslogoiPhoneApp_60pt@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "AppIcons60x60@3x.png",
+      "filename" : "upslogoiPhoneApp_60pt@3x.png",
       "scale" : "3x"
     },
     {
-      "idiom" : "ios-marketing",
+      "size" : "20x20",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadNotifications_20pt.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "20x20",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadNotifications_20pt@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "29x29",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadSpootlight5_29pt.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "29x29",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadSpootlight5_29pt@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "40x40",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadSpootlight7_40pt.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "40x40",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadSpootlight7_40pt@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadApp_76pt.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadApp_76pt@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "83.5x83.5",
+      "idiom" : "ipad",
+      "filename" : "upslogoiPadProApp_83.5pt@2x.png",
+      "scale" : "2x"
+    },
+    {
       "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "upslogostore_1024pt.png",
       "scale" : "1x"
     }
   ],

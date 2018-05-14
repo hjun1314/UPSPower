@@ -37,4 +37,14 @@
 
 + (NSString *)stringWithNsdate:(NSString *)str;
 
+#pragma 存储用户偏好设置 到 NSUserDefults
++(void)dc_saveUserData:(id)data forKey:(NSString*)key;
+
+#pragma 读取用户偏好设置
++(id)dc_readUserDataForKey:(NSString*)key;
+
+#pragma 删除用户偏好设置
++(void)dc_removeUserDataForkey:(NSString*)key;
+
+
 @end

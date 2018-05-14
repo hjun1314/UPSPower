@@ -17,12 +17,11 @@
 #import "MBProgressHUD.h"
 #import "UPSChildUsersVC.h"
 #import "AppDelegate.h"
+#import "UIView+Toast.h"
+
 @interface UPSMainVC ()
 
 @property (nonatomic,strong)UPSLoginView *loginView;
-
-
-
 
 @end
 
@@ -30,16 +29,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     UPSLoginView *loginView = [[UPSLoginView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
     self.loginView = loginView;
     self.loginView.backgroundColor = UICOLOR_RGB(55.0, 157.0, 246.0, 0.7);
-//    self.loginView.backgroundColor = [UIColor whiteColor];
+    //    self.loginView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:loginView];
-      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickLoginViewSureBtn) name:@"didClickSureBtn" object:nil];
-//    self.navigationItem.title = @"账号登录";
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickLoginViewSureBtn) name:@"didClickSureBtn" object:nil];
+    //    self.navigationItem.title = @"账号登录";
     
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -47,10 +46,9 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-//
     self.tabBarController.tabBar.hidden = YES;
     
-
+    
 }
 
 - (void)clickLoginViewSureBtn{
@@ -62,59 +60,65 @@
         [self loadLoginData];
         
     }
-
+    
 }
 - (void)loadLoginData{
-    //    UPSTabVC *tab = [[UPSTabVC alloc]init];
-    //    [self.navigationController pushViewController:tab animated:YES];
-    [SVProgressHUD showWithStatus:@"正在登陆"];
-    [SVProgressHUD setBackgroundColor:UICOLOR_RGB(0, 0, 0, 0.3)];
-
-    //192.168.1.147:12345/ups-interface/login
-    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":@"aaaaaddd1111"};
+    [SVProgressHUD show];
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
     
+    NSDictionary *params = @{@"username":self.loginView.userTextField.text,@"password":self.loginView.passwordTextField.text,@"registrationId":[UPSTool getGeTuiCid]};
+    kWeakSelf(self);
+    [UPSTool dc_saveUserData:@"1" forKey:@"isLogin"];
     [[UPSHttpNetWorkTool sharedApi]POST:@"login" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        NSLog(@"总的数据%@",responseObject);
-        ///总模型
-        NSMutableArray *dataM = [NSMutableArray array];
-        NSDictionary *data = responseObject[@"data"];
-        
-        UPSMainModel *mainModel = [UPSMainModel mj_objectWithKeyValues:data];
-        [dataM addObject:mainModel];
-        ///parentGroup数组转模型数组
-        //        NSMutableArray *parentM = responseObject[@"data"][@"parentGroup"];
-        //
-        //        NSMutableArray *parentG = [NSMutableArray array];
-        //        for (int i = 0; i < parentM.count; i++) {
-        //            UPSParentGroupModel *groupModel = [UPSParentGroupModel mj_objectWithKeyValues:parentM[i]];
-        //            [parentG addObject:groupModel];
-        //
-        //        }
-        ////     self.parentArr = [UPSParentGroupModel mj_objectArrayWithKeyValuesArray:self.tempArr];
-        //        ///ups设备数组转模型数组
-        // NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
-        //NSMutableArray *upsG = [NSMutableArray array];
-        //        upsG = [UPSGroupUPSModel mj_objectArrayWithKeyValuesArray:upsM];
-        //        for (int i = 0 ; i < upsM.count; i++) {
-        //            UPSGroupUPSModel *upsModel = [UPSGroupUPSModel mj_objectWithKeyValues:upsM[i]];
-        //            [upsG addObject:upsModel];
-        //        }
-        
-        ///存token id
-        [UPSTool saveToken:responseObject[@"data"][@"token"]];
-        NSString *ID = responseObject[@"data"][@"userId"];
-        [UPSTool saveID:[ID integerValue]];
-        UPSTabVC *tab = [[UPSTabVC alloc]init];
-        [self.navigationController pushViewController:tab animated:YES];
-//         [(AppDelegate *)[UIApplication sharedApplication].delegate showWindowMain:@"logoutTab"];
-        [UPSTool saveUserName:self.loginView.userTextField.text];
-        [UPSTool savePassWord:self.loginView.passwordTextField.text];
-        [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+          
+            
+            NSLog(@"总的数据%@",responseObject);
+            ///总模型
+            NSMutableArray *dataM = [NSMutableArray array];
+            NSDictionary *data = responseObject[@"data"];
+            
+            UPSMainModel *mainModel = [UPSMainModel mj_objectWithKeyValues:data];
+            [dataM addObject:mainModel];
+            ///parentGroup数组转模型数组
+            //        NSMutableArray *parentM = responseObject[@"data"][@"parentGroup"];
+            //
+            //        NSMutableArray *parentG = [NSMutableArray array];
+            //        for (int i = 0; i < parentM.count; i++) {
+            //            UPSParentGroupModel *groupModel = [UPSParentGroupModel mj_objectWithKeyValues:parentM[i]];
+            //            [parentG addObject:groupModel];
+            //
+            //        }
+            ////     self.parentArr = [UPSParentGroupModel mj_objectArrayWithKeyValuesArray:self.tempArr];
+            //        ///ups设备数组转模型数组
+            // NSMutableArray *upsM = responseObject[@"data"][@"groupUps"];
+            //NSMutableArray *upsG = [NSMutableArray array];
+            //        upsG = [UPSGroupUPSModel mj_objectArrayWithKeyValuesArray:upsM];
+            //        for (int i = 0 ; i < upsM.count; i++) {
+            //            UPSGroupUPSModel *upsModel = [UPSGroupUPSModel mj_objectWithKeyValues:upsM[i]];
+            //            [upsG addObject:upsModel];
+            //        }
+            
+            ///存token id
+            [UPSTool saveToken:responseObject[@"data"][@"token"]];
+            NSString *ID = responseObject[@"data"][@"userId"];
+            [UPSTool saveID:[ID integerValue]];
+            UPSTabVC *tab = [[UPSTabVC alloc]init];
+            [weakself.navigationController pushViewController:tab animated:YES];
+           [tab.view makeToast:@"登录成功" duration:0.5 position:CSToastPositionCenter];
+            [UPSTool saveUserName:weakself.loginView.userTextField.text];
+            [UPSTool savePassWord:weakself.loginView.passwordTextField.text];
+            
+        });
         
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"登录失败%@",error);
-        [SVProgressHUD showErrorWithStatus:@"密码错误,请重新登录"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+//            UPSTabVC *tab = [[UPSTabVC alloc]init];
+
+            [weakself.view makeToast:@"账号密码错误请重新登录" duration:0.5 position:CSToastPositionCenter];
+        });
     }];
 }
 

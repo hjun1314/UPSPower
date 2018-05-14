@@ -30,6 +30,8 @@
         self.window.rootViewController = nav;
     }
 }
+
+
 - (void)setAppGuide{
     NSString *versionKey = @"CFBundleShortVersionString";
     NSString *lastVersionCode = [[NSUserDefaults standardUserDefaults] objectForKey:versionKey];
@@ -81,12 +83,12 @@
     // 如需继续使用pushConfig.plist文件声明appKey等配置内容，请依旧使用[JPUSHService setupWithOption:launchOptions]方式初始化。
     [JPUSHService setupWithOption:launchOptions appKey:JpushAppkey
                           channel:@"www.changling.com"
-                 apsForProduction:NO
+                 apsForProduction:YES
             advertisingIdentifier:nil];
     
     ///注册通知获取registrationID
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-   
+    
     [defaultCenter addObserver:self selector:@selector(networkDidLogin:) name:kJPFNetworkDidLoginNotification object:nil];
     
     
@@ -103,7 +105,7 @@ void uncaughtExceptionHandler(NSException *exception) {    NSLog(@"错误原因:
     // 注册 APNs
     [self registerRemoteNotification];
     ///注册本地通知
-    [self registLocationNotification];
+//    [self registLocationNotification];
     
 }
 ///获取id

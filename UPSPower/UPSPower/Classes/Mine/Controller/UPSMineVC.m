@@ -15,6 +15,7 @@
 #import "UPSAlarmModel.h"
 #import "UPSChangePasswordVC.h"
 #import "AppDelegate.h"
+#import "UIView+Toast.h"
 @interface UPSMineVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)UPSMainModel *mainModel;
 
@@ -29,6 +30,7 @@
     [self setup];
     UPSMainModel *model = [UPSMainModel sharedUPSMainModel];
     self.mainModel = model;
+    
 }
 
 - (void)setup{

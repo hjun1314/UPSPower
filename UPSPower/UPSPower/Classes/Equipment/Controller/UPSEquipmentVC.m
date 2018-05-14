@@ -70,7 +70,6 @@
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
     [self loadData];
-   
     
 }
 
@@ -84,11 +83,11 @@
    
     
 }
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.tableView reloadData];
-    
-}
+//- (void)viewWillAppear:(BOOL)animated{
+//    [super viewWillAppear:animated];
+//    [self.tableView reloadData];
+//    
+//}
 - (void)loadData{
     
     self.parentData = [NSMutableArray array];
@@ -142,10 +141,13 @@
         
     }
                                    fail:^(NSURLSessionDataTask *task, NSError *error) {
-                                       
+        
                                    }];
-    
-    
+    kWeakSelf(self);
+    [[NSNotificationCenter defaultCenter]addObserverForName:@"addGroup" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        
+        [weakself.tableView reloadData];
+    }];
 }
 
 - (void)clickRightBarItem{

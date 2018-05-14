@@ -31,10 +31,8 @@
     self.mainModel = mainModel;
     [self loadData];
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-self.navigationController.interactivePopGestureRecognizer.delegate = self;
-        
+ self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-    
 }
 
 - (void)loadData{
@@ -97,7 +95,7 @@ self.navigationController.interactivePopGestureRecognizer.delegate = self;
     faultBtn.tag = 200;
     [faultBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
     [faultBtn setTitle:@"异常信息" forState:UIControlStateNormal];
-    [faultBtn setBackgroundColor:[UIColor redColor]];
+    [faultBtn setBackgroundColor:UICOLOR_RGB(55.0, 157.0, 246.0, 1)];
     
     ///交流输入
     UPSBaseInfoBtn *ACinputBtn = [[UPSBaseInfoBtn alloc]init];
@@ -142,72 +140,72 @@ self.navigationController.interactivePopGestureRecognizer.delegate = self;
     
 }
 - (void)clickBtn:(UIButton *)btn{
-    if (btn.tag == 100) {
-        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
-        [self.view addSubview:textView];
-        self.textView = textView;
-//        textView.backgroundColor = [UIColor blueColor];
-        UILabel *title = [[UILabel alloc]init];
-//                          WithFrame:CGRectMake((textView.width - 80)/2, textView.origin.y + 10, 80, 44)];
-        [textView addSubview:title];
-        [title mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(textView).mas_offset(10);
-            make.centerX.equalTo(textView);
-            make.height.mas_equalTo(44);
-            make.width.mas_equalTo(80);
-        }];
-        title.text = @"旁路输入";
-        title.textColor = [UIColor lightGrayColor];
-        title.backgroundColor = [UIColor lightTextColor];
-        //    textView.userInteractionEnabled = NO;
-//        textView.backgroundColor = [UIColor yellowColor];
-
-    }else if (btn.tag == 200){
-        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5 + 20, KScreenW, KScreenH - KScreenH * 0.5 - 20)];
-        [self.view addSubview:textView];
-        self.textView = textView;
-        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(textView.width / 2 - 30, 10, 60, 30)];
-        [textView addSubview:titleLabel];
-        titleLabel.text = @"异常信息";
-        titleLabel.font = [UIFont systemFontOfSize:14.0];
-        titleLabel.textColor = [UIColor lightGrayColor];
-        
-        UILabel *label = [[UILabel alloc]init];
-        [textView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(titleLabel.mas_bottom).offset(10);
-            make.left.equalTo(textView).offset(15);
-            make.height.offset(30);
-        }];
-        label.text = @"无异常";
-        label.font = [UIFont systemFontOfSize:13];
-        label.textColor = [UIColor lightGrayColor];
-        //    textView.userInteractionEnabled = NO;
-//        textView.backgroundColor = [UIColor redColor];
-
-    }else if (btn.tag == 300){
-        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
-        [self.view addSubview:textView];
-        self.textView = textView;
-        
-        //    textView.userInteractionEnabled = NO;
-        textView.backgroundColor = [UIColor orangeColor];
-
-    }else if (btn.tag == 400){
-        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
-        [self.view addSubview:textView];
-        self.textView = textView;
-        //    textView.userInteractionEnabled = NO;
-        textView.backgroundColor = [UIColor brownColor];
-
-    }else{
-        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
-        [self.view addSubview:textView];
-       self.textView = textView;
-        //    textView.userInteractionEnabled = NO;
-        textView.backgroundColor = [UIColor cyanColor];
-
-    }
+//    if (btn.tag == 100) {
+//        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+//        [self.view addSubview:textView];
+//        self.textView = textView;
+////        textView.backgroundColor = [UIColor blueColor];
+//        UILabel *title = [[UILabel alloc]init];
+////                          WithFrame:CGRectMake((textView.width - 80)/2, textView.origin.y + 10, 80, 44)];
+//        [textView addSubview:title];
+//        [title mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(textView).mas_offset(10);
+//            make.centerX.equalTo(textView);
+//            make.height.mas_equalTo(44);
+//            make.width.mas_equalTo(80);
+//        }];
+//        title.text = @"旁路输入";
+//        title.textColor = [UIColor lightGrayColor];
+//        title.backgroundColor = [UIColor lightTextColor];
+//        //    textView.userInteractionEnabled = NO;
+////        textView.backgroundColor = [UIColor yellowColor];
+//
+//    }else if (btn.tag == 200){
+//        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5 + 20, KScreenW, KScreenH - KScreenH * 0.5 - 20)];
+//        [self.view addSubview:textView];
+//        self.textView = textView;
+//        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(textView.width / 2 - 30, 10, 60, 30)];
+//        [textView addSubview:titleLabel];
+//        titleLabel.text = @"异常信息";
+//        titleLabel.font = [UIFont systemFontOfSize:14.0];
+//        titleLabel.textColor = [UIColor lightGrayColor];
+//        
+//        UILabel *label = [[UILabel alloc]init];
+//        [textView addSubview:label];
+//        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(titleLabel.mas_bottom).offset(10);
+//            make.left.equalTo(textView).offset(15);
+//            make.height.offset(30);
+//        }];
+//        label.text = @"无异常";
+//        label.font = [UIFont systemFontOfSize:13];
+//        label.textColor = [UIColor lightGrayColor];
+//        //    textView.userInteractionEnabled = NO;
+////        textView.backgroundColor = [UIColor redColor];
+//
+//    }else if (btn.tag == 300){
+//        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+//        [self.view addSubview:textView];
+//        self.textView = textView;
+//        
+//        //    textView.userInteractionEnabled = NO;
+//        textView.backgroundColor = [UIColor orangeColor];
+//
+//    }else if (btn.tag == 400){
+//        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+//        [self.view addSubview:textView];
+//        self.textView = textView;
+//        //    textView.userInteractionEnabled = NO;
+//        textView.backgroundColor = [UIColor brownColor];
+//
+//    }else{
+//        UIView *textView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenH * 0.5, KScreenW, KScreenH - KScreenH * 0.5)];
+//        [self.view addSubview:textView];
+//       self.textView = textView;
+//        //    textView.userInteractionEnabled = NO;
+//        textView.backgroundColor = [UIColor cyanColor];
+//
+//    }
 
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

@@ -25,7 +25,6 @@
 
 @property (nonatomic,strong)NSMutableArray *dataArr;
 
-
 @property (nonatomic,strong)UPSMainModel *mainModel;
 
 
@@ -63,7 +62,14 @@
     } fail:^(NSURLSessionDataTask *task, NSError *error) {
         
     }];
-    
+    self.tableView.estimatedRowHeight = 0;
+    self.tableView.estimatedSectionHeaderHeight = 0;
+    self.tableView.estimatedSectionFooterHeight = 0;
+    if (@available(iOS 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     
 }
 
@@ -131,7 +137,7 @@
 - (void)setupUI{
     
     ///tableView
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,  35+SafeAreaTopHeight, kScreenW, kScreenH  - SafeAreaTabbarHeight - 35)];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,  35+SafeAreaTopHeight, kScreenW, kScreenH  - SafeAreaTabbarHeight - 35-SafeAreaTopHeight)style:UITableViewStylePlain];
     [self.view addSubview:tableView];
     self.tableView = tableView;
     tableView.delegate = self;
@@ -249,6 +255,7 @@
     
     return @[editAction,deleteAction];
 }
+
 
 
 - (void)didReceiveMemoryWarning {

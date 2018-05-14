@@ -114,5 +114,27 @@
     return currentDateStr;
 }
 
+#pragma mark - NSUserDefults
++ (void)dc_saveUserData:(id)data forKey:(NSString*)key
+{
+    if (data)
+    {
+        [[NSUserDefaults standardUserDefaults]setObject:data forKey:key];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+    }
+}
+
+#pragma mark - 读取用户偏好设置
++ (id)dc_readUserDataForKey:(NSString*)key
+{
+    return [[NSUserDefaults standardUserDefaults]objectForKey:key];
+    
+}
+
+#pragma mark - 删除用户偏好设置
++ (void)dc_removeUserDataForkey:(NSString*)key
+{
+    [[NSUserDefaults standardUserDefaults]removeObjectForKey:key];
+}
 
 @end

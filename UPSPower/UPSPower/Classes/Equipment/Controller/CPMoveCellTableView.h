@@ -4,12 +4,12 @@
 
 @class CPMoveCellTableView;
 @protocol CPMoveCellTableViewDataSource <UITableViewDataSource>
-
 @required
 /**将外部数据源数组传入，以便在移动cell数据发生改变时进行修改重排*/
 - (NSArray *)originalArrayDataForTableView:(CPMoveCellTableView *)tableView;
 
 @end
+
 
 @protocol CPMoveCellTableViewDelegate <UITableViewDelegate>
 

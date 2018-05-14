@@ -11,6 +11,7 @@
 #import "UPSParentGroupModel.h"
 #import "UPSGroupUPSModel.h"
 #import "UPSAddGroup.h"
+#import "UIView+Toast.h"
 @interface UPSContactVC ()<UITableViewDataSource, UITableViewDelegate>
 {
     NSIndexPath *_indexPath; // 保存当前选中的单元格
@@ -28,21 +29,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"分组管理";
     [self initUI];
     UPSMainModel *mainModel = [UPSMainModel sharedUPSMainModel];
     self.mainModel = mainModel;
-//        if (@available(iOS 11.0, *)){
-//            //表示只在ios11以上的版本执行
-//            self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-//    
-//        }
+    //        if (@available(iOS 11.0, *)){
+    //            //表示只在ios11以上的版本执行
+    //            self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    //
+    //        }
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.tableView reloadData];
 }
 - (void)initUI {
+    self.navigationItem.title = @"分组管理";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(clickEditBtn:)];
     self.tableView.hidden = NO;
 }
@@ -105,6 +106,8 @@
         textField.clearButtonMode = UITextFieldViewModeAlways;
     }];
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [SVProgressHUD show];
+        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
         // 读取文本框的值显示出来
         UITextField *addGroupTF = alert.textFields.firstObject;
         // 发送添加请求...http://192.168.1.147:12345/ups-interface/addGroup
@@ -112,36 +115,36 @@
         params[@"token"] = self.mainModel.token;
         params[@"userId"] = @(self.mainModel.userId);
         params[@"newGroupName"] = addGroupTF.text;
-        if (addGroupTF.text.length == 0) {
-            [SVProgressHUD showErrorWithStatus:@"新添加分组名称不能为空"];
-            return ;
-        }
-        for (UPSParentGroupModel *model in self.parentGroup) {
-            if ([addGroupTF.text isEqualToString:model.groupName]) {
-                [SVProgressHUD showErrorWithStatus:@"添加新分组不能和已有分组名称同名，请重新输入"];
-                return;
+        kWeakSelf(self);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (addGroupTF.text.length == 0) {
+               
+                [self.view makeToast:@"新添加分组名称不能为空" duration:0.8 position:CSToastPositionCenter];
+                return ;
             }
-        }
-        [[UPSHttpNetWorkTool sharedApi]POST:@"addGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
-            NSLog(@"添加组成功%@",responseObject);
-            NSDictionary *dictM = responseObject[@"data"];
-            NSMutableArray *addGroupArr = [NSMutableArray array];
-            UPSAddGroup *addGroup = [UPSAddGroup mj_objectWithKeyValues:dictM];
-            [addGroupArr addObject:addGroup];
-//            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//            for (UPSParentGroupModel *model in self.parentGroup) {
-//
-//            }
-            [self.parentGroup addObjectsFromArray:addGroupArr];
-//            [self.parentGroup addObject:indexPath];
-//            [self.tableView beginUpdates];
-//            [self.tableView insertRowsAtIndexPaths:self.parentGroup withRowAnimation:UITableViewRowAnimationLeft];
-
-//            [self.tableView endUpdates];
-            [self.tableView reloadData];
-        } fail:^(NSURLSessionDataTask *task, NSError *error) {
+            for (UPSParentGroupModel *model in weakself.parentGroup) {
+                if ([addGroupTF.text isEqualToString:model.groupName]) {
+                     [self.view makeToast:@"添加新分组不能和已有分组名称同名，请重新输入" duration:0.8 position:CSToastPositionCenter];
+                    return;
+                }
+            }
+        });
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[UPSHttpNetWorkTool sharedApi]POST:@"addGroup" baseURL:API_BaseURL params:params success:^(NSURLSessionDataTask *task, id responseObject) {
+                NSDictionary *dictM = responseObject[@"data"];
+                NSMutableArray *addGroupArr = [NSMutableArray array];
+                UPSAddGroup *addGroup = [UPSAddGroup mj_objectWithKeyValues:dictM];
+                [addGroupArr addObject:addGroup];
+                [UPSTool dc_readUserDataForKey:addGroupTF.text];
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"addGroup" object:nil];
+            [weakself.parentGroup addObjectsFromArray:addGroupArr];
+           
+            [weakself.tableView reloadData];
+            } fail:^(NSURLSessionDataTask *task, NSError *error) {
+                
+            }];
             
-        }];
+        });
         
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
@@ -239,9 +242,9 @@
 }
 
 // 分区头的高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 50 / 375.0 * kScreenW;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 50 / 375.0 * kScreenW;
+//}
 //// 分区尾的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     //    if (section == 0) {
@@ -286,9 +289,9 @@
         }
         
     }
-//    if (editingStyle == UITableViewCellEditingStyleInsert) {
-//        [self.parentGroup insertObject:@"" atIndex:indexPath.row];
-//        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationAutomatic];
+    //    if (editingStyle == UITableViewCellEditingStyleInsert) {
+    //        [self.parentGroup insertObject:@"" atIndex:indexPath.row];
+    //        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationAutomatic];
     //}
 }
 
@@ -342,6 +345,8 @@
         [cell setSeparatorInset:UIEdgeInsetsZero];
     }
 }
+
+
 
 
 

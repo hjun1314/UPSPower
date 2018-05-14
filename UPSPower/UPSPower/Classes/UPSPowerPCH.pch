@@ -42,6 +42,7 @@ blue:((CGFloat)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
 #import <MJExtension.h>
 #import "FMDB.h"
 #import "MJRefresh.h"
+
 #ifdef  NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
@@ -49,13 +50,14 @@ blue:((CGFloat)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
 
 
 
-
 ///存储用户账号密码
 #define API_UserFilePath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"user.plist"]
 
 #define NUMBERS @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-#define API_BaseURL @"http://192.168.1.120:10000/ups-interface/"
+#define API_BaseURL @"http://111.230.198.240:8080/ups-interface/"
 
 #define HidenKeybord {[[[UIApplication sharedApplication] keyWindow] endEditing:YES];}
+
+#import "MacroDefine.h"
 
 #endif /* UPSPowerPCH_pch */
